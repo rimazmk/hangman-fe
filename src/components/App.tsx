@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { gameInitInterface } from "../hangman";
+import React, { useState, useEffect, useRef } from "react";
+import { gameInitInterface, gameStateInterface } from "../hangman";
 import logo from "../logo.svg";
 import "../css/App.css";
 import Letters from "./Letters";
 import io from "socket.io-client";
 import axios from "axios";
+
+const socket = io("http://localhost:5000");
 
 function App() {
   const [state, setState] = useState<gameInitInterface>({
@@ -13,52 +15,61 @@ function App() {
     word: "",
   });
 
+  const [gameState, setGameState] = useState<gameStateInterface>();
   const [gameURL, setGameURL] = useState("");
-  const [message, setMessage] = useState("");
 
-  const socket = io("http://localhost:5000");
   // let counter = 0;
 
+  const getUrlCode = (): string => {
+    return gameURL.slice(-11, -1);
+  };
+
+  const handleLink = (info: { url: string; gameState: gameStateInterface }) => {
+    setGameURL(info.url);
+    setGameState(Object.assign({}, info.gameState));
+  };
+
+  const gameHandler = (newState: gameStateInterface) => {
+    console.log("run");
+    console.log(newState);
+    setGameState(Object.assign({}, newState));
+  };
+
   useEffect(() => {
-    // socket.on("link", (url: string) => {
-    //   console.log("url received");
-    //   setGameURL(url);
-    // });
-    // socket.on("response", (msg: string) => {
-    //   console.log(counter);
-    //   counter++;
-    //   setMessage(msg);
-    // });
+    console.log("run");
+    socket.on("link", handleLink);
+    socket.on("guess", gameHandler);
+    return () => {
+      socket.close();
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    let room = await axios.post<{ url: string }>(
-      "http://localhost:5000/create"
-    );
-    setGameURL(room.data.url);
-    // console.log(state.username, state.word, state.category);
-    // if (state.category && state.username && state.word) {
-    //   socket.emit("create", JSON.stringify(state));
-    //   setState({
-    //     category: "",
-    //     username: "",
-    //     word: "",
-    //   });
-    // } else {
-    //   console.warn("One or more field(s) missing");
-    // }
+    console.log(state.username, state.word, state.category);
+    if (state.category && state.username && state.word) {
+      socket.emit("create", state);
+    } else {
+      console.warn("One or more field(s) missing");
+    }
 
-    // console.log("message sent");
-    // socket.emit("message", message);
-    // setMessage("");
+    console.log("message sent");
   };
 
   const onLetterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     let ev = e.target as HTMLButtonElement;
-    console.log(ev.value);
-    socket.emit("message", ev.value);
+
+    let guessState = Object.assign({}, gameState);
+    guessState.curGuess = ev.value;
+
+    let guess = {
+      user: state.username,
+      roomID: getUrlCode(),
+      gameState: guessState,
+    };
+    console.log(guess);
+    socket.emit("guess", guess);
   };
 
   return (
@@ -94,10 +105,23 @@ function App() {
         <br />
         <input type="submit" value="Get Game Link"></input>
       </form>
-
-      <p>Share this link with friends :) {gameURL}</p>
+      <button
+        onClick={async () => {
+          let code = getUrlCode();
+          let res = await axios.get<gameInitInterface>(
+            `http://localhost:5000/room/${code}`
+          );
+          console.log(res.data);
+        }}
+      >
+        Get state
+      </button>
+      <p>
+        Share this link with friends :) <a href={gameURL}>{gameURL}</a>
+      </p>
       <Letters onClick={onLetterClick} />
-      {/* <p>{message}</p> */}
+      <br />
+      {JSON.stringify(gameState)}
     </div>
   );
 }
