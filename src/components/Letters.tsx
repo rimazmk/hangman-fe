@@ -35,7 +35,11 @@ const Letters = ({ onClick }: Props) => {
   ];
   const renderLetters = () => {
     return letters.map((letter) => {
-      return <button onClick={onClick}>{letter}</button>;
+      return (
+        <button onClick={onClick} value={letter}>
+          {letter}
+        </button>
+      );
     });
   };
 

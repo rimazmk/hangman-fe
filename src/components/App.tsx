@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { gameInitInterface } from "../hangman";
 import logo from "../logo.svg";
 import "../css/App.css";
 import Letters from "./Letters";
 import io from "socket.io-client";
-
-interface formValues {
-  category: string;
-  username: string;
-  word: string;
-}
+import axios from "axios";
 
 function App() {
-  const [state, setState] = useState<formValues>({
+  const [state, setState] = useState<gameInitInterface>({
     category: "",
     username: "",
     word: "",
@@ -24,30 +20,34 @@ function App() {
   // let counter = 0;
 
   useEffect(() => {
-    socket.on("link", (url: string) => {
-      console.log("url received");
-      setGameURL(url);
-    });
+    // socket.on("link", (url: string) => {
+    //   console.log("url received");
+    //   setGameURL(url);
+    // });
     // socket.on("response", (msg: string) => {
     //   console.log(counter);
     //   counter++;
     //   setMessage(msg);
     // });
-  }, [socket]);
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(state.username, state.word, state.category);
-    if (state.category && state.username && state.word) {
-      socket.emit("create", JSON.stringify(state));
-      setState({
-        category: "",
-        username: "",
-        word: "",
-      });
-    } else {
-      console.warn("One or more field(s) missing");
-    }
+    let room = await axios.post<{ url: string }>(
+      "http://localhost:5000/create"
+    );
+    setGameURL(room.data.url);
+    // console.log(state.username, state.word, state.category);
+    // if (state.category && state.username && state.word) {
+    //   socket.emit("create", JSON.stringify(state));
+    //   setState({
+    //     category: "",
+    //     username: "",
+    //     word: "",
+    //   });
+    // } else {
+    //   console.warn("One or more field(s) missing");
+    // }
 
     // console.log("message sent");
     // socket.emit("message", message);
@@ -58,7 +58,7 @@ function App() {
     e.preventDefault();
     let ev = e.target as HTMLButtonElement;
     console.log(ev.value);
-    socket.emit("message", state.username);
+    socket.emit("message", ev.value);
   };
 
   return (
