@@ -1,14 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { gameInitInterface, gameStateInterface } from "../hangman";
 import logo from "../logo.svg";
-import "../css/App.css";
 import Letters from "./Letters";
 import io from "socket.io-client";
 import axios from "axios";
 
 const socket = io("http://localhost:5000");
 
-function App() {
+function Create({
+  setUser,
+}: {
+  setUser: React.Dispatch<React.SetStateAction<string>>;
+}) {
   const [state, setState] = useState<gameInitInterface>({
     category: "",
     username: "",
@@ -17,8 +20,6 @@ function App() {
 
   const [gameState, setGameState] = useState<gameStateInterface>();
   const [gameURL, setGameURL] = useState("");
-
-  // let counter = 0;
 
   const getUrlCode = (): string => {
     return gameURL.slice(-11, -1);
@@ -36,7 +37,6 @@ function App() {
   };
 
   useEffect(() => {
-    console.log("run");
     socket.on("link", handleLink);
     socket.on("guess", gameHandler);
     return () => {
@@ -46,14 +46,11 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(state.username, state.word, state.category);
     if (state.category && state.username && state.word) {
       socket.emit("create", state);
     } else {
       console.warn("One or more field(s) missing");
     }
-
-    console.log("message sent");
   };
 
   const onLetterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -126,4 +123,4 @@ function App() {
   );
 }
 
-export default App;
+export default Create;

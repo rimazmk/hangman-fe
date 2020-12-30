@@ -36,7 +36,7 @@ const Letters = ({ onClick }: Props) => {
   const renderLetters = () => {
     return letters.map((letter) => {
       return (
-        <button onClick={onClick} value={letter}>
+        <button onClick={onClick} value={letter} key={letter.charCodeAt(0)}>
           {letter}
         </button>
       );

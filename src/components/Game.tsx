@@ -9,12 +9,12 @@ import { stat } from "fs";
 
 function Game({
   gameState,
-  user,
-  roomID,
+  username,
+  gameID,
 }: {
   gameState: gameStateInterface;
-  user: string;
-  roomID: string;
+  username: string;
+  gameID: string;
 }) {
   // get initial game state, user, roomID as prop
   // <Game gameState={gameState} />
