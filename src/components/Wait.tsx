@@ -17,14 +17,15 @@ function Wait({
   >;
 }) {
   const [user, setUser] = useState(username);
-
+  const [joined, setJoined] = useState(false);
   const handleSubmitJoin = (e: React.FormEvent) => {
     e.preventDefault();
     if (user && user !== "") {
       let credentials = {
         roomID: roomID,
-        user: username,
+        user: user,
       };
+      setJoined(true);
       socket.emit("join", credentials);
     } else {
       console.warn("One or more field(s) missing");
@@ -39,8 +40,9 @@ function Wait({
     setGameState({ ...gameState, gameStart: newState.gameStart });
   };
 
-  const handleJoin = (newPlayers: string[]) => {
-    setGameState({ ...gameState, players: newPlayers });
+  const handleJoin = (newState: gameStateInterface) => {
+    console.log(newState);
+    setGameState({ ...gameState, players: newState.players });
   };
 
   useEffect(() => {
@@ -51,16 +53,20 @@ function Wait({
     };
   }, []);
 
+  const url = `http://localhost:3000/?roomID=${roomID}`;
+
   return (
     <>
-      <p>Players: {gameState.players}</p>
+      <p>Players: {gameState.players.map((n) => `${n} `)}</p>
+
+      {user === gameState.hanger && <p>Share this link with friends: {url}</p>}
 
       {user === gameState.hanger && gameState.players.length >= 2 && (
         <button onClick={onButtonClick}>Start game!</button>
       )}
 
       {/* Add functionality for changing username */}
-      {!gameState.players.includes(user) && (
+      {user !== gameState.hanger && !joined && (
         <div>
           <form onSubmit={handleSubmitJoin}>
             Enter Username:

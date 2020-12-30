@@ -9,8 +9,10 @@ const socket = io("http://localhost:5000");
 
 function Create({
   setUser,
+  setRoom,
 }: {
   setUser: React.Dispatch<React.SetStateAction<string>>;
+  setRoom: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [state, setState] = useState<gameInitInterface>({
     category: "",
@@ -25,9 +27,15 @@ function Create({
     return gameURL.slice(-11, -1);
   };
 
-  const handleLink = (info: { url: string; gameState: gameStateInterface }) => {
-    setGameURL(info.url);
+  const handleLink = (info: {
+    gameState: gameStateInterface;
+    roomID: string;
+  }) => {
+    setGameURL(info.roomID);
     setGameState(Object.assign({}, info.gameState));
+    console.log(`this is my username:  ${state.username}`);
+    setUser(info.gameState.players[0]); // why doesn't state.username itself work
+    setRoom(info.roomID);
   };
 
   const gameHandler = (newState: gameStateInterface) => {

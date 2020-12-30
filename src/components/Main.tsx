@@ -27,7 +27,7 @@ const Main = () => {
     const checkRoomID = async () => {
       let res = await axios.get(`http://localhost:5000/?roomID=${id}`);
       console.log(id);
-      if (res.status === 200) setRoomID(roomID!);
+      if (res.status === 200) setRoomID(id!);
     };
 
     checkRoomID();
@@ -35,10 +35,10 @@ const Main = () => {
 
   return (
     <div>
-      {id ? (
-        <Room roomID={roomID} username={username} />
+      {roomID !== "" ? (
+        <Room username={username} roomID={roomID} />
       ) : (
-        <Create setUser={setUsername} />
+        <Create setUser={setUsername} setRoom={setRoomID} />
       )}
     </div>
   );

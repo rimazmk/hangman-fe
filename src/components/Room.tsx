@@ -6,6 +6,7 @@ import axios from "axios";
 
 function Room({ username, roomID }: { username: string; roomID: string }) {
   const [gameState, setGameState] = useState<gameStateInterface>();
+  console.log(`ROOM ID: ${roomID}`);
 
   useEffect(() => {
     const getGameState = async () => {
@@ -13,7 +14,8 @@ function Room({ username, roomID }: { username: string; roomID: string }) {
         `http://localhost:5000/?roomID=${roomID}`
       );
 
-      setGameState(res.data);
+      if (res.status === 200) setGameState(res.data);
+      console.log(`GAMESTATE:  ${res.data}`);
     };
 
     getGameState();
@@ -21,9 +23,10 @@ function Room({ username, roomID }: { username: string; roomID: string }) {
 
   return (
     <div>
-      {gameState && gameState.gameStart ? (
+      {gameState && gameState.gameStart && (
         <Game username={username} gameID={roomID} gameState={gameState} />
-      ) : (
+      )}
+      {gameState && !gameState.gameStart && (
         <Wait
           username={username}
           roomID={roomID}
