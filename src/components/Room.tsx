@@ -21,7 +21,7 @@ function Room({ username, roomID }: { username: string; roomID: string }) {
     };
 
     getGameState();
-  }, []);
+  }, [roomID]);
 
   const render = () => {
     if (gameState && gameState.gameStart && gameState.category !== "") {

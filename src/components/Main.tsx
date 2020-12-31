@@ -27,7 +27,7 @@ const Main = () => {
     };
 
     checkRoomID();
-  }, []);
+  }, [id]);
 
   // TODO: replace with react router
   return (

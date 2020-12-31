@@ -38,7 +38,7 @@ function Create({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (state.category && state.username && state.word) {
+    if (state.category && state.username && state.word && state.lives) {
       socket.emit("create", state);
     } else {
       console.warn("One or more fields are missing");
