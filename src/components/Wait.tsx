@@ -60,8 +60,9 @@ function Wait({
   return (
     <>
       <p>Players: </p>
-      {gameState.players.map((n) => (
-        <p>{n}</p>
+      {/* Change keys to be player usernames after ensuring unique usernames */}
+      {gameState.players.map((player, index) => (
+        <p key={index}>{player}</p>
       ))}
 
       {user === gameState.hanger && <p>Share this link with friends: {url}</p>}

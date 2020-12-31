@@ -22,7 +22,7 @@ const NewWord = ({
   const checkInput = (): boolean => {
     let copy = Object.assign("", word);
     copy.replace(/[^a-z\s-]/gi, "");
-    console.log(copy);
+    // console.log(copy);
     return word.length === 0;
   };
 

@@ -51,6 +51,9 @@ function Game({
     if (word.length < 2) {
       setError("Word cannot be a single character");
       return;
+    } else if (gameState.guessedWords.includes(word)) {
+      setError(`${word} has already been guessed`);
+      return;
     }
     setError("");
     makeGuess(word);
@@ -60,6 +63,7 @@ function Game({
   const onLetterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setError("");
+    setWord("");
     let ev = e.target as HTMLButtonElement;
     makeGuess(ev.value);
   };
@@ -72,7 +76,7 @@ function Game({
 
   const displayWords = () => {
     return gameState.guessedWords.map((word) => {
-      return <div>{word}</div>;
+      return <div key={word}>{word}</div>;
     });
   };
 

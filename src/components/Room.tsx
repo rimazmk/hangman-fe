@@ -8,7 +8,7 @@ import axios from "axios";
 function Room({ username, roomID }: { username: string; roomID: string }) {
   const [gameState, setGameState] = useState<gameStateInterface>();
   const [user, setUser] = useState(username);
-  console.log(`ROOM ID: ${roomID}`);
+  // console.log(`ROOM ID: ${roomID}`);
 
   useEffect(() => {
     const getGameState = async () => {
@@ -17,7 +17,7 @@ function Room({ username, roomID }: { username: string; roomID: string }) {
       );
 
       if (res.status === 200) setGameState(res.data);
-      console.log(`GAMESTATE:  ${res.data}`);
+      // console.log(`GAMESTATE:  ${res.data}`);
     };
 
     getGameState();
