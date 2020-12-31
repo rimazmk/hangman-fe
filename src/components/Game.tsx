@@ -19,7 +19,7 @@ function Game({
   const [word, setWord] = useState("");
   const [error, setError] = useState("");
   const gameHandler = (newState: gameStateInterface) => {
-    console.log(newState);
+    // console.log(newState);
     setGameState(Object.assign({}, newState));
   };
 
@@ -42,7 +42,7 @@ function Game({
       gameState: guessState,
     };
 
-    console.log(`GUESS: ${guess.gameState.curGuess}`);
+    // console.log(`GUESS: ${guess.gameState.curGuess}`);
     socket.emit("guess", guess);
   };
 
@@ -100,7 +100,9 @@ function Game({
           </form>
           {error && <p>{error}</p>}
           <br />
-          {username == gameState.hanger && <h1>{"Word: " + gameState.word}</h1>}
+          {username === gameState.hanger && (
+            <h1>{"Word: " + gameState.word}</h1>
+          )}
           <h1>{"Guessed Word: " + gameState.guessedWord}</h1>
           <h2>{"Category: " + gameState.category}</h2>
           <h2>{"Guesser: " + gameState.guesser}</h2>

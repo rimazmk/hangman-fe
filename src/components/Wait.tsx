@@ -38,7 +38,7 @@ function Wait({
   };
 
   const handleStart = (newState: gameStateInterface) => {
-    console.log(newState);
+    // console.log(newState);
     setGameState(Object.assign({}, newState));
   };
 

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { gameInitInterface, gameStateInterface } from "../hangman";
-import axios from "axios";
-
 import { socket } from "../modules";
 
 function Create({
@@ -18,36 +16,23 @@ function Create({
     lives: "",
   });
 
-  const [gameState, setGameState] = useState<gameStateInterface>();
-  const [gameURL, setGameURL] = useState("");
-
-  const getUrlCode = (): string => {
-    return gameURL.slice(-11, -1);
-  };
+  // const getUrlCode = (): string => {
+  //   return gameURL.slice(-11, -1);
+  // };
 
   const handleLink = (info: {
     gameState: gameStateInterface;
     roomID: string;
   }) => {
-    setGameURL(info.roomID);
-    setGameState(Object.assign({}, info.gameState));
-    console.log(`this is my username:  ${state.username}`);
+    // console.log(`this is my username:  ${state.username}`);
     setUser(info.gameState.players[0]); // why doesn't state.username itself work
     setRoom(info.roomID);
   };
 
-  const gameHandler = (newState: gameStateInterface) => {
-    console.log("run");
-    console.log(newState);
-    setGameState(Object.assign({}, newState));
-  };
-
   useEffect(() => {
     socket.on("link", handleLink);
-    socket.on("guess", gameHandler);
     return () => {
       socket.off("link", handleLink);
-      socket.off("guess", gameHandler);
     };
   }, []);
 
@@ -56,7 +41,7 @@ function Create({
     if (state.category && state.username && state.word) {
       socket.emit("create", state);
     } else {
-      console.warn("One or more field(s) missing");
+      console.warn("One or more fields are missing");
     }
   };
 
@@ -104,9 +89,6 @@ function Create({
         <br />
         <input type="submit" value="Get Game Link"></input>
       </form>
-      <p>
-        Share this link with friends :) <a href={gameURL}>{gameURL}</a>
-      </p>
     </div>
   );
 }

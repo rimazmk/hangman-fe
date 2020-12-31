@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Router, Route, Redirect, useLocation } from "react-router";
 import Create from "./Create";
 import Room from "./Room";
-import { createBrowserHistory } from "history";
-
-// Pages -> home, waiting, game
-// components -> main determines if home or room
-// room -> determines if game or wait
+// import { Router, Route, Redirect, useLocation } from "react-router";
+// import { createBrowserHistory } from "history";
 
 // const useQuery = (): URLSearchParams => {
 //   return new URLSearchParams(useLocation().search);
 // };
 
-const history = createBrowserHistory();
+// const history = createBrowserHistory();
 
 const Main = () => {
   const [roomID, setRoomID] = useState("");
@@ -21,12 +17,12 @@ const Main = () => {
 
   const params = new URLSearchParams(window.location.search);
   const id = params.get("roomID");
-  console.log(params, id, window.location, window.location.search);
+  // console.log(params, id, window.location, window.location.search);
 
   useEffect(() => {
     const checkRoomID = async () => {
       let res = await axios.get(`http://localhost:5000/?roomID=${id}`);
-      console.log(id);
+      // console.log(id);
       if (res.status === 200) setRoomID(id!);
     };
 

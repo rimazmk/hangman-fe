@@ -33,7 +33,7 @@ const NewWord = ({
       const info = { category: category, word: word, roomID: roomID };
       socket.emit("newRound", info);
     } else {
-      setError("One or more field(s) missing");
+      setError("One or more fields are missing");
     }
   };
 
