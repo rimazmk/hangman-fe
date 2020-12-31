@@ -2,9 +2,11 @@ import React from "react";
 
 interface Props {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
+  disabled: boolean;
+  guessedLetters: string[];
 }
 
-const Letters = ({ onClick }: Props) => {
+const Letters = ({ onClick, disabled, guessedLetters }: Props) => {
   let letters = [
     "a",
     "b",
@@ -33,10 +35,16 @@ const Letters = ({ onClick }: Props) => {
     "y",
     "z",
   ];
+
   const renderLetters = () => {
     return letters.map((letter) => {
       return (
-        <button onClick={onClick} value={letter} key={letter.charCodeAt(0)}>
+        <button
+          onClick={onClick}
+          value={letter}
+          key={letter.charCodeAt(0)}
+          disabled={disabled || guessedLetters.includes(letter)}
+        >
           {letter}
         </button>
       );

@@ -6,6 +6,7 @@ export interface gameInitInterface {
   category: string;
   username: string;
   word: string;
+  lives: string;
 }
 
 export interface gameStateInterface {
@@ -13,7 +14,8 @@ export interface gameStateInterface {
   hanger: string;
   category: string;
   word: string;
-  guessedLetters: boolean[];
+  guessedLetters: string[];
+  lives: number;
   numIncorrect: number;
   guessedWords: string[];
   guesser: string;

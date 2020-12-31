@@ -33,6 +33,7 @@ const Main = () => {
     checkRoomID();
   }, []);
 
+  // TODO: replace with react router
   return (
     <div>
       {roomID !== "" ? (

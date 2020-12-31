@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { gameInitInterface, gameStateInterface } from "../hangman";
-import logo from "../logo.svg";
-import Letters from "./Letters";
-import io from "socket.io-client";
 import axios from "axios";
 
-const socket = io("http://localhost:5000");
+import { socket } from "../modules";
 
 function Create({
   setUser,
@@ -18,6 +15,7 @@ function Create({
     category: "",
     username: "",
     word: "",
+    lives: "",
   });
 
   const [gameState, setGameState] = useState<gameStateInterface>();
@@ -48,7 +46,8 @@ function Create({
     socket.on("link", handleLink);
     socket.on("guess", gameHandler);
     return () => {
-      socket.close();
+      socket.off("link", handleLink);
+      socket.off("guess", gameHandler);
     };
   }, []);
 
@@ -59,22 +58,6 @@ function Create({
     } else {
       console.warn("One or more field(s) missing");
     }
-  };
-
-  const onLetterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    let ev = e.target as HTMLButtonElement;
-
-    let guessState = Object.assign({}, gameState);
-    guessState.curGuess = ev.value;
-
-    let guess = {
-      user: state.username,
-      roomID: getUrlCode(),
-      gameState: guessState,
-    };
-    console.log(guess);
-    socket.emit("guess", guess);
   };
 
   return (
@@ -107,26 +90,23 @@ function Create({
           name="category"
         ></input>
         <br />
+        Enter Lives:
+        <input
+          type="number"
+          value={state.lives}
+          onChange={(e) => setState({ ...state, lives: e.target.value })}
+          id="lives"
+          name="lives"
+          min="6"
+          max="10"
+        ></input>
+        <br />
         <br />
         <input type="submit" value="Get Game Link"></input>
       </form>
-      <button
-        onClick={async () => {
-          let code = getUrlCode();
-          let res = await axios.get<gameInitInterface>(
-            `http://localhost:5000/room/${code}`
-          );
-          console.log(res.data);
-        }}
-      >
-        Get state
-      </button>
       <p>
         Share this link with friends :) <a href={gameURL}>{gameURL}</a>
       </p>
-      <Letters onClick={onLetterClick} />
-      <br />
-      {JSON.stringify(gameState)}
     </div>
   );
 }

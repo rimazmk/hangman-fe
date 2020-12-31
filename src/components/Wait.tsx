@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { gameStateInterface } from "../hangman";
 import { socket } from "../modules";
-// import axios from "axios";
 
 function Wait({
-  username,
+  user,
   roomID,
   gameState,
   setGameState,
+  setUser,
 }: {
-  username: string;
+  user: string;
   roomID: string;
   gameState: gameStateInterface;
   setGameState: React.Dispatch<
     React.SetStateAction<gameStateInterface | undefined>
   >;
+  setUser: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  const [user, setUser] = useState(username);
   const [joined, setJoined] = useState(false);
   const handleSubmitJoin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,6 +26,7 @@ function Wait({
         user: user,
       };
       setJoined(true);
+      setUser(user);
       socket.emit("join", credentials);
     } else {
       console.warn("One or more field(s) missing");
@@ -37,19 +38,20 @@ function Wait({
   };
 
   const handleStart = (newState: gameStateInterface) => {
-    setGameState({ ...gameState, gameStart: newState.gameStart });
+    console.log(newState);
+    setGameState(Object.assign({}, newState));
   };
 
   const handleJoin = (newState: gameStateInterface) => {
-    console.log(newState);
-    setGameState({ ...gameState, players: newState.players });
+    setGameState(Object.assign({}, newState));
   };
 
   useEffect(() => {
     socket.on("start", handleStart);
     socket.on("join", handleJoin);
     return () => {
-      socket.close();
+      socket.off("start", handleStart);
+      socket.off("join", handleJoin);
     };
   }, []);
 
@@ -57,14 +59,16 @@ function Wait({
 
   return (
     <>
-      <p>Players: {gameState.players.map((n) => `${n} `)}</p>
+      <p>Players: </p>
+      {gameState.players.map((n) => (
+        <p>{n}</p>
+      ))}
 
       {user === gameState.hanger && <p>Share this link with friends: {url}</p>}
 
       {user === gameState.hanger && gameState.players.length >= 2 && (
         <button onClick={onButtonClick}>Start game!</button>
       )}
-
       {/* Add functionality for changing username */}
       {user !== gameState.hanger && !joined && (
         <div>
