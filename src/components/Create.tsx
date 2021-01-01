@@ -10,9 +10,7 @@ function Create({
   setRoom: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [state, setState] = useState<gameInitInterface>({
-    category: "",
     username: "",
-    word: "",
     lives: "",
   });
 
@@ -38,7 +36,7 @@ function Create({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (state.category && state.username && state.word && state.lives) {
+    if (state.username && state.lives) {
       socket.emit("create", state);
     } else {
       console.warn("One or more fields are missing");
@@ -55,24 +53,6 @@ function Create({
           onChange={(e) => setState({ ...state, username: e.target.value })}
           id="username"
           name="username"
-        ></input>
-        <br />
-        Enter First Word:
-        <input
-          type="text"
-          value={state.word}
-          onChange={(e) => setState({ ...state, word: e.target.value })}
-          id="word"
-          name="word"
-        ></input>
-        <br />
-        Enter Category:
-        <input
-          type="text"
-          value={state.category}
-          onChange={(e) => setState({ ...state, category: e.target.value })}
-          id="category"
-          name="category"
         ></input>
         <br />
         Enter Lives:

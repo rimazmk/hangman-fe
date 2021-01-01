@@ -52,9 +52,9 @@ const NewWord = ({
     <>
       {gameState.hanger === user ? (
         <div>
-          <p>YOU WIN! :)</p>
+          {gameState.word !== "" && <p>YOU WIN! :)</p>}
           <form onSubmit={handleSubmit}>
-            Enter New Word:
+            <>Enter {gameState.word ? "New" : ""} Word:</>
             <input
               type="text"
               value={word}
@@ -63,7 +63,7 @@ const NewWord = ({
               name="word"
             ></input>
             <br />
-            Enter New Category:
+            Enter {gameState.word ? "New" : ""} Category:
             <input
               type="text"
               value={category}
@@ -77,9 +77,11 @@ const NewWord = ({
         </div>
       ) : (
         <div>
-          <p>The word was {gameState.word}</p>
-          <p>{gameState.hanger} is now the hanger</p>
-          <p>Waiting for a new word...</p>
+          {gameState.word !== "" && <p>The word was {gameState.word}</p>}
+          <p>
+            {gameState.hanger} is {gameState.word ? "now" : ""} the hanger
+          </p>
+          <p>Waiting for a {gameState.word ? "new" : ""} word...</p>
         </div>
       )}
       {error && error !== "" && <p>error</p>}

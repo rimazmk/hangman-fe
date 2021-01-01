@@ -3,9 +3,7 @@
 export as namespace hangman;
 
 export interface gameInitInterface {
-  category: string;
   username: string;
-  word: string;
   lives: string;
 }
 
