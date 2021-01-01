@@ -16,7 +16,7 @@ function Room({ username, roomID }: { username: string; roomID: string }) {
     setGameState(Object.assign({}, newState));
   };
 
-  const cleanup = () => socket.emit("leave", { user: user, roomID: roomID });
+  // const cleanup = () => socket.emit("leave", { user: user, roomID: roomID });
 
   useEffect(() => {
     const getGameState = async () => {
@@ -29,11 +29,11 @@ function Room({ username, roomID }: { username: string; roomID: string }) {
 
     socket.on("leave", handleLeave);
     getGameState();
-    window.addEventListener("beforeunload", (ev) => {
-      ev.preventDefault();
-      cleanup();
-    });
-    return () => window.removeEventListener("beforeunload", cleanup);
+    // window.addEventListener("beforeunload", (ev) => {
+    //   ev.preventDefault();
+    //   cleanup();
+    // });
+    // return () => window.removeEventListener("beforeunload", cleanup);
   }, [roomID]);
 
   const render = () => {
