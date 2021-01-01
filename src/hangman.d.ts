@@ -11,6 +11,7 @@ export interface gameInitInterface {
 
 export interface gameStateInterface {
   players: string[];
+  cap: number;
   hanger: string;
   category: string;
   word: string;

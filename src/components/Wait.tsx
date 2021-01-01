@@ -6,27 +6,33 @@ function Wait({
   user,
   roomID,
   gameState,
-  setGameState,
+  handleState,
   setUser,
 }: {
   user: string;
   roomID: string;
   gameState: gameStateInterface;
-  setGameState: React.Dispatch<
+  handleState: React.Dispatch<
     React.SetStateAction<gameStateInterface | undefined>
   >;
   setUser: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [joined, setJoined] = useState(false);
+  const [formUser, setFormUser] = useState("");
+
   const handleSubmitJoin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (user && user !== "") {
+    if (gameState.players.includes(formUser)) {
+      console.warn("Username is already taken");
+      setFormUser("");
+    } else if (formUser && formUser !== "") {
       let credentials = {
         roomID: roomID,
-        user: user,
+        user: formUser,
       };
       setJoined(true);
-      setUser(user);
+      setUser(formUser);
+      // socket.username = formUser;
       socket.emit("join", credentials);
     } else {
       console.warn("One or more field(s) missing");
@@ -37,21 +43,12 @@ function Wait({
     socket.emit("start", roomID);
   };
 
-  const handleStart = (newState: gameStateInterface) => {
-    // console.log(newState);
-    setGameState(Object.assign({}, newState));
-  };
-
-  const handleJoin = (newState: gameStateInterface) => {
-    setGameState(Object.assign({}, newState));
-  };
-
   useEffect(() => {
-    socket.on("start", handleStart);
-    socket.on("join", handleJoin);
+    socket.on("update", handleState);
+    socket.emit("joinRoom", roomID);
     return () => {
-      socket.off("start", handleStart);
-      socket.off("join", handleJoin);
+      socket.emit("leave", { user: user, roomID: roomID });
+      socket.off("update", handleState);
     };
   }, []);
 
@@ -77,8 +74,8 @@ function Wait({
             Enter Username:
             <input
               type="text"
-              value={user}
-              onChange={(e) => setUser(e.target.value)}
+              value={formUser}
+              onChange={(e) => setFormUser(e.target.value)}
               id="username"
               name="username"
             ></input>
