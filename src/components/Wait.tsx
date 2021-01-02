@@ -47,7 +47,6 @@ function Wait({
     socket.on("update", handleState);
     socket.emit("joinRoom", roomID);
     return () => {
-      // socket.emit("leave", { user: user, roomID: roomID });
       socket.off("update", handleState);
     };
   }, []);

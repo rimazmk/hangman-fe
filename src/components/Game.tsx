@@ -24,9 +24,9 @@ function Game({
   };
 
   useEffect(() => {
-    socket.on("guess", gameHandler);
+    socket.on("update", gameHandler);
     return () => {
-      socket.off("guess", gameHandler);
+      socket.off("update", gameHandler);
     };
   }, []);
 
@@ -119,6 +119,13 @@ function Game({
           <h2>{"Words Guessed: "}</h2>
           {displayWords()}
           <h2>Player: {username}</h2>
+          <h2>
+            {" "}
+            Active Players:{" "}
+            {gameState.players.map((player) => (
+              <>{player} </>
+            ))}
+          </h2>
         </div>
       )}
       {!username && "game already started"}

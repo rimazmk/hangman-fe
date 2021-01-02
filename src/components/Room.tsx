@@ -10,13 +10,10 @@ import { socket } from "../modules";
 function Room({ username, roomID }: { username: string; roomID: string }) {
   const [gameState, setGameState] = useState<gameStateInterface>();
   const [user, setUser] = useState(username);
-  // console.log(`ROOM ID: ${roomID}`);
 
   const handleLeave = (newState: gameStateInterface) => {
     setGameState(Object.assign({}, newState));
   };
-
-  // const cleanup = () => socket.emit("leave", { user: user, roomID: roomID });
 
   useEffect(() => {
     const getGameState = async () => {
@@ -29,12 +26,16 @@ function Room({ username, roomID }: { username: string; roomID: string }) {
 
     socket.on("leave", handleLeave);
     getGameState();
-    // window.addEventListener("beforeunload", (ev) => {
-    //   ev.preventDefault();
-    //   cleanup();
-    // });
-    // return () => window.removeEventListener("beforeunload", cleanup);
   }, [roomID]);
+
+  useEffect(() => {
+    const cleanup = (e: Event) => {
+      e.preventDefault();
+      socket.emit("leave", { user: user, roomID: roomID });
+    };
+    window.addEventListener("unload", cleanup);
+    return () => window.removeEventListener("unload", cleanup);
+  }, [user, roomID]);
 
   const render = () => {
     if (
