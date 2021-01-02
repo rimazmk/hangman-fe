@@ -5,6 +5,7 @@ export as namespace hangman;
 export interface gameInitInterface {
   username: string;
   lives: string;
+  time: string;
 }
 
 export interface gameStateInterface {
@@ -21,4 +22,5 @@ export interface gameStateInterface {
   curGuess: string;
   guessedWord: string;
   gameStart: bool;
+  time: number;
 }

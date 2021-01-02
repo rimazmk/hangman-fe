@@ -6,10 +6,12 @@ import NewWord from "./NewWord";
 import axios from "axios";
 
 import { socket } from "../modules";
+import { time } from "console";
 
 function Room({ username, roomID }: { username: string; roomID: string }) {
   const [gameState, setGameState] = useState<gameStateInterface>();
   const [user, setUser] = useState(username);
+  const [err, setErr] = useState(false);
 
   const handleLeave = (newState: gameStateInterface) => {
     setGameState(Object.assign({}, newState));
@@ -21,7 +23,11 @@ function Room({ username, roomID }: { username: string; roomID: string }) {
         `http://localhost:5000/?roomID=${roomID}`
       );
 
-      if (res.status === 200) setGameState(res.data);
+      if (res.status === 200) {
+        setGameState(res.data);
+      } else {
+        setErr(true);
+      }
     };
 
     socket.on("leave", handleLeave);
@@ -77,7 +83,7 @@ function Room({ username, roomID }: { username: string; roomID: string }) {
       );
     } else {
       // this should never be reached
-      return <p>An error occurred</p>;
+      return err ? <p>An error occurred</p> : <p>Loading...</p>;
     }
   };
 
