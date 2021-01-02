@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { gameStateInterface } from "../hangman";
 import Letters from "./Letters";
+import Chat from "./Chat";
 import { socket } from "../modules";
 
 function Game({
@@ -126,6 +127,9 @@ function Game({
               <>{player} </>
             ))}
           </h2>
+          <br />
+          <br />
+          <Chat user={username} roomID={roomID} />
         </div>
       )}
       {!username && "game already started"}
