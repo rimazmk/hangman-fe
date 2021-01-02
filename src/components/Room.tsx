@@ -4,9 +4,7 @@ import Game from "./Game";
 import Wait from "./Wait";
 import NewWord from "./NewWord";
 import axios from "axios";
-
 import { socket } from "../modules";
-import { time } from "console";
 
 function Room({ username, roomID }: { username: string; roomID: string }) {
   const [gameState, setGameState] = useState<gameStateInterface>();
