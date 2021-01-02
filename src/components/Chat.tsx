@@ -1,12 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { socket } from "../modules";
 
 function Chat({ user, roomID }: { user: string; roomID: string }) {
   const [messages, setMessages] = useState<[string, string][]>([]);
   const [message, setMessage] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const handleMessage = (info: [string, string]) => {
-    setMessages([...messages, info]);
+    setMessages((messages) => [...messages, info]);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -25,19 +32,26 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
 
   useEffect(() => {
     socket.on("chat", handleMessage);
+    scrollToBottom();
     return () => {
       socket.off("chat", handleMessage);
     };
-  }, []);
+  }, [messages]);
 
   return (
     <div>
       <h2>Chat:</h2>
-      {messages.map((user, msg) => (
-        <p>
-          {user}: {msg}
-        </p>
-      ))}
+
+      {/* Add scroll functionality through CSS */}
+      <div className="messagesWrapper">
+        {messages.map((info) => (
+          <p>
+            {info[0]}: {info[1]}
+          </p>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -46,9 +60,7 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
           id="message"
           name="message"
         ></input>
-        <input type="submit" value="Submit">
-          Send
-        </input>
+        <input type="submit" value="Send" />
       </form>
     </div>
   );

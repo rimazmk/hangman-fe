@@ -129,7 +129,9 @@ function Game({
           </h2>
           <br />
           <br />
-          <Chat user={username} roomID={roomID} />
+          <div>
+            <Chat user={username} roomID={roomID} />
+          </div>
         </div>
       )}
       {!username && "game already started"}
