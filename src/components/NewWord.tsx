@@ -54,7 +54,7 @@ const NewWord = ({
         <div>
           {gameState.word !== "" && <p>YOU WIN! :)</p>}
           <form onSubmit={handleSubmit}>
-            <>Enter {gameState.word ? "New" : ""} Word:</>
+            Enter {gameState.word ? "New" : ""} Word:
             <input
               type="text"
               value={word}
@@ -72,7 +72,7 @@ const NewWord = ({
               name="category"
             ></input>
             <br />
-            <input type="submit" value="Submit"></input>
+            <input type="submit" value="Submit" />
           </form>
         </div>
       ) : (
