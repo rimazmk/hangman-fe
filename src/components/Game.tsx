@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { gameStateInterface } from "../hangman";
 import Letters from "./Letters";
-import Chat from "./Chat";
 import Timer from "./Timer";
+import Chat from "./Chat";
 import { socket } from "../modules";
 
 function Game({
@@ -135,8 +135,6 @@ function Game({
               makeGuess={makeGuess}
             />
           )}
-          <br />
-          <br />
           <div>
             <Chat user={username} roomID={roomID} />
           </div>
