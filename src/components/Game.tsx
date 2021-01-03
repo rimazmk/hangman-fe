@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { gameStateInterface } from "../hangman";
 import Letters from "./Letters";
 import { socket } from "../modules";
+import Timer from "./Timer";
 
 function Game({
   gameState,
@@ -18,24 +19,10 @@ function Game({
 }) {
   const [word, setWord] = useState("");
   const [error, setError] = useState("");
-  const [time, setTime] = useState(gameState.time);
-  const def = gameState.time;
   const gameHandler = (newState: gameStateInterface) => {
     // console.log(newState);
     setGameState(Object.assign({}, newState));
   };
-
-  const resetTime = () => setTime(def);
-
-  useEffect(() => {
-    if (username === gameState.guesser) {
-      if (time > 0) {
-        setTimeout(() => setTime(time - 1), 1000);
-      } else {
-        makeGuess("");
-      }
-    }
-  }, [time]);
 
   useEffect(() => {
     socket.on("update", gameHandler);
@@ -56,12 +43,6 @@ function Game({
       gameState: guessState,
     };
 
-    // console.log(`GUESS: ${guess.gameState.curGuess}`);
-    if (guessedEntity === "") {
-      setTimeout(resetTime, 3000);
-    } else {
-      resetTime();
-    }
     socket.emit("guess", guess);
   };
 
@@ -145,10 +126,13 @@ function Game({
               <>{player} </>
             ))}
           </h2>
-          {username === gameState.guesser && time !== 0 && (
-            <h2>Time Remaining: {time}</h2>
+          {username === gameState.guesser && (
+            <Timer
+              gameState={gameState}
+              username={username}
+              makeGuess={makeGuess}
+            />
           )}
-          {time === 0 && <h2>Time's Up!</h2>}
         </div>
       )}
       {!username && "game already started"}
