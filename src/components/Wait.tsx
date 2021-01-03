@@ -32,7 +32,6 @@ function Wait({
       };
       setJoined(true);
       setUser(formUser);
-      // socket.username = formUser;
       socket.emit("join", credentials);
     } else {
       console.warn("One or more field(s) missing");
@@ -56,9 +55,8 @@ function Wait({
   return (
     <>
       <p>Players: </p>
-      {/* Change keys to be player usernames after ensuring unique usernames */}
-      {gameState.players.map((player, index) => (
-        <p key={index}>{player}</p>
+      {gameState.players.map((player) => (
+        <p key={player}>{player}</p>
       ))}
 
       {user === gameState.hanger && <p>Share this link with friends: {url}</p>}

@@ -29,7 +29,7 @@ const NewWord = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (category && word) {
-      if (checkInput()) setError("Only alphabetic, spaces, and dashed allowed");
+      if (checkInput()) setError("Only alphabetic, spaces, and dashes allowed");
       const info = { category: category, word: word, roomID: roomID };
       socket.emit("newRound", info);
     } else {
