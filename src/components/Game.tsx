@@ -19,12 +19,13 @@ function Game({
   const [word, setWord] = useState("");
   const [error, setError] = useState("");
   const [time, setTime] = useState(gameState.time);
+  const def = gameState.time;
   const gameHandler = (newState: gameStateInterface) => {
     // console.log(newState);
     setGameState(Object.assign({}, newState));
   };
 
-  const resetTime = () => setTime(gameState.time);
+  const resetTime = () => setTime(def);
 
   useEffect(() => {
     if (username === gameState.guesser) {
@@ -34,7 +35,7 @@ function Game({
         makeGuess("");
       }
     }
-  });
+  }, [time]);
 
   useEffect(() => {
     socket.on("update", gameHandler);
@@ -56,8 +57,12 @@ function Game({
     };
 
     // console.log(`GUESS: ${guess.gameState.curGuess}`);
+    if (guessedEntity === "") {
+      setTimeout(resetTime, 3000);
+    } else {
+      resetTime();
+    }
     socket.emit("guess", guess);
-    setTimeout(resetTime, 3000);
   };
 
   const onFormSubmit = (e: React.FormEvent) => {
