@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { gameStateInterface } from "../hangman";
 import Game from "./Game";
 import Wait from "./Wait";
@@ -7,10 +8,11 @@ import axios from "axios";
 
 import { socket } from "../modules";
 
-function Room({ username, roomID }: { username: string; roomID: string }) {
+function Room({ username }: { username: string }) {
   const [gameState, setGameState] = useState<gameStateInterface>();
   const [user, setUser] = useState(username);
-
+  const { roomID }: { roomID: string } = useParams();
+  console.log(username);
   const handleLeave = (newState: gameStateInterface) => {
     setGameState(Object.assign({}, newState));
   };
@@ -76,8 +78,8 @@ function Room({ username, roomID }: { username: string; roomID: string }) {
         />
       );
     } else {
-      // this should never be reached
-      return <p>An error occurred</p>;
+      // this should only occur on the first render
+      return <></>;
     }
   };
 

@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { Redirect } from "react-router";
 import { gameInitInterface, gameStateInterface } from "../hangman";
 import { socket } from "../modules";
 
 function Create({
   setUser,
-  setRoom,
 }: {
   setUser: React.Dispatch<React.SetStateAction<string>>;
-  setRoom: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [state, setState] = useState<gameInitInterface>({
     username: "",
     lives: "",
   });
+  const [roomID, setRoomID] = useState("");
 
   // const getUrlCode = (): string => {
   //   return gameURL.slice(-11, -1);
@@ -22,9 +22,9 @@ function Create({
     gameState: gameStateInterface;
     roomID: string;
   }) => {
-    // console.log(`this is my username:  ${state.username}`);
+    console.log(info);
     setUser(info.gameState.players[0]); // why doesn't state.username itself work
-    setRoom(info.roomID);
+    setRoomID(info.roomID);
   };
 
   useEffect(() => {
@@ -69,6 +69,7 @@ function Create({
         <br />
         <input type="submit" value="Get Game Link"></input>
       </form>
+      {roomID && roomID !== "" && <Redirect to={`/${roomID}`} />}
     </div>
   );
 }

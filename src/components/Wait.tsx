@@ -32,7 +32,6 @@ function Wait({
       };
       setJoined(true);
       setUser(formUser);
-      // socket.username = formUser;
       socket.emit("join", credentials);
     } else {
       console.warn("One or more field(s) missing");
@@ -51,7 +50,7 @@ function Wait({
     };
   }, []);
 
-  const url = `http://localhost:3000/?roomID=${roomID}`;
+  const url = `http://localhost:3000/${roomID}`;
 
   return (
     <>
