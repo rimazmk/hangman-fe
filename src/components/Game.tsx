@@ -38,7 +38,6 @@ function Game({
     );
 
     let guess = {
-      user: username,
       roomID: roomID,
       gameState: guessState,
     };
@@ -85,6 +84,7 @@ function Game({
     <>
       {username && username !== "" && (
         <div>
+          <h1>Round: {gameState.round}</h1>
           <Letters
             onClick={onLetterClick}
             disabled={gameState.guesser !== username}

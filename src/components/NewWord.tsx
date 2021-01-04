@@ -30,7 +30,12 @@ const NewWord = ({
     e.preventDefault();
     if (category && word) {
       if (checkInput()) setError("Only alphabetic, spaces, and dashed allowed");
-      const info = { category: category, word: word, roomID: roomID };
+      const info = {
+        category: category,
+        word: word,
+        user: user,
+        roomID: roomID,
+      };
       socket.emit("newRound", info);
     } else {
       setError("One or more fields are missing");
@@ -48,11 +53,44 @@ const NewWord = ({
     };
   }, []);
 
+  const next =
+    gameState.players[
+      (gameState.players.indexOf(gameState.hanger) + 1) %
+        gameState.players.length
+    ];
+
+  let next_hanger = "";
+
+  if (gameState.round === 0) {
+    next_hanger = gameState.hanger;
+  } else if (gameState.rotation === "king") {
+    if (gameState.numIncorrect === gameState.lives) {
+      next_hanger = gameState.hanger;
+    } else {
+      next_hanger = gameState.guesser;
+    }
+  } else if (gameState.rotation === "robin") {
+    next_hanger = next;
+  }
+
   return (
     <>
-      {gameState.hanger === user ? (
+      {gameState.word !== "" &&
+        gameState.rotation === "robin" &&
+        gameState.numIncorrect !== gameState.lives &&
+        user === gameState.guesser && <p>YOU WIN! :)</p>}
+
+      {gameState.word !== "" &&
+        gameState.rotation === "robin" &&
+        gameState.numIncorrect === gameState.lives &&
+        user === gameState.hanger && <p>YOU WIN! :)</p>}
+
+      {user === next_hanger ? (
         <div>
-          {gameState.word !== "" && <p>YOU WIN! :)</p>}
+          {gameState.word !== "" && gameState.rotation === "king" && (
+            <p>YOU WIN! :)</p>
+          )}
+
           <form onSubmit={handleSubmit}>
             Enter {gameState.word ? "New" : ""} Word:
             <input
@@ -77,9 +115,11 @@ const NewWord = ({
         </div>
       ) : (
         <div>
-          {gameState.word !== "" && <p>The word was {gameState.word}</p>}
+          {gameState.word !== "" && user !== gameState.hanger && (
+            <p>The word was {gameState.word}</p>
+          )}
           <p>
-            {gameState.hanger} is {gameState.word ? "now" : ""} the hanger
+            {next_hanger} is {gameState.word ? "now" : ""} the hanger
           </p>
           <p>Waiting for a {gameState.word ? "new" : ""} word...</p>
         </div>

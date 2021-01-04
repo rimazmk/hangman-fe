@@ -11,6 +11,7 @@ function Create({
   const [state, setState] = useState<gameInitInterface>({
     username: "",
     lives: "",
+    rotation: "robin",
   });
   const [roomID, setRoomID] = useState("");
 
@@ -36,7 +37,7 @@ function Create({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (state.username && state.lives) {
+    if (state.username && state.lives && state.rotation) {
       socket.emit("create", state);
     } else {
       console.warn("One or more fields are missing");
@@ -65,6 +66,16 @@ function Create({
           min="6"
           max="10"
         ></input>
+        <br />
+        <label htmlFor="rotation">Rotation Mode:</label>
+        <select
+          name="rotation"
+          id="rotation"
+          onChange={(e) => setState({ ...state, rotation: e.target.value })}
+        >
+          <option value="robin">Round Robin</option>
+          <option value="king">King of the Hill</option>
+        </select>
         <br />
         <br />
         <input type="submit" value="Get Game Link"></input>
