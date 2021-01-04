@@ -12,10 +12,12 @@ function Timer({
 }) {
   const [time, setTime] = useState(gameState.time);
   const timerRef = useRef<number>();
+  const changeRef = useRef(false);
 
   useEffect(() => {
     clearTimeout(timerRef.current);
     setTime(gameState.time);
+    changeRef.current = !changeRef.current;
   }, [gameState.guessedWord, gameState.numIncorrect, gameState.time]);
 
   useEffect(() => {
@@ -28,7 +30,7 @@ function Timer({
     return () => {
       clearTimeout(timerRef.current);
     };
-  }, [time]);
+  }, [time, changeRef.current]);
 
   return <div>{time !== 0 && <h2>Time Remaining: {time}</h2>}</div>;
 }
