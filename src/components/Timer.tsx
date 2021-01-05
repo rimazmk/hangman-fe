@@ -9,13 +9,15 @@ function Timer({
   makeGuess: (guessedEntity: string) => void;
 }) {
   const [time, setTime] = useState(gameState.time);
+  const [change, setChange] = useState(false);
   const timerRef = useRef<number>();
-  const changeRef = useRef(false);
+  // const changeRef = useRef(false);
 
   useEffect(() => {
     clearTimeout(timerRef.current);
     setTime(gameState.time);
-    changeRef.current = !changeRef.current;
+    setChange(!change);
+    // changeRef.current = !changeRef.current;
   }, [gameState.guessedWord, gameState.numIncorrect, gameState.time]);
 
   useEffect(() => {
@@ -28,9 +30,9 @@ function Timer({
     return () => {
       clearTimeout(timerRef.current);
     };
-  }, [time, changeRef.current]);
+  }, [time, change]);
 
-  return <div>{time !== 0 && <h2>Time Remaining: {time}</h2>}</div>;
+  return <>{time !== 0 && <h2>Time Remaining: {time}</h2>}</>;
 }
 
 export default Timer;

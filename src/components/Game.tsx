@@ -130,10 +130,11 @@ function Game({
           </h2>
           <h2>Round: {gameState.round}</h2>
           <br />
-          <br />
           {username === gameState.guesser && (
             <Timer gameState={gameState} makeGuess={makeGuess} />
           )}
+          <br />
+          <br />
           <div>
             <Chat user={username} roomID={roomID} />
           </div>

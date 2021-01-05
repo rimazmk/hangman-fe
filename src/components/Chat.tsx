@@ -43,8 +43,8 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
       <h2>Chat:</h2>
 
       {/* Add scroll functionality through CSS */}
-      {messages.map((info) => (
-        <p>
+      {messages.map((info, idx) => (
+        <p key={idx}>
           {info[0]}: {info[1]}
         </p>
       ))}
