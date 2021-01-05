@@ -4,9 +4,6 @@ import Create from "./Create";
 import Room from "./Room";
 import { Route, Redirect, useLocation } from "react-router";
 import { BrowserRouter } from "react-router-dom";
-import { createBrowserHistory } from "history";
-
-const history = createBrowserHistory();
 
 const Main = () => {
   const [roomID, setRoomID] = useState("");

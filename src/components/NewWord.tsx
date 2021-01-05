@@ -72,60 +72,97 @@ const NewWord = ({
     next_hanger = next;
   }
 
-  return (
-    <>
-      {gameState.word !== "" &&
-        gameState.rotation === "robin" &&
-        gameState.numIncorrect !== gameState.lives &&
-        user === gameState.guesser && <p>YOU WIN! :)</p>}
+  if (gameState.round !== gameState.numrounds) {
+    return (
+      <>
+        {gameState.word !== "" &&
+          gameState.rotation === "robin" &&
+          gameState.numIncorrect !== gameState.lives &&
+          user === gameState.guesser && <p>YOU WIN! :)</p>}
 
-      {gameState.word !== "" &&
-        gameState.rotation === "robin" &&
-        gameState.numIncorrect === gameState.lives &&
-        user === gameState.hanger && <p>YOU WIN! :)</p>}
+        {gameState.word !== "" &&
+          gameState.rotation === "robin" &&
+          gameState.numIncorrect === gameState.lives &&
+          user === gameState.hanger && <p>YOU WIN! :)</p>}
 
-      {user === next_hanger ? (
-        <div>
-          {gameState.word !== "" && gameState.rotation === "king" && (
-            <p>YOU WIN! :)</p>
-          )}
+        {user === next_hanger ? (
+          <div>
+            {gameState.word !== "" && gameState.rotation === "king" && (
+              <p>YOU WIN! :)</p>
+            )}
 
-          <form onSubmit={handleSubmit}>
-            Enter {gameState.word ? "New" : ""} Word:
-            <input
-              type="text"
-              value={word}
-              onChange={(e) => setWord(e.target.value)}
-              id="word"
-              name="word"
-            ></input>
-            <br />
-            Enter {gameState.word ? "New" : ""} Category:
-            <input
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              id="category"
-              name="category"
-            ></input>
-            <br />
-            <input type="submit" value="Submit" />
-          </form>
-        </div>
-      ) : (
-        <div>
-          {gameState.word !== "" && user !== gameState.hanger && (
-            <p>The word was {gameState.word}</p>
-          )}
-          <p>
-            {next_hanger} is {gameState.word ? "now" : ""} the hanger
-          </p>
-          <p>Waiting for a {gameState.word ? "new" : ""} word...</p>
-        </div>
-      )}
-      {error && error !== "" && <p>error</p>}
-    </>
-  );
+            <form onSubmit={handleSubmit}>
+              Enter {gameState.word ? "New" : ""} Word:
+              <input
+                type="text"
+                value={word}
+                onChange={(e) => setWord(e.target.value)}
+                id="word"
+                name="word"
+              ></input>
+              <br />
+              Enter {gameState.word ? "New" : ""} Category:
+              <input
+                type="text"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                id="category"
+                name="category"
+              ></input>
+              <br />
+              <input type="submit" value="Submit" />
+            </form>
+          </div>
+        ) : (
+          <div>
+            {gameState.word !== "" && user !== gameState.hanger && (
+              <p>The word was {gameState.word}</p>
+            )}
+            <p>
+              {next_hanger} is {gameState.word ? "now" : ""} the hanger
+            </p>
+            <p>Waiting for a {gameState.word ? "new" : ""} word...</p>
+          </div>
+        )}
+        {error && error !== "" && <p>error</p>}
+      </>
+    );
+  } else {
+    let high_score = 0;
+    const places = [
+      "FIRST",
+      "SECOND",
+      "THIRD",
+      "FOURTH",
+      "FIFTH",
+      "SIXTH",
+      "SEVENTH",
+      "EIGTH",
+    ];
+    let wins = Object.entries(gameState.wins);
+    wins.sort(function (a, b) {
+      return b[1] - a[1];
+    });
+    let prev = wins[0][1];
+    let uniq = 0;
+    let res: Array<string> = [];
+    for (let person of wins) {
+      if (person[1] !== prev) {
+        uniq++;
+      }
+      prev = person[1];
+      let str = `${places[uniq]} PLACE: ${person[0]} with a score of ${person[1]}`;
+      res.push(str);
+    }
+
+    return (
+      <div>
+        {res.map((place: string) => (
+          <p>{place}</p>
+        ))}
+      </div>
+    );
+  }
 };
 
 export default NewWord;

@@ -20,7 +20,7 @@ function Game({
   const [word, setWord] = useState("");
   const [error, setError] = useState("");
   const gameHandler = (newState: gameStateInterface) => {
-    // console.log(newState);
+    console.log(newState);
     setGameState(Object.assign({}, newState));
   };
 
@@ -127,6 +127,7 @@ function Game({
               <>{player} </>
             ))}
           </h2>
+          <h2>Round: {gameState.round}</h2>
           <br />
           <br />
           <div>
