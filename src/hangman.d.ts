@@ -5,11 +5,13 @@ export as namespace hangman;
 export interface gameInitInterface {
   username: string;
   lives: string;
+  numrounds: string;
   rotation: string;
 }
 
 export interface gameStateInterface {
   players: string[];
+  wins: object;
   cap: number;
   hanger: string;
   category: string;
@@ -24,4 +26,5 @@ export interface gameStateInterface {
   gameStart: bool;
   rotation: string;
   round: number;
+  numrounds: number;
 }

@@ -127,6 +127,7 @@ function Game({
               <>{player} </>
             ))}
           </h2>
+          <h2>Round: {gameState.round}</h2>
           <br />
           <br />
           <div>

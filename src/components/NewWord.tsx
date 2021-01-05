@@ -72,60 +72,79 @@ const NewWord = ({
     next_hanger = next;
   }
 
-  return (
-    <>
-      {gameState.word !== "" &&
-        gameState.rotation === "robin" &&
-        gameState.numIncorrect !== gameState.lives &&
-        user === gameState.guesser && <p>YOU WIN! :)</p>}
+  if (gameState.round !== gameState.numrounds) {
+    return (
+      <>
+        {gameState.word !== "" &&
+          gameState.rotation === "robin" &&
+          gameState.numIncorrect !== gameState.lives &&
+          user === gameState.guesser && <p>YOU WIN! :)</p>}
 
-      {gameState.word !== "" &&
-        gameState.rotation === "robin" &&
-        gameState.numIncorrect === gameState.lives &&
-        user === gameState.hanger && <p>YOU WIN! :)</p>}
+        {gameState.word !== "" &&
+          gameState.rotation === "robin" &&
+          gameState.numIncorrect === gameState.lives &&
+          user === gameState.hanger && <p>YOU WIN! :)</p>}
 
-      {user === next_hanger ? (
-        <div>
-          {gameState.word !== "" && gameState.rotation === "king" && (
-            <p>YOU WIN! :)</p>
-          )}
+        {user === next_hanger ? (
+          <div>
+            {gameState.word !== "" && gameState.rotation === "king" && (
+              <p>YOU WIN! :)</p>
+            )}
 
-          <form onSubmit={handleSubmit}>
-            Enter {gameState.word ? "New" : ""} Word:
-            <input
-              type="text"
-              value={word}
-              onChange={(e) => setWord(e.target.value)}
-              id="word"
-              name="word"
-            ></input>
-            <br />
-            Enter {gameState.word ? "New" : ""} Category:
-            <input
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              id="category"
-              name="category"
-            ></input>
-            <br />
-            <input type="submit" value="Submit" />
-          </form>
-        </div>
-      ) : (
-        <div>
-          {gameState.word !== "" && user !== gameState.hanger && (
-            <p>The word was {gameState.word}</p>
-          )}
-          <p>
-            {next_hanger} is {gameState.word ? "now" : ""} the hanger
-          </p>
-          <p>Waiting for a {gameState.word ? "new" : ""} word...</p>
-        </div>
-      )}
-      {error && error !== "" && <p>error</p>}
-    </>
-  );
+            <form onSubmit={handleSubmit}>
+              Enter {gameState.word ? "New" : ""} Word:
+              <input
+                type="text"
+                value={word}
+                onChange={(e) => setWord(e.target.value)}
+                id="word"
+                name="word"
+              ></input>
+              <br />
+              Enter {gameState.word ? "New" : ""} Category:
+              <input
+                type="text"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                id="category"
+                name="category"
+              ></input>
+              <br />
+              <input type="submit" value="Submit" />
+            </form>
+          </div>
+        ) : (
+          <div>
+            {gameState.word !== "" && user !== gameState.hanger && (
+              <p>The word was {gameState.word}</p>
+            )}
+            <p>
+              {next_hanger} is {gameState.word ? "now" : ""} the hanger
+            </p>
+            <p>Waiting for a {gameState.word ? "new" : ""} word...</p>
+          </div>
+        )}
+        {error && error !== "" && <p>error</p>}
+      </>
+    );
+  } else {
+    let winner = "";
+    let score = 0;
+    Object.entries(gameState.wins).forEach((player) => {
+      let [key, value] = player;
+      if (value > score) {
+        winner = key;
+        score = value;
+      }
+    });
+    return (
+      <>
+        <p>
+          {winner} wins with score {score}
+        </p>
+      </>
+    );
+  }
 };
 
 export default NewWord;
