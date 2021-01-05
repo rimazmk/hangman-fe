@@ -72,7 +72,7 @@ const NewWord = ({
     next_hanger = next;
   }
 
-  if (gameState.round !== gameState.numrounds) {
+  if (gameState.round !== gameState.numRounds) {
     return (
       <>
         {gameState.word !== "" &&

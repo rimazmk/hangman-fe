@@ -19,6 +19,8 @@ function Wait({
 }) {
   const [joined, setJoined] = useState(false);
   const [formUser, setFormUser] = useState("");
+  const [copy, setCopy] = useState("Copy Link");
+  const url = `http://localhost:3000/${roomID}`;
 
   const handleSubmitJoin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,6 +44,17 @@ function Wait({
     socket.emit("start", roomID);
   };
 
+  const copyLink = () => {
+    navigator.clipboard.writeText(url).then(
+      () => {
+        setCopy("Copied!");
+      },
+      () => {
+        setCopy("Failed to Copy");
+      }
+    );
+  };
+
   useEffect(() => {
     socket.on("update", handleState);
     socket.emit("joinRoom", roomID);
@@ -50,8 +63,6 @@ function Wait({
     };
   }, []);
 
-  const url = `http://localhost:3000/${roomID}`;
-
   return (
     <>
       <p>Players: </p>
@@ -59,7 +70,14 @@ function Wait({
         <p key={player}>{player}</p>
       ))}
 
-      {user === gameState.hanger && <p>Share this link with friends: {url}</p>}
+      {user === gameState.hanger && (
+        <>
+          <p>Invite your friends: {url}</p>
+          <p>
+            <button onClick={copyLink}>{copy}</button>
+          </p>
+        </>
+      )}
 
       {user === gameState.hanger && gameState.players.length >= 2 && (
         <button onClick={onButtonClick}>Start game!</button>

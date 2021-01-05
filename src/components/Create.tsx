@@ -11,7 +11,7 @@ function Create({
   const [state, setState] = useState<gameInitInterface>({
     username: "",
     lives: "",
-    numrounds: "",
+    numRounds: "",
     rotation: "robin",
     time: "30",
   });
@@ -38,7 +38,7 @@ function Create({
     if (
       state.username &&
       state.lives &&
-      state.numrounds &&
+      state.numRounds &&
       state.rotation &&
       state.time
     ) {
@@ -71,13 +71,13 @@ function Create({
           max="10"
         ></input>
         <br />
-        Enter number of rounds:
+        <label htmlFor="numRounds">Enter Number of Rounds:</label>
         <input
           type="number"
-          value={state.numrounds}
-          onChange={(e) => setState({ ...state, numrounds: e.target.value })}
-          id="numrounds"
-          name="numrounds"
+          value={state.numRounds}
+          onChange={(e) => setState({ ...state, numRounds: e.target.value })}
+          id="numRounds"
+          name="numRounds"
           min="1"
         ></input>
         <br />
