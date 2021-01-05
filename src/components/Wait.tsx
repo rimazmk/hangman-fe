@@ -72,9 +72,9 @@ function Wait({
 
       {user === gameState.hanger && (
         <>
-          <p>Invite your friends: {url}</p>
+          Share this link with your friends:
           <p>
-            <button onClick={copyLink}>{copy}</button>
+            {url} <button onClick={copyLink}>{copy}</button>
           </p>
         </>
       )}
