@@ -3,11 +3,9 @@ import { gameStateInterface } from "../hangman";
 
 function Timer({
   gameState,
-  username,
   makeGuess,
 }: {
   gameState: gameStateInterface;
-  username: string;
   makeGuess: (guessedEntity: string) => void;
 }) {
   const [time, setTime] = useState(gameState.time);

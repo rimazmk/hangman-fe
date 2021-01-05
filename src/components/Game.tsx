@@ -132,11 +132,7 @@ function Game({
           <br />
           <br />
           {username === gameState.guesser && (
-            <Timer
-              gameState={gameState}
-              username={username}
-              makeGuess={makeGuess}
-            />
+            <Timer gameState={gameState} makeGuess={makeGuess} />
           )}
           <div>
             <Chat user={username} roomID={roomID} />

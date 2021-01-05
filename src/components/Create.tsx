@@ -78,6 +78,7 @@ function Create({
           onChange={(e) => setState({ ...state, numrounds: e.target.value })}
           id="numrounds"
           name="numrounds"
+          min="1"
         ></input>
         <br />
         <label htmlFor="rotation">Rotation Mode:</label>
@@ -88,7 +89,7 @@ function Create({
         >
           <option value="robin">Round Robin</option>
           <option value="king">King of the Hill</option>
-        </select>
+        </select>{" "}
         <label htmlFor="time">Enter Guess Time: </label>
         <select
           name="time"
