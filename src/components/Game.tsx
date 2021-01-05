@@ -43,7 +43,6 @@ function Game({
       gameState: guessState,
     };
 
-    // console.log(`GUESS: ${guess.gameState.curGuess}`);
     socket.emit("guess", guess);
   };
 
@@ -130,7 +129,7 @@ function Game({
           </h2>
           <h2>Round: {gameState.round}</h2>
           <br />
-          {username === gameState.guesser && (
+          {username === gameState.guesser && gameState.time && (
             <Timer gameState={gameState} makeGuess={makeGuess} />
           )}
           <br />
@@ -140,7 +139,6 @@ function Game({
           </div>
         </div>
       )}
-      {!username && "game already started"}
     </>
   );
 }

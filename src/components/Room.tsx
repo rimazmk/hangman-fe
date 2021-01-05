@@ -21,14 +21,17 @@ function Room({ username }: { username: string }) {
 
   useEffect(() => {
     const getGameState = async () => {
-      let res = await axios.get<gameStateInterface>(
-        `http://localhost:5000/?roomID=${roomID}`
-      );
-
-      if (res.status === 200) {
-        setGameState(res.data);
-      } else {
+      let res = null;
+      try {
+        res = await axios.get<gameStateInterface>(
+          `http://localhost:5000/?roomID=${roomID}`
+        );
+      } catch (err) {
         setErr(true);
+      } finally {
+        if (res && res.status === 200) {
+          setGameState(res.data);
+        }
       }
     };
 
@@ -84,7 +87,7 @@ function Room({ username }: { username: string }) {
         />
       );
     } else {
-      return err ? <p>An error occurred</p> : <p>Loading...</p>;
+      return err ? <p>Room does not exist</p> : <p>Loading...</p>;
     }
   };
 
