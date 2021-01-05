@@ -39,18 +39,16 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
   }, [messages]);
 
   return (
-    <div>
+    <div className="messagesWrapper">
       <h2>Chat:</h2>
 
       {/* Add scroll functionality through CSS */}
-      <div className="messagesWrapper">
-        {messages.map((info) => (
-          <p>
-            {info[0]}: {info[1]}
-          </p>
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
+      {messages.map((info) => (
+        <p>
+          {info[0]}: {info[1]}
+        </p>
+      ))}
+      <div ref={messagesEndRef} />
 
       <form onSubmit={handleSubmit}>
         <input

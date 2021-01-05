@@ -13,6 +13,8 @@ function Room({ username }: { username: string }) {
   const [user, setUser] = useState(username);
   const { roomID }: { roomID: string } = useParams();
   console.log(username);
+  const [err, setErr] = useState(false);
+
   const handleLeave = (newState: gameStateInterface) => {
     setGameState(Object.assign({}, newState));
   };
@@ -23,7 +25,11 @@ function Room({ username }: { username: string }) {
         `http://localhost:5000/?roomID=${roomID}`
       );
 
-      if (res.status === 200) setGameState(res.data);
+      if (res.status === 200) {
+        setGameState(res.data);
+      } else {
+        setErr(true);
+      }
     };
 
     socket.on("leave", handleLeave);
@@ -78,8 +84,7 @@ function Room({ username }: { username: string }) {
         />
       );
     } else {
-      // this should only occur on the first render
-      return <></>;
+      return err ? <p>An error occurred</p> : <p>Loading...</p>;
     }
   };
 

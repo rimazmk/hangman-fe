@@ -7,6 +7,7 @@ export interface gameInitInterface {
   lives: string;
   numrounds: string;
   rotation: string;
+  time: string;
 }
 
 export interface gameStateInterface {
@@ -27,4 +28,5 @@ export interface gameStateInterface {
   rotation: string;
   round: number;
   numrounds: number;
+  time: number;
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { gameStateInterface } from "../hangman";
 import Letters from "./Letters";
+import Timer from "./Timer";
 import Chat from "./Chat";
 import { socket } from "../modules";
 
@@ -130,6 +131,13 @@ function Game({
           <h2>Round: {gameState.round}</h2>
           <br />
           <br />
+          {username === gameState.guesser && (
+            <Timer
+              gameState={gameState}
+              username={username}
+              makeGuess={makeGuess}
+            />
+          )}
           <div>
             <Chat user={username} roomID={roomID} />
           </div>

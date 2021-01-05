@@ -13,6 +13,7 @@ function Create({
     lives: "",
     numrounds: "",
     rotation: "robin",
+    time: "30",
   });
   const [roomID, setRoomID] = useState("");
 
@@ -34,7 +35,13 @@ function Create({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (state.username && state.lives && state.numrounds && state.rotation) {
+    if (
+      state.username &&
+      state.lives &&
+      state.numrounds &&
+      state.rotation &&
+      state.time
+    ) {
       socket.emit("create", state);
     } else {
       console.warn("One or more fields are missing");
@@ -44,7 +51,7 @@ function Create({
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        Enter Username:
+        <label htmlFor="username">Enter Username: </label>
         <input
           type="text"
           value={state.username}
@@ -53,7 +60,7 @@ function Create({
           name="username"
         ></input>
         <br />
-        Enter Lives:
+        <label htmlFor="lives">Enter Lives: </label>
         <input
           type="number"
           value={state.lives}
@@ -81,6 +88,20 @@ function Create({
         >
           <option value="robin">Round Robin</option>
           <option value="king">King of the Hill</option>
+        </select>
+        <label htmlFor="time">Enter Guess Time: </label>
+        <select
+          name="time"
+          id="time"
+          onChange={(e) => setState({ ...state, time: e.target.value })}
+        >
+          <option value="30">30</option>
+          <option value="40">40</option>
+          <option value="50">50</option>
+          <option value="60">60</option>
+          <option value="70">70</option>
+          <option value="80">80</option>
+          <option value="90">90</option>
         </select>
         <br />
         <br />

@@ -128,7 +128,6 @@ const NewWord = ({
       </>
     );
   } else {
-    let high_score = 0;
     const places = [
       "FIRST",
       "SECOND",
