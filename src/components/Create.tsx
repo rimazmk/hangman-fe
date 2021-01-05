@@ -16,10 +16,6 @@ function Create({
   });
   const [roomID, setRoomID] = useState("");
 
-  // const getUrlCode = (): string => {
-  //   return gameURL.slice(-11, -1);
-  // };
-
   const handleLink = (info: {
     gameState: gameStateInterface;
     roomID: string;

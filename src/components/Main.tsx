@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Create from "./Create";
 import Room from "./Room";
-import { Router, Route, Redirect, useLocation } from "react-router";
+import { Route, Redirect, useLocation } from "react-router";
 import { createBrowserHistory } from "history";
+import { BrowserRouter } from "react-router-dom";
 
 const history = createBrowserHistory();
 
@@ -23,21 +24,15 @@ const Main = () => {
     checkRoomID();
   }, [id]);
 
-  // TODO: replace with react router
   return (
-    <Router history={history}>
+    <BrowserRouter>
       <Route exact path="/">
         <Create setUser={setUsername} />
       </Route>
       <Route path="/:roomID">
         <Room username={username} />
       </Route>
-      {/* {roomID !== "" ? (
-        <Room username={username} roomID={roomID} />
-      ) : (
-        <Create setUser={setUsername} setRoom={setRoomID} />
-      )} */}
-    </Router>
+    </BrowserRouter>
   );
 };
 

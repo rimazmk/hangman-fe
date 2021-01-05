@@ -20,7 +20,7 @@ function Game({
   const [word, setWord] = useState("");
   const [error, setError] = useState("");
   const gameHandler = (newState: gameStateInterface) => {
-    // console.log(newState);
+    console.log(newState);
     setGameState(Object.assign({}, newState));
   };
 
