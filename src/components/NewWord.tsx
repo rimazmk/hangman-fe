@@ -19,6 +19,7 @@ const NewWord = ({
   const [category, setCategory] = useState("");
   const [error, setError] = useState("");
 
+  // TODO: Update Regex to Prohibit Digits in Word
   const checkInput = (): boolean => {
     let copy = Object.assign("", word);
     copy.replace(/[^a-z\s-]/gi, "");
