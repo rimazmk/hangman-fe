@@ -120,14 +120,13 @@ function Game({
           <h2>{"Words Guessed: "}</h2>
           {displayWords()}
           <h2>Player: {username}</h2>
+          {/* TODO: Add Unique Key for Child in List */}
           <h2>
-            {" "}
             Active Players:{" "}
             {gameState.players.map((player) => (
               <>{player} </>
             ))}
           </h2>
-          <h2>Round: {gameState.round}</h2>
           <br />
           {username === gameState.guesser && gameState.time && (
             <Timer gameState={gameState} makeGuess={makeGuess} />

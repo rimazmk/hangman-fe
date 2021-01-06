@@ -12,7 +12,6 @@ function Room({ username }: { username: string }) {
   const [gameState, setGameState] = useState<gameStateInterface>();
   const [user, setUser] = useState(username);
   const { roomID }: { roomID: string } = useParams();
-  console.log(username);
   const [err, setErr] = useState(false);
 
   const handleLeave = (newState: gameStateInterface) => {
