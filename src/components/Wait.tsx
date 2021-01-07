@@ -63,42 +63,92 @@ function Wait({
     };
   }, []);
 
-  return (
-    <>
-      <p>Players: </p>
-      {gameState.players.map((player) => (
-        <p key={player}>{player}</p>
-      ))}
-
-      {user === gameState.hanger && (
+  const render = () => {
+    if (
+      gameState &&
+      gameState.players.length >= gameState!.cap &&
+      user === ""
+    ) {
+      return <p>Sorry, Room is full </p>;
+    } else {
+      return (
         <>
-          Share this link with your friends:
-          <p>
-            {url} <button onClick={copyLink}>{copy}</button>
-          </p>
-        </>
-      )}
+          <p>Players: </p>
+          {gameState.players.map((player) => (
+            <p key={player}>{player}</p>
+          ))}
 
-      {user === gameState.hanger && gameState.players.length >= 2 && (
-        <button onClick={onButtonClick}>Start game!</button>
-      )}
-      {/* Add functionality for changing username */}
-      {user !== gameState.hanger && !joined && (
-        <div>
-          <form onSubmit={handleSubmitJoin}>
-            Enter Username:
-            <input
-              type="text"
-              value={formUser}
-              onChange={(e) => setFormUser(e.target.value)}
-              id="username"
-              name="username"
-            ></input>
-          </form>
-        </div>
-      )}
-    </>
-  );
+          {user === gameState.hanger && (
+            <>
+              Share this link with your friends:
+              <p>
+                {url} <button onClick={copyLink}>{copy}</button>
+              </p>
+            </>
+          )}
+
+          {user === gameState.hanger && gameState.players.length >= 2 && (
+            <button onClick={onButtonClick}>Start game!</button>
+          )}
+          {/* Add functionality for changing username */}
+          {user !== gameState.hanger && !joined && (
+            <div>
+              <form onSubmit={handleSubmitJoin}>
+                Enter Username:
+                <input
+                  type="text"
+                  value={formUser}
+                  onChange={(e) => setFormUser(e.target.value)}
+                  id="username"
+                  name="username"
+                ></input>
+              </form>
+            </div>
+          )}
+        </>
+      );
+    }
+  };
+
+  return <div>{render()}</div>;
 }
+
+// return (
+//   <>
+//     <p>Players: </p>
+//     {gameState.players.map((player) => (
+//       <p key={player}>{player}</p>
+//     ))}
+
+//     {user === gameState.hanger && (
+//       <>
+//         Share this link with your friends:
+//         <p>
+//           {url} <button onClick={copyLink}>{copy}</button>
+//         </p>
+//       </>
+//     )}
+
+//     {user === gameState.hanger && gameState.players.length >= 2 && (
+//       <button onClick={onButtonClick}>Start game!</button>
+//     )}
+//     {/* Add functionality for changing username */}
+//     {user !== gameState.hanger && !joined && (
+//       <div>
+//         <form onSubmit={handleSubmitJoin}>
+//           Enter Username:
+//           <input
+//             type="text"
+//             value={formUser}
+//             onChange={(e) => setFormUser(e.target.value)}
+//             id="username"
+//             name="username"
+//           ></input>
+//         </form>
+//       </div>
+//     )}
+//   </>
+// );
+// }
 
 export default Wait;

@@ -35,17 +35,7 @@ function Create({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (
-      state.username &&
-      state.lives &&
-      state.numRounds &&
-      state.rotation &&
-      state.time
-    ) {
-      socket.emit("create", state);
-    } else {
-      console.warn("One or more fields are missing");
-    }
+    socket.emit("create", state);
   };
 
   return (
@@ -58,6 +48,8 @@ function Create({
           onChange={(e) => setState({ ...state, username: e.target.value })}
           id="username"
           name="username"
+          onInvalid={(e) => "Please fill out this field"}
+          required
         ></input>
         <br />
         <label htmlFor="lives">Enter Lives: </label>
@@ -69,6 +61,8 @@ function Create({
           name="lives"
           min="6"
           max="10"
+          onInvalid={(e) => "Please fill out this field"}
+          required
         ></input>
         <br />
         <label htmlFor="numRounds">Enter Number of Rounds:</label>
@@ -79,6 +73,8 @@ function Create({
           id="numRounds"
           name="numRounds"
           min="1"
+          onInvalid={(e) => "Please fill out this field"}
+          required
         ></input>
         <br />
         <label htmlFor="rotation">Rotation Mode:</label>
@@ -86,6 +82,8 @@ function Create({
           name="rotation"
           id="rotation"
           onChange={(e) => setState({ ...state, rotation: e.target.value })}
+          onInvalid={(e) => "Please fill out this field"}
+          required
         >
           <option value="robin">Round Robin</option>
           <option value="king">King of the Hill</option>
@@ -94,6 +92,8 @@ function Create({
         <select
           name="time"
           id="time"
+          onInvalid={(e) => "Please fill out this field"}
+          required
           onChange={(e) => setState({ ...state, time: e.target.value })}
         >
           <option value="10">10</option>

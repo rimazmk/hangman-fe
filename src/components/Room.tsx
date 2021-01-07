@@ -15,6 +15,8 @@ function Room({ username }: { username: string }) {
   const [err, setErr] = useState(false);
 
   const handleLeave = (newState: gameStateInterface) => {
+    console.log(newState!.players.length);
+    if (newState!.players.length === 0) setErr(true);
     setGameState(Object.assign({}, newState));
   };
 
@@ -35,6 +37,7 @@ function Room({ username }: { username: string }) {
     };
 
     socket.on("leave", handleLeave);
+    console.log();
     getGameState();
   }, [roomID]);
 
@@ -48,12 +51,8 @@ function Room({ username }: { username: string }) {
   }, [user, roomID]);
 
   const render = () => {
-    if (
-      gameState &&
-      gameState.players.length >= gameState!.cap &&
-      user === ""
-    ) {
-      return <p>Sorry, Room is full :(</p>;
+    if (err) {
+      return <p>Room does not exist</p>;
     } else if (
       (gameState && user === "") ||
       (gameState && !gameState.gameStart)
@@ -86,7 +85,7 @@ function Room({ username }: { username: string }) {
         />
       );
     } else {
-      return err ? <p>Room does not exist</p> : <p>Loading...</p>;
+      return <p>Loading..</p>;
     }
   };
 

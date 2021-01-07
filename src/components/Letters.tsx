@@ -26,5 +26,4 @@ const Letters = ({ onClick, disabled, guessedLetters }: Props) => {
 
   return <>{renderLetters()}</>;
 };
-
 export default Letters;

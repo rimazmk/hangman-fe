@@ -48,10 +48,7 @@ function Game({
 
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (word.length < 2) {
-      setError("Word cannot be a single character");
-      return;
-    } else if (gameState.guessedWords.includes(word)) {
+    if (gameState.guessedWords.includes(word)) {
       setError(`${word} has already been guessed`);
       return;
     }
@@ -100,15 +97,19 @@ function Game({
               onChange={(e) => setWord(e.target.value)}
               id="word"
               name="word"
+              pattern="^[-\sa-zA-Z]+$"
+              title="Only alphabetic characters, spaces, and dashes allowed"
+              maxLength={50}
+              minLength={2}
               disabled={gameState.guesser !== username}
             ></input>
           </form>
           {error && <p>{error}</p>}
           <br />
           {username === gameState.hanger && (
-            <h1>{"Word: " + gameState.word}</h1>
+            <h1>{"Word(s): " + gameState.word}</h1>
           )}
-          <h1>{"Guessed Word: " + gameState.guessedWord}</h1>
+          <h1>{"Guessed Word(s): " + gameState.guessedWord}</h1>
           <h2>{"Category: " + gameState.category}</h2>
           <h2>{"Guesser: " + gameState.guesser}</h2>
           <h2>{"Hanger: " + gameState.hanger}</h2>
