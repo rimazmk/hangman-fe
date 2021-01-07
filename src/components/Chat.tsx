@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { socket } from "../modules";
+import { FormControl, Input, InputLabel } from "@material-ui/core";
 
 function Chat({ user, roomID }: { user: string; roomID: string }) {
   const [messages, setMessages] = useState<[string, string][]>([]);
@@ -51,16 +52,18 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
       <div ref={messagesEndRef} />
 
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          pattern="^[^\s]+(\s+[^\s]+)*$"
-          title="Message cannot have leading or trailing spaces"
-          id="message"
-          name="message"
-        ></input>
-        <input type="submit" value="Send" />
+        <FormControl>
+          <Input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            inputProps={{ pattern: "^[^s]+(s+[^s]+)*$" }}
+            title="Message cannot have leading or trailing spaces"
+            id="message"
+            name="message"
+          />
+          <input type="submit" value="Send" />
+        </FormControl>
       </form>
     </div>
   );
