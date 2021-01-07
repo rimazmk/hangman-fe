@@ -34,6 +34,19 @@ const NewWord = ({
     setGameState(Object.assign({}, newState));
   };
 
+  const validateWord = () => {
+    let userWord = document.getElementById("word") as HTMLInputElement;
+    if (!/^[^\s]+(\s+[^\s]+)*$/.test(userWord.value)) {
+      userWord.setCustomValidity("Word cannot have leading or trailing spaces");
+    } else if (!/^[-\sa-zA-Z]+$/.test(userWord.value)) {
+      userWord.setCustomValidity(
+        "Only alphabetic characters, spaces, and dashes allowed"
+      );
+    } else {
+      userWord.setCustomValidity("");
+    }
+  };
+
   useEffect(() => {
     socket.on("response", gameHandler);
     return () => {
@@ -88,8 +101,7 @@ const NewWord = ({
                   onChange={(e) => setWord(e.target.value)}
                   id="word"
                   name="word"
-                  pattern="^[-\sa-zA-Z]+$"
-                  title="Only alphabetic characters, spaces, and dashes allowed"
+                  onInput={(e) => validateWord()}
                   maxLength={50}
                   minLength={2}
                   onInvalid={(e) => "Please fill out this field"}

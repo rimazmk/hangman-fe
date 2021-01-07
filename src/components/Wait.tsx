@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { gameStateInterface } from "../hangman";
 import { socket } from "../modules";
 
@@ -20,23 +20,26 @@ function Wait({
   const [joined, setJoined] = useState(false);
   const [formUser, setFormUser] = useState("");
   const [copy, setCopy] = useState("Copy Link");
+  const timerRef = useRef<number>();
   const url = `http://localhost:3000/${roomID}`;
 
   const handleSubmitJoin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (gameState.players.includes(formUser)) {
-      console.warn("Username is already taken");
-      setFormUser("");
-    } else if (formUser && formUser !== "") {
-      let credentials = {
-        roomID: roomID,
-        user: formUser,
-      };
-      setJoined(true);
-      setUser(formUser);
-      socket.emit("join", credentials);
+    let credentials = {
+      roomID: roomID,
+      user: formUser,
+    };
+    setJoined(true);
+    setUser(formUser);
+    socket.emit("join", credentials);
+  };
+
+  const validateUsername = () => {
+    let username = document.getElementById("username") as HTMLInputElement;
+    if (gameState.players.includes(username.value)) {
+      username.setCustomValidity("Username is already taken");
     } else {
-      console.warn("One or more field(s) missing");
+      username.setCustomValidity("");
     }
   };
 
@@ -47,10 +50,14 @@ function Wait({
   const copyLink = () => {
     navigator.clipboard.writeText(url).then(
       () => {
+        clearTimeout(timerRef.current);
         setCopy("Copied!");
+        timerRef.current = window.setTimeout(() => setCopy("Copy"), 5000);
       },
       () => {
+        clearTimeout(timerRef.current);
         setCopy("Failed to Copy");
+        timerRef.current = window.setTimeout(() => setCopy("Copy"), 5000);
       }
     );
   };
@@ -98,7 +105,10 @@ function Wait({
                 <input
                   type="text"
                   value={formUser}
+                  pattern="^[^\s]+(\s+[^\s]+)*$"
+                  title="Username cannot have leading or trailing spaces"
                   onChange={(e) => setFormUser(e.target.value)}
+                  onInput={(e) => validateUsername()}
                   id="username"
                   name="username"
                 ></input>
@@ -112,43 +122,5 @@ function Wait({
 
   return <div>{render()}</div>;
 }
-
-// return (
-//   <>
-//     <p>Players: </p>
-//     {gameState.players.map((player) => (
-//       <p key={player}>{player}</p>
-//     ))}
-
-//     {user === gameState.hanger && (
-//       <>
-//         Share this link with your friends:
-//         <p>
-//           {url} <button onClick={copyLink}>{copy}</button>
-//         </p>
-//       </>
-//     )}
-
-//     {user === gameState.hanger && gameState.players.length >= 2 && (
-//       <button onClick={onButtonClick}>Start game!</button>
-//     )}
-//     {/* Add functionality for changing username */}
-//     {user !== gameState.hanger && !joined && (
-//       <div>
-//         <form onSubmit={handleSubmitJoin}>
-//           Enter Username:
-//           <input
-//             type="text"
-//             value={formUser}
-//             onChange={(e) => setFormUser(e.target.value)}
-//             id="username"
-//             name="username"
-//           ></input>
-//         </form>
-//       </div>
-//     )}
-//   </>
-// );
-// }
 
 export default Wait;

@@ -55,6 +55,8 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          pattern="^[^\s]+(\s+[^\s]+)*$"
+          title="Message cannot have leading or trailing spaces"
           id="message"
           name="message"
         ></input>

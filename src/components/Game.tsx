@@ -19,7 +19,6 @@ function Game({
   roomID: string;
 }) {
   const [word, setWord] = useState("");
-  const [error, setError] = useState("");
   const gameHandler = (newState: gameStateInterface) => {
     console.log(newState);
     setGameState(Object.assign({}, newState));
@@ -31,6 +30,15 @@ function Game({
       socket.off("update", gameHandler);
     };
   }, []);
+
+  const validateWord = () => {
+    let userWord = document.getElementById("word") as HTMLInputElement;
+    if (gameState.guessedWords.includes(userWord.value)) {
+      userWord.setCustomValidity(`${userWord.value} has already been guessed`);
+    } else {
+      userWord.setCustomValidity("");
+    }
+  };
 
   const makeGuess = (guessedEntity: string) => {
     let guessState = Object.assign(
@@ -48,18 +56,12 @@ function Game({
 
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (gameState.guessedWords.includes(word)) {
-      setError(`${word} has already been guessed`);
-      return;
-    }
-    setError("");
     makeGuess(word);
     setWord("");
   };
 
   const onLetterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setError("");
     setWord("");
     let ev = e.target as HTMLButtonElement;
     makeGuess(ev.value);
@@ -99,12 +101,12 @@ function Game({
               name="word"
               pattern="^[-\sa-zA-Z]+$"
               title="Only alphabetic characters, spaces, and dashes allowed"
+              onInput={(e) => validateWord()}
               maxLength={50}
               minLength={2}
               disabled={gameState.guesser !== username}
             ></input>
           </form>
-          {error && <p>{error}</p>}
           <br />
           {username === gameState.hanger && (
             <h1>{"Word(s): " + gameState.word}</h1>

@@ -48,6 +48,8 @@ function Create({
           onChange={(e) => setState({ ...state, username: e.target.value })}
           id="username"
           name="username"
+          pattern="^[^\s]+(\s+[^\s]+)*$"
+          title="Username cannot have leading or trailing spaces"
           onInvalid={(e) => "Please fill out this field"}
           required
         ></input>
