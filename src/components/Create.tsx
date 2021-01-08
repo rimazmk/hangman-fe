@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router";
 import { gameInitInterface, gameStateInterface } from "../hangman";
 import {
-  FormControl,
+  FormGroup,
   Input,
   InputLabel,
+  TextField,
   MenuItem,
   Select,
 } from "@material-ui/core";
@@ -48,9 +49,9 @@ function Create({
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <FormControl>
+        <FormGroup>
           <InputLabel htmlFor="username">Enter Username: </InputLabel>
-          <Input
+          <TextField
             type="text"
             value={state.username}
             onChange={(e) => setState({ ...state, username: e.target.value })}
@@ -62,8 +63,6 @@ function Create({
             required
           />
           <br />
-        </FormControl>
-        <FormControl>
           <InputLabel htmlFor="lives">Enter Lives: </InputLabel>
           <Input
             type="number"
@@ -76,9 +75,7 @@ function Create({
             required
           />
           <br />
-        </FormControl>
-        <FormControl>
-          <label htmlFor="numRounds">Enter Number of Rounds:</label>
+          <InputLabel htmlFor="numRounds">Enter Number of Rounds:</InputLabel>
           <Input
             type="number"
             value={state.numRounds}
@@ -90,42 +87,45 @@ function Create({
             required
           />
           <br />
-        </FormControl>
-        <FormControl>
           <InputLabel htmlFor="rotation">Rotation Mode</InputLabel>
           <Select
             name="rotation"
             id="rotation"
-            onChange={(e) => setState({ ...state, rotation: e.target.value })}
+            onChange={(e) =>
+              setState({ ...state, rotation: e.target.value as string })
+            }
             onInvalid={(e) => "Please fill out this field"}
             required
           >
             <MenuItem value="robin">Round Robin</MenuItem>
             <MenuItem value="king">King of the Hill</MenuItem>
           </Select>{" "}
-        </FormControl>
-        <label htmlFor="time">Enter Guess Time: </label>
-        <Select
-          name="time"
-          id="time"
-          onInvalid={(e) => "Please fill out this field"}
-          required
-          onChange={(e) => setState({ ...state, time: e.target.value })}
-        >
-          <MenuItem value="10">10</MenuItem>
-          <MenuItem value="20">20</MenuItem>
-          <MenuItem value="30">30</MenuItem>
-          <MenuItem value="40">40</MenuItem>
-          <MenuItem value="50">50</MenuItem>
-          <MenuItem value="60">60</MenuItem>
-          <MenuItem value="70">70</MenuItem>
-          <MenuItem value="80">80</MenuItem>
-          <MenuItem value="90">90</MenuItem>
-          <option value="inf">Unlimited</option>
-        </Select>
-        <br />
-        <br />
-        <Input type="submit" value="Get Game Link"></Input>
+          <br />
+          <InputLabel htmlFor="time">Enter Guess Time: </InputLabel>
+          <Select
+            name="time"
+            id="time"
+            onInvalid={(e) => "Please fill out this field"}
+            required
+            onChange={(e) =>
+              setState({ ...state, time: e.target.value as string })
+            }
+          >
+            <MenuItem value="10">10</MenuItem>
+            <MenuItem value="20">20</MenuItem>
+            <MenuItem value="30">30</MenuItem>
+            <MenuItem value="40">40</MenuItem>
+            <MenuItem value="50">50</MenuItem>
+            <MenuItem value="60">60</MenuItem>
+            <MenuItem value="70">70</MenuItem>
+            <MenuItem value="80">80</MenuItem>
+            <MenuItem value="90">90</MenuItem>
+            <option value="inf">Unlimited</option>
+          </Select>
+          <br />
+          <br />
+          <Input type="submit" value="Get Game Link"></Input>
+        </FormGroup>
       </form>
       {roomID && roomID !== "" && <Redirect to={`/${roomID}`} />}
     </div>

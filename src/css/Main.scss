@@ -1,4 +1,9 @@
 .container {
-  max-width: 850px;
+  padding: 40px;
+  // max-width: 450px;
   width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
 }

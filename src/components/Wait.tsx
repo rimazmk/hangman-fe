@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { gameStateInterface } from "../hangman";
 import { socket } from "../modules";
+import { InputLabel, TextField, Button } from "@material-ui/core";
 
 function Wait({
   user,
@@ -89,7 +90,7 @@ function Wait({
             <>
               Share this link with your friends:
               <p>
-                {url} <button onClick={copyLink}>{copy}</button>
+                {url} <Button onClick={copyLink}>{copy}</Button>
               </p>
             </>
           )}
@@ -101,17 +102,17 @@ function Wait({
           {user !== gameState.hanger && !joined && (
             <div>
               <form onSubmit={handleSubmitJoin}>
-                Enter Username:
-                <input
+                <InputLabel htmlFor="username">Username</InputLabel>
+                <TextField
                   type="text"
                   value={formUser}
-                  pattern="^[^\s]+(\s+[^\s]+)*$"
+                  inputProps={{ pattern: "^[^s]+(s+[^s]+)*$" }}
                   title="Username cannot have leading or trailing spaces"
                   onChange={(e) => setFormUser(e.target.value)}
                   onInput={(e) => validateUsername()}
                   id="username"
                   name="username"
-                ></input>
+                />
               </form>
             </div>
           )}
