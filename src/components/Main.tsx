@@ -10,7 +10,7 @@ const Main = () => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" className="menu">
         <Typography variant="h6">Hangman</Typography>
       </AppBar>
       <div className="container">

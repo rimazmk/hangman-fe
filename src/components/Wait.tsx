@@ -90,13 +90,18 @@ function Wait({
             <>
               Share this link with your friends:
               <p>
-                {url} <Button onClick={copyLink}>{copy}</Button>
+                {url}{" "}
+                <Button variant="contained" onClick={copyLink}>
+                  {copy}
+                </Button>
               </p>
             </>
           )}
 
           {user === gameState.hanger && gameState.players.length >= 2 && (
-            <button onClick={onButtonClick}>Start game!</button>
+            <Button variant="contained" onClick={onButtonClick}>
+              Start game!
+            </Button>
           )}
           {/* Add functionality for changing username */}
           {user !== gameState.hanger && !joined && (

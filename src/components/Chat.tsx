@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { socket } from "../modules";
-import { FormControl, Input, InputLabel } from "@material-ui/core";
+import { FormControl, Input, InputLabel, Button } from "@material-ui/core";
 
 function Chat({ user, roomID }: { user: string; roomID: string }) {
   const [messages, setMessages] = useState<[string, string][]>([]);
@@ -62,7 +62,10 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
             id="message"
             name="message"
           />
-          <input type="submit" value="Send" />
+          <br />
+          <Button variant="contained" color="primary" type="submit">
+            Submit
+          </Button>
         </FormControl>
       </form>
     </div>

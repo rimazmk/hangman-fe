@@ -42,6 +42,7 @@ function Game({
   };
 
   const makeGuess = (guessedEntity: string) => {
+    console.log(guessedEntity);
     let guessState = Object.assign(
       {},
       { ...gameState, curGuess: guessedEntity }
@@ -64,7 +65,7 @@ function Game({
   const onLetterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setWord("");
-    let ev = e.target as HTMLButtonElement;
+    let ev = e.currentTarget as HTMLButtonElement;
     makeGuess(ev.value);
   };
 
@@ -91,7 +92,7 @@ function Game({
             guessedLetters={gameState.guessedLetters}
           />
           <br />
-
+          <br />
           <form onSubmit={onFormSubmit}>
             <FormControl>
               <InputLabel htmlFor="word">Word</InputLabel>

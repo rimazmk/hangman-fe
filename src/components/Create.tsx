@@ -8,6 +8,7 @@ import {
   TextField,
   MenuItem,
   Select,
+  Button,
 } from "@material-ui/core";
 import { socket } from "../modules";
 
@@ -18,8 +19,8 @@ function Create({
 }) {
   const [state, setState] = useState<gameInitInterface>({
     username: "",
-    lives: "",
-    numRounds: "",
+    lives: "6",
+    numRounds: "3",
     rotation: "robin",
     time: "30",
   });
@@ -91,6 +92,7 @@ function Create({
           <Select
             name="rotation"
             id="rotation"
+            value={state.rotation}
             onChange={(e) =>
               setState({ ...state, rotation: e.target.value as string })
             }
@@ -106,6 +108,7 @@ function Create({
             name="time"
             id="time"
             onInvalid={(e) => "Please fill out this field"}
+            value={state.time}
             required
             onChange={(e) =>
               setState({ ...state, time: e.target.value as string })
@@ -124,7 +127,9 @@ function Create({
           </Select>
           <br />
           <br />
-          <Input type="submit" value="Get Game Link"></Input>
+          <Button variant="contained" color="primary" type="submit">
+            Submit
+          </Button>
         </FormGroup>
       </form>
       {roomID && roomID !== "" && <Redirect to={`/${roomID}`} />}

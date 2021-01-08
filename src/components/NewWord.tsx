@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { TextField, Button, InputLabel } from "@material-ui/core";
 import { gameStateInterface } from "../hangman";
 import Standings from "./Standings";
 import { socket } from "../modules";
@@ -94,22 +95,26 @@ const NewWord = ({
               )}
 
               <form onSubmit={handleSubmit}>
-                Enter {gameState.word ? "New" : ""} Word(s):
-                <input
+                <InputLabel htmlFor="word">
+                  Enter {gameState.word ? "New" : ""} Word(s):
+                </InputLabel>
+                <TextField
                   type="text"
                   value={word}
                   onChange={(e) => setWord(e.target.value)}
                   id="word"
                   name="word"
                   onInput={(e) => validateWord()}
-                  maxLength={50}
-                  minLength={2}
+                  inputProps={{ maxLength: 50, minLength: 2 }}
                   onInvalid={(e) => "Please fill out this field"}
                   required
-                ></input>
+                />
                 <br />
-                Enter {gameState.word ? "New" : ""} Category:
-                <input
+                <br />
+                <InputLabel htmlFor="category">
+                  Enter {gameState.word ? "New" : ""} Category:
+                </InputLabel>
+                <TextField
                   type="text"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
@@ -117,9 +122,12 @@ const NewWord = ({
                   name="category"
                   onInvalid={(e) => "Please fill out this field"}
                   required
-                ></input>
+                />
                 <br />
-                <input type="submit" value="Submit" />
+                <br />
+                <Button variant="contained" color="primary" type="submit">
+                  Submit
+                </Button>
               </form>
             </div>
           ) : (
