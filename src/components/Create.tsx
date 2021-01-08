@@ -13,7 +13,7 @@ function Create({
     lives: "",
     numRounds: "",
     rotation: "robin",
-    time: "30",
+    time: "10",
   });
   const [roomID, setRoomID] = useState("");
 

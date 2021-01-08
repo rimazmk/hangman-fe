@@ -17,7 +17,6 @@ function Wait({
   >;
   setUser: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  const [joined, setJoined] = useState(false);
   const [formUser, setFormUser] = useState("");
   const [copy, setCopy] = useState("Copy Link");
   const timerRef = useRef<number>();
@@ -29,7 +28,6 @@ function Wait({
       roomID: roomID,
       user: formUser,
     };
-    setJoined(true);
     setUser(formUser);
     socket.emit("join", credentials);
   };
@@ -98,7 +96,7 @@ function Wait({
             <button onClick={onButtonClick}>Start game!</button>
           )}
           {/* Add functionality for changing username */}
-          {user !== gameState.hanger && !joined && (
+          {!gameState.players.includes(user) && (
             <div>
               <form onSubmit={handleSubmitJoin}>
                 Enter Username:

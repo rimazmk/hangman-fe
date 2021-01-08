@@ -42,6 +42,8 @@ const NewWord = ({
       userWord.setCustomValidity(
         "Only alphabetic characters, spaces, and dashes allowed"
       );
+    } else if (userWord.value.length < 2) {
+      userWord.setCustomValidity("Word must have at least two characters");
     } else {
       userWord.setCustomValidity("");
     }
@@ -136,7 +138,7 @@ const NewWord = ({
         </>
       );
     } else {
-      return <Standings gameState={gameState} />;
+      return <Standings gameState={gameState} roomID={roomID} user={user} />;
     }
   };
 
