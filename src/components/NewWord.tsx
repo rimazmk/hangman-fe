@@ -9,6 +9,7 @@ const NewWord = ({
   setGameState,
   user,
   roomID,
+  mute,
 }: {
   gameState: gameStateInterface;
   setGameState: React.Dispatch<
@@ -16,6 +17,7 @@ const NewWord = ({
   >;
   user: string;
   roomID: string;
+  mute: boolean;
 }) => {
   const [word, setWord] = useState("");
   const [category, setCategory] = useState("");
@@ -83,7 +85,19 @@ const NewWord = ({
           {gameState.word !== "" &&
             gameState.rotation === "robin" &&
             gameState.numIncorrect !== gameState.lives &&
-            user === gameState.guesser && <p>YOU WIN! :)</p>}
+            user === gameState.guesser && (
+              <>
+                <p>YOU WIN! :)</p>
+                {!mute && (
+                  <audio autoPlay>
+                    <source
+                      src={"http://localhost:5000/audio/win.wav"}
+                      type="audio/wav"
+                    />
+                  </audio>
+                )}
+              </>
+            )}
 
           {gameState.word !== "" &&
             gameState.rotation === "robin" &&

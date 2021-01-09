@@ -7,13 +7,13 @@ function Wait({
   user,
   roomID,
   gameState,
-  handleState,
+  setGameState,
   setUser,
 }: {
   user: string;
   roomID: string;
   gameState: gameStateInterface;
-  handleState: React.Dispatch<
+  setGameState: React.Dispatch<
     React.SetStateAction<gameStateInterface | undefined>
   >;
   setUser: React.Dispatch<React.SetStateAction<string>>;
@@ -62,10 +62,10 @@ function Wait({
   };
 
   useEffect(() => {
-    socket.on("update", handleState);
+    socket.on("update", setGameState);
     socket.emit("joinRoom", roomID);
     return () => {
-      socket.off("update", handleState);
+      socket.off("update", setGameState);
     };
   }, []);
 

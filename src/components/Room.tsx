@@ -8,14 +8,13 @@ import axios from "axios";
 
 import { socket } from "../modules";
 
-function Room({ username }: { username: string }) {
+function Room({ username, mute }: { username: string; mute: boolean }) {
   const [gameState, setGameState] = useState<gameStateInterface>();
   const [user, setUser] = useState(username);
   const { roomID }: { roomID: string } = useParams();
   const [err, setErr] = useState(false);
 
   const handleLeave = (newState: gameStateInterface) => {
-    console.log(newState!.players.length);
     if (newState!.players.length === 0) setErr(true);
     setGameState(Object.assign({}, newState));
   };
@@ -37,7 +36,6 @@ function Room({ username }: { username: string }) {
     };
 
     socket.on("leave", handleLeave);
-    console.log();
     getGameState();
   }, [roomID]);
 
@@ -62,7 +60,7 @@ function Room({ username }: { username: string }) {
           user={user}
           roomID={roomID}
           gameState={gameState!}
-          handleState={setGameState}
+          setGameState={setGameState}
           setUser={setUser}
         />
       );
@@ -73,6 +71,7 @@ function Room({ username }: { username: string }) {
           roomID={roomID}
           gameState={gameState}
           setGameState={setGameState}
+          mute={mute}
         />
       );
     } else if (gameState && gameState.category === "") {
@@ -82,6 +81,7 @@ function Room({ username }: { username: string }) {
           setGameState={setGameState}
           user={user}
           roomID={roomID}
+          mute={mute}
         />
       );
     } else {
