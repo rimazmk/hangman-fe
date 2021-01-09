@@ -88,14 +88,12 @@ const NewWord = ({
             user === gameState.guesser && (
               <>
                 <p>YOU WIN! :)</p>
-                {!mute && (
-                  <audio autoPlay>
-                    <source
-                      src={"http://localhost:5000/audio/win.wav"}
-                      type="audio/wav"
-                    />
-                  </audio>
-                )}
+                <audio autoPlay muted={mute}>
+                  <source
+                    src={"http://localhost:5000/audio/win.wav"}
+                    type="audio/wav"
+                  />
+                </audio>
               </>
             )}
 

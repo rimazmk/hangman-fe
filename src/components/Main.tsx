@@ -25,14 +25,14 @@ const Main = () => {
   return (
     <>
       <AppBar position="static" className="menu">
-        <Typography variant="h5" style={{ flex: 1 }}>
+        <Typography variant="h5">
           <a href="http://localhost:3000/">hangmanonline.io</a>
         </Typography>
         {/* <HomeIcon
           fontSize="large"
           onClick={() => (window.location.href = "http://localhost:3000/")}
         ></HomeIcon> */}
-        <div>
+        <div className="volume">
           {!mute && (
             <VolumeUpIcon
               onClick={() => setMute(!mute)}

@@ -120,10 +120,30 @@ function Game({
     });
   };
 
+  let guesser_pos: number = gameState.players.indexOf(gameState.guesser);
+  let prevGuesser: number =
+    (((guesser_pos - 1) % gameState.players.length) +
+      gameState.players.length) %
+    gameState.players.length;
+
+  if (gameState.players[prevGuesser] === gameState.hanger) {
+    prevGuesser =
+      (((guesser_pos - 1) % gameState.players.length) +
+        gameState.players.length) %
+      gameState.players.length;
+  }
+
+  console.log(prevGuesser);
+
   return (
     <>
-      {!mute && username === gameState.guesser && source !== "" && (
-        <audio autoPlay ref={audioRef}>
+      {username === gameState.players[prevGuesser] && source !== "" && (
+        <audio
+          autoPlay
+          onEnded={() => setSource("")}
+          muted={mute}
+          ref={audioRef}
+        >
           <source src={source} />
         </audio>
       )}

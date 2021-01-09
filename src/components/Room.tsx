@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { gameStateInterface } from "../hangman";
 import Game from "./Game";
@@ -14,9 +14,22 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
   const { roomID }: { roomID: string } = useParams();
   const [err, setErr] = useState(false);
 
+  const [source, setSource] = useState("");
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const updateSong = () => {
+    setSource("http://localhost:5000/audio/leave.wav");
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.load();
+      audioRef.current.play();
+    }
+  };
+
   const handleLeave = (newState: gameStateInterface) => {
     if (newState!.players.length === 0) setErr(true);
     setGameState(Object.assign({}, newState));
+    updateSong();
   };
 
   useEffect(() => {
@@ -56,13 +69,27 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
       (gameState && !gameState.gameStart)
     ) {
       return (
-        <Wait
-          user={user}
-          roomID={roomID}
-          gameState={gameState!}
-          setGameState={setGameState}
-          setUser={setUser}
-        />
+        <>
+          <Wait
+            user={user}
+            roomID={roomID}
+            gameState={gameState!}
+            setGameState={setGameState}
+            setUser={setUser}
+            mute={mute}
+          />
+
+          {source !== "" && (
+            <audio
+              autoPlay
+              onEnded={() => setSource("")}
+              muted={mute}
+              ref={audioRef}
+            >
+              <source src={source} />
+            </audio>
+          )}
+        </>
       );
     } else if (gameState && gameState.gameStart && gameState.category !== "") {
       return (
