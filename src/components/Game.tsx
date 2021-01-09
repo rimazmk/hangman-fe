@@ -40,11 +40,11 @@ function Game({
   const handleStatus = (status: string) => {
     let newURL: string = "";
     if (status === "timer") {
-      newURL = "http://localhost:5000/audio/timer.wav";
+      newURL = "http://localhost:5000/audio/timer.mp3";
     } else if (status === "correct") {
       newURL = "http://localhost:5000/audio/correct.mp3";
     } else if (status === "incorrect") {
-      newURL = "http://localhost:5000/audio/incorrect.wav";
+      newURL = "http://localhost:5000/audio/wrong.mp3";
     }
 
     updateSong(newURL);
@@ -128,17 +128,16 @@ function Game({
 
   if (gameState.players[prevGuesser] === gameState.hanger) {
     prevGuesser =
-      (((guesser_pos - 1) % gameState.players.length) +
+      (((prevGuesser - 1) % gameState.players.length) +
         gameState.players.length) %
       gameState.players.length;
   }
-
-  console.log(prevGuesser);
 
   return (
     <>
       {username === gameState.players[prevGuesser] && source !== "" && (
         <audio
+          id="guessAudio"
           autoPlay
           onEnded={() => setSource("")}
           muted={mute}

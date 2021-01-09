@@ -18,7 +18,7 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const updateSong = () => {
-    setSource("http://localhost:5000/audio/leave.wav");
+    setSource("http://localhost:5000/audio/leave.mp3");
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.load();

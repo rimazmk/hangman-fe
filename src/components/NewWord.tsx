@@ -89,10 +89,7 @@ const NewWord = ({
               <>
                 <p>YOU WIN! :)</p>
                 <audio autoPlay muted={mute}>
-                  <source
-                    src={"http://localhost:5000/audio/win.wav"}
-                    type="audio/wav"
-                  />
+                  <source src={"http://localhost:5000/audio/win.mp3"} />
                 </audio>
               </>
             )}

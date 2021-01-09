@@ -113,7 +113,7 @@ function Wait({
               muted={mute}
               ref={audioRef}
             >
-              <source src="http://localhost:5000/audio/join.wav" />
+              <source src="http://localhost:5000/audio/join.mp3" />
             </audio>
           )}
 
