@@ -113,7 +113,7 @@ function Create({
           </FormControl>
           <br />
           <FormControl>
-            <InputLabel id="time-label">Time</InputLabel>
+            <InputLabel id="time-label">Guess Time (sec)</InputLabel>
             <Select
               name="time"
               id="time"

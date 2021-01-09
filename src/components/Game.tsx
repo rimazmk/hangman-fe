@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { gameStateInterface } from "../hangman";
 import { FormControl, Input, InputLabel } from "@material-ui/core";
 import Letters from "./Letters";
@@ -11,6 +11,7 @@ function Game({
   setGameState,
   username,
   roomID,
+  mute,
 }: {
   gameState: gameStateInterface;
   setGameState: React.Dispatch<
@@ -18,17 +19,43 @@ function Game({
   >;
   username: string;
   roomID: string;
+  mute: boolean;
 }) {
   const [word, setWord] = useState("");
+  const [source, setSource] = useState("");
+  const audioRef = useRef<HTMLAudioElement>(null);
   const gameHandler = (newState: gameStateInterface) => {
-    console.log(newState);
     setGameState(Object.assign({}, newState));
+  };
+
+  const updateSong = (source: string) => {
+    setSource(source);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.load();
+      audioRef.current.play();
+    }
+  };
+
+  const handleStatus = (status: string) => {
+    let newURL: string = "";
+    if (status === "timer") {
+      newURL = "http://localhost:5000/audio/timer.mp3";
+    } else if (status === "correct") {
+      newURL = "http://localhost:5000/audio/correct.mp3";
+    } else if (status === "incorrect") {
+      newURL = "http://localhost:5000/audio/wrong.mp3";
+    }
+
+    updateSong(newURL);
   };
 
   useEffect(() => {
     socket.on("update", gameHandler);
+    socket.on("status", handleStatus);
     return () => {
       socket.off("update", gameHandler);
+      socket.off("status", handleStatus);
     };
   }, []);
 
@@ -93,8 +120,32 @@ function Game({
     });
   };
 
+  let guesser_pos: number = gameState.players.indexOf(gameState.guesser);
+  let prevGuesser: number =
+    (((guesser_pos - 1) % gameState.players.length) +
+      gameState.players.length) %
+    gameState.players.length;
+
+  if (gameState.players[prevGuesser] === gameState.hanger) {
+    prevGuesser =
+      (((prevGuesser - 1) % gameState.players.length) +
+        gameState.players.length) %
+      gameState.players.length;
+  }
+
   return (
     <>
+      {username === gameState.players[prevGuesser] && source !== "" && (
+        <audio
+          id="guessAudio"
+          autoPlay
+          onEnded={() => setSource("")}
+          muted={mute}
+          ref={audioRef}
+        >
+          <source src={source} />
+        </audio>
+      )}
       {username && username !== "" && (
         <div>
           <h1>

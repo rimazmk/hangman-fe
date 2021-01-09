@@ -7,21 +7,39 @@ function Wait({
   user,
   roomID,
   gameState,
-  handleState,
+  setGameState,
   setUser,
+  mute,
 }: {
   user: string;
   roomID: string;
   gameState: gameStateInterface;
-  handleState: React.Dispatch<
+  setGameState: React.Dispatch<
     React.SetStateAction<gameStateInterface | undefined>
   >;
   setUser: React.Dispatch<React.SetStateAction<string>>;
+  mute: boolean;
 }) {
   const [formUser, setFormUser] = useState("");
   const [copy, setCopy] = useState("Copy Link");
+  const [play, setPlay] = useState(false);
   const timerRef = useRef<number>();
+  const audioRef = useRef<HTMLAudioElement>(null);
   const url = `http://localhost:3000/${roomID}`;
+
+  const handleUpdate = (newState: gameStateInterface) => {
+    updateSong();
+    setGameState(Object.assign({}, newState));
+  };
+
+  const updateSong = () => {
+    setPlay(true);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.load();
+      audioRef.current.play();
+    }
+  };
 
   const handleSubmitJoin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,10 +80,10 @@ function Wait({
   };
 
   useEffect(() => {
-    socket.on("update", handleState);
+    socket.on("update", handleUpdate);
     socket.emit("joinRoom", roomID);
     return () => {
-      socket.off("update", handleState);
+      socket.off("update", handleUpdate);
     };
   }, []);
 
@@ -87,6 +105,17 @@ function Wait({
               {player}
             </Typography>
           ))}
+
+          {play && gameState.players[gameState.players.length - 1] !== user && (
+            <audio
+              autoPlay
+              onEnded={() => setPlay(false)}
+              muted={mute}
+              ref={audioRef}
+            >
+              <source src="http://localhost:5000/audio/join.mp3" />
+            </audio>
+          )}
 
           {user === gameState.hanger && (
             <>

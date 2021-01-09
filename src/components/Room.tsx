@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { gameStateInterface } from "../hangman";
 import Game from "./Game";
@@ -8,16 +8,28 @@ import axios from "axios";
 
 import { socket } from "../modules";
 
-function Room({ username }: { username: string }) {
+function Room({ username, mute }: { username: string; mute: boolean }) {
   const [gameState, setGameState] = useState<gameStateInterface>();
   const [user, setUser] = useState(username);
   const { roomID }: { roomID: string } = useParams();
   const [err, setErr] = useState(false);
 
+  const [source, setSource] = useState("");
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const updateSong = () => {
+    setSource("http://localhost:5000/audio/leave.mp3");
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.load();
+      audioRef.current.play();
+    }
+  };
+
   const handleLeave = (newState: gameStateInterface) => {
-    console.log(newState!.players.length);
     if (newState!.players.length === 0) setErr(true);
     setGameState(Object.assign({}, newState));
+    updateSong();
   };
 
   useEffect(() => {
@@ -37,7 +49,6 @@ function Room({ username }: { username: string }) {
     };
 
     socket.on("leave", handleLeave);
-    console.log();
     getGameState();
   }, [roomID]);
 
@@ -58,13 +69,27 @@ function Room({ username }: { username: string }) {
       (gameState && !gameState.gameStart)
     ) {
       return (
-        <Wait
-          user={user}
-          roomID={roomID}
-          gameState={gameState!}
-          handleState={setGameState}
-          setUser={setUser}
-        />
+        <>
+          <Wait
+            user={user}
+            roomID={roomID}
+            gameState={gameState!}
+            setGameState={setGameState}
+            setUser={setUser}
+            mute={mute}
+          />
+
+          {source !== "" && (
+            <audio
+              autoPlay
+              onEnded={() => setSource("")}
+              muted={mute}
+              ref={audioRef}
+            >
+              <source src={source} />
+            </audio>
+          )}
+        </>
       );
     } else if (gameState && gameState.gameStart && gameState.category !== "") {
       return (
@@ -73,6 +98,7 @@ function Room({ username }: { username: string }) {
           roomID={roomID}
           gameState={gameState}
           setGameState={setGameState}
+          mute={mute}
         />
       );
     } else if (gameState && gameState.category === "") {
@@ -82,6 +108,7 @@ function Room({ username }: { username: string }) {
           setGameState={setGameState}
           user={user}
           roomID={roomID}
+          mute={mute}
         />
       );
     } else {

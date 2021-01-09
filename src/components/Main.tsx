@@ -5,6 +5,9 @@ import {
   ThemeProvider,
   createMuiTheme,
 } from "@material-ui/core";
+import VolumeUpIcon from "@material-ui/icons/VolumeUp";
+import VolumeOffIcon from "@material-ui/icons/VolumeOff";
+import HomeIcon from "@material-ui/icons/Home";
 import Create from "./Create";
 import Room from "./Room";
 import "../css/Main.scss";
@@ -17,13 +20,32 @@ theme.typography.h6 = {
 
 const Main = () => {
   const [username, setUsername] = useState("");
+  const [mute, setMute] = useState(true);
 
   return (
     <>
       <AppBar position="static" className="menu">
         <Typography variant="h5">
-          <a href="http://localhost:3000/">Hangman</a>
+          <a href="http://localhost:3000/">hangmanonline.io</a>
         </Typography>
+        {/* <HomeIcon
+          fontSize="large"
+          onClick={() => (window.location.href = "http://localhost:3000/")}
+        ></HomeIcon> */}
+        <div className="volume">
+          {!mute && (
+            <VolumeUpIcon
+              onClick={() => setMute(!mute)}
+              fontSize="large"
+            ></VolumeUpIcon>
+          )}
+          {mute && (
+            <VolumeOffIcon
+              onClick={() => setMute(!mute)}
+              fontSize="large"
+            ></VolumeOffIcon>
+          )}
+        </div>
       </AppBar>
       <div className="container">
         <ThemeProvider theme={theme}>
@@ -32,7 +54,7 @@ const Main = () => {
               <Create setUser={setUsername} />
             </Route>
             <Route path="/:roomID">
-              <Room username={username} />
+              <Room username={username} mute={mute} />
             </Route>
           </BrowserRouter>
         </ThemeProvider>
