@@ -209,9 +209,6 @@ function Game({
             </>
           )}
           <br />
-          <div>
-            <Chat user={username} roomID={roomID} />
-          </div>
         </div>
       )}
     </>

@@ -8,6 +8,7 @@ import {
   TextField,
   MenuItem,
   Select,
+  Typography,
   Button,
 } from "@material-ui/core";
 import { socket } from "../modules";
@@ -49,7 +50,10 @@ function Create({
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        style={{ maxWidth: "300px", margin: "auto" }}
+      >
         <FormGroup>
           <TextField
             type="text"
@@ -63,7 +67,7 @@ function Create({
               title: "Username cannot have leading or trailing spaces",
             }}
             onInvalid={(e) => "Please fill out this field"}
-            variant="outlined"
+            variant="filled"
             required
           />
           <br />
@@ -76,7 +80,7 @@ function Create({
             name="lives"
             inputProps={{ min: 6, max: 10 }}
             onInvalid={(e) => "Please fill out this field"}
-            variant="outlined"
+            variant="filled"
             required
           />
           <br />
@@ -89,7 +93,7 @@ function Create({
             name="numRounds"
             inputProps={{ min: 1 }}
             onInvalid={(e) => "Please fill out this field"}
-            variant="outlined"
+            variant="filled"
             required
           />
           <br />
@@ -104,7 +108,7 @@ function Create({
                 setState({ ...state, rotation: e.target.value as string })
               }
               onInvalid={(e) => "Please fill out this field"}
-              variant="outlined"
+              variant="filled"
               required
             >
               <MenuItem value="robin">Round Robin</MenuItem>
@@ -121,7 +125,7 @@ function Create({
               onInvalid={(e) => "Please fill out this field"}
               value={state.time}
               required
-              variant="outlined"
+              variant="filled"
               onChange={(e) =>
                 setState({ ...state, time: e.target.value as string })
               }
@@ -141,10 +145,25 @@ function Create({
           <br />
           <br />
           <Button variant="contained" color="primary" type="submit">
-            Submit
+            Create Game
           </Button>
+          <br />
+          <br />
         </FormGroup>
       </form>
+      <Typography variant="h5">
+        About <br />
+      </Typography>
+      Hangman Online.io is a free online platform to play Hangman with your
+      friends.
+      <br />
+      <br />
+      <Typography variant="h5">
+        How to Play <br />
+      </Typography>
+      Choose a word, category, and time limit. Then Pick between Classic
+      “Rotation” mode and the competetive “ and challenge your friends!!
+      <br />
       {roomID && roomID !== "" && <Redirect to={`/${roomID}`} />}
     </div>
   );

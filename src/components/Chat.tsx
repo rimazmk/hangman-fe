@@ -1,24 +1,38 @@
 import React, { useState, useEffect, useRef } from "react";
 import { socket } from "../modules";
 import { FormControl, Input, Button } from "@material-ui/core";
+import { gameStateInterface } from "../hangman";
 
-function Chat({ user, roomID }: { user: string; roomID: string }) {
-  const [messages, setMessages] = useState<[string, string][]>([]);
+function Chat({
+  user,
+  roomID,
+  messages,
+  setMessages,
+}: {
+  user: string;
+  roomID: string;
+  messages: [string, string][];
+  setMessages: React.Dispatch<React.SetStateAction<[string, string][]>>;
+}) {
   const [message, setMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const didMountRef = useRef(false);
+  const scrollToBottom = () => {
+    // window.scroll({top: messagesEndRef.current!.offsetTop, behavior: 'smooth'});
+    messagesEndRef.current!.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "start",
+    });
+  };
 
-  // const scrollToBottom = () => {
-  //   messagesEndRef.current!.scrollIntoView({ behavior: 'smooth' });
-  // };
-
-  // useEffect(() => {
-  //   if (didMountRef.current) {
-  //     scrollToBottom();
-  //   } else {
-  //     didMountRef.current = true;
-  //   }
-  // }, [messages]);
+  useEffect(() => {
+    if (didMountRef.current) {
+      scrollToBottom();
+    } else {
+      didMountRef.current = true;
+    }
+  }, [messages]);
 
   // useEffect(scrollToBottom, [messages]);
 

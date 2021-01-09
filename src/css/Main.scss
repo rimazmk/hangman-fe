@@ -11,11 +11,18 @@ a {
   text-decoration: none;
   color: white;
 }
+
 .menu {
   padding: 10px;
-  box-shadow: none;
+  display: flex;
+  flex-direction: row !important;
+  box-shadow: none !important;
 }
 
 .messagesWrapper {
   overflow-y: scroll;
+}
+
+.messages {
+  position: relative;
 }

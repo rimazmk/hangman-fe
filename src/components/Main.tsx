@@ -3,6 +3,7 @@ import {
   AppBar,
   Typography,
   ThemeProvider,
+  CssBaseline,
   createMuiTheme,
 } from "@material-ui/core";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
@@ -13,10 +14,19 @@ import Room from "./Room";
 import "../css/Main.scss";
 import { BrowserRouter, Route } from "react-router-dom";
 
-const theme = createMuiTheme();
-theme.typography.h6 = {
-  fontSize: "1rem",
-};
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: ["Yeon Sung", "Sans Serif"].join(","),
+  },
+  palette: {
+    primary: {
+      main: "#000000",
+    },
+    background: {
+      default: "#d2d2d2",
+    },
+  },
+});
 
 const Main = () => {
   const [username, setUsername] = useState("");
@@ -24,31 +34,28 @@ const Main = () => {
 
   return (
     <>
-      <AppBar position="static" className="menu">
-        <Typography variant="h5">
-          <a href="http://localhost:3000/">hangmanonline.io</a>
-        </Typography>
-        {/* <HomeIcon
-          fontSize="large"
-          onClick={() => (window.location.href = "http://localhost:3000/")}
-        ></HomeIcon> */}
-        <div className="volume">
-          {!mute && (
-            <VolumeUpIcon
-              onClick={() => setMute(!mute)}
-              fontSize="large"
-            ></VolumeUpIcon>
-          )}
-          {mute && (
-            <VolumeOffIcon
-              onClick={() => setMute(!mute)}
-              fontSize="large"
-            ></VolumeOffIcon>
-          )}
-        </div>
-      </AppBar>
-      <div className="container">
-        <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AppBar position="static" className="menu">
+          <Typography variant="h5">
+            <a href="http://localhost:3000/">Hangmanonline.io</a>
+          </Typography>
+          <div className="volume" style={{ marginLeft: "10px" }}>
+            {!mute && (
+              <VolumeUpIcon
+                onClick={() => setMute(!mute)}
+                fontSize="large"
+              ></VolumeUpIcon>
+            )}
+            {mute && (
+              <VolumeOffIcon
+                onClick={() => setMute(!mute)}
+                fontSize="large"
+              ></VolumeOffIcon>
+            )}
+          </div>
+        </AppBar>
+        <div className="container">
           <BrowserRouter>
             <Route exact path="/">
               <Create setUser={setUsername} />
@@ -57,8 +64,8 @@ const Main = () => {
               <Room username={username} mute={mute} />
             </Route>
           </BrowserRouter>
-        </ThemeProvider>
-      </div>
+        </div>
+      </ThemeProvider>
     </>
   );
 };

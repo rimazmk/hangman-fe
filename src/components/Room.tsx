@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { gameStateInterface } from "../hangman";
 import Game from "./Game";
 import Wait from "./Wait";
+import Chat from "./Chat";
 import NewWord from "./NewWord";
 import axios from "axios";
 
@@ -15,6 +16,7 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
   const [err, setErr] = useState(false);
 
   const [source, setSource] = useState("");
+  const [messages, setMessages] = useState<[string, string][]>([]);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const updateSong = () => {
@@ -60,6 +62,18 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
     window.addEventListener("unload", cleanup);
     return () => window.removeEventListener("unload", cleanup);
   }, [user, roomID]);
+
+  useEffect(() => {
+    let guesser_pos: number = gameState!.players.indexOf(gameState!.guesser);
+    let prevGuesser: number =
+      (((guesser_pos - 1) % gameState!.players.length) +
+        gameState!.players.length) %
+      gameState!.players.length;
+    messages.push([
+      gameState!.players[prevGuesser],
+      `guessed ${gameState!.guessedWords[gameState!.guessedWords.length - 1]}`,
+    ]);
+  }, [gameState!.guessedWords.length]);
 
   const render = () => {
     if (err) {
@@ -116,7 +130,33 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
     }
   };
 
-  return <div>{render()}</div>;
+  const show_chat = () => {
+    if (
+      gameState &&
+      gameState.players.includes(user) &&
+      (user === "" ||
+        !gameState.gameStart ||
+        (gameState.gameStart && gameState.category !== ""))
+    ) {
+      return (
+        <div>
+          <Chat
+            user={user}
+            roomID={roomID}
+            messages={messages}
+            setMessages={setMessages}
+          />
+        </div>
+      );
+    }
+  };
+
+  return (
+    <div>
+      {render()}
+      {show_chat()}
+    </div>
+  );
 }
 
 export default Room;
