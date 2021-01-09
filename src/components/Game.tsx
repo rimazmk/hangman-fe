@@ -32,12 +32,24 @@ function Game({
     };
   }, []);
 
-  const validateWord = () => {
-    let userWord = document.getElementById("word") as HTMLInputElement;
-    if (gameState.guessedWords.includes(userWord.value)) {
-      userWord.setCustomValidity(`${userWord.value} has already been guessed`);
+  const validateGuess = () => {
+    let userGuess = document.getElementById("guess") as HTMLInputElement;
+    if (gameState.guessedWords.includes(userGuess.value)) {
+      userGuess.setCustomValidity(
+        `${userGuess.value} has already been guessed`
+      );
+    } else if (!/^[^\s]+(\s+[^\s]+)*$/.test(userGuess.value)) {
+      userGuess.setCustomValidity(
+        "Guess cannot have leading or trailing spaces"
+      );
+    } else if (!/^[-\sa-zA-Z]+$/.test(userGuess.value)) {
+      userGuess.setCustomValidity(
+        "Only alphabetic characters, spaces, and dashes allowed"
+      );
+    } else if (userGuess.value.length < 2) {
+      userGuess.setCustomValidity("Guess must have at least two characters");
     } else {
-      userWord.setCustomValidity("");
+      userGuess.setCustomValidity("");
     }
   };
 
@@ -85,7 +97,9 @@ function Game({
     <>
       {username && username !== "" && (
         <div>
-          <h1>Round: {gameState.round}</h1>
+          <h1>
+            Round {gameState.round} of {gameState.numRounds}
+          </h1>
           <Letters
             onClick={onLetterClick}
             disabled={gameState.guesser !== username}
@@ -95,20 +109,21 @@ function Game({
           <br />
           <form onSubmit={onFormSubmit}>
             <FormControl>
-              <InputLabel htmlFor="word">Word</InputLabel>
+              <InputLabel htmlFor="guess">Word</InputLabel>
               <Input
                 type="text"
                 value={word}
                 onChange={(e) => setWord(e.target.value)}
-                id="word"
-                name="word"
+                id="guess"
+                name="guess"
                 inputProps={{
-                  pattern: "^[-sa-zA-Z]+$",
+                  // pattern: "^[-sa-zA-Z]{2,}$",
                   maxLength: 50,
                   minLength: 2,
+                  // title:
+                  //   "Only alphabetic characters, spaces, and dashes allowed",
                 }}
-                title="Only alphabetic characters, spaces, and dashes allowed"
-                onInput={(e) => validateWord()}
+                onInput={(e) => validateGuess()}
                 disabled={gameState.guesser !== username}
               />
             </FormControl>
@@ -136,11 +151,12 @@ function Game({
               <>{player} </>
             ))}
           </h2>
-          <br />
           {username === gameState.guesser && gameState.time && (
-            <Timer gameState={gameState} makeGuess={makeGuess} />
+            <>
+              <br />
+              <Timer gameState={gameState} makeGuess={makeGuess} />
+            </>
           )}
-          <br />
           <br />
           <div>
             <Chat user={username} roomID={roomID} />

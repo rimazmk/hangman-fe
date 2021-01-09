@@ -3,7 +3,6 @@ import { Redirect } from "react-router";
 import { gameInitInterface, gameStateInterface } from "../hangman";
 import {
   FormGroup,
-  Input,
   FormControl,
   InputLabel,
   TextField,
@@ -58,9 +57,9 @@ function Create({
             onChange={(e) => setState({ ...state, username: e.target.value })}
             id="username"
             name="username"
-            label="Username"
+            label="username"
             inputProps={{
-              pattern: "^(?=[A-Za-z0-9])([A-Za-z0-9s]*)(?<=[A-Za-z0-9])$",
+              pattern: "(?! )([^*?]| )+(?<! )",
               title: "Username cannot have leading or trailing spaces",
             }}
             onInvalid={(e) => "Please fill out this field"}

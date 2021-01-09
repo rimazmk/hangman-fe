@@ -11,12 +11,11 @@ function Timer({
   const [time, setTime] = useState(gameState.time);
   const [change, setChange] = useState(false);
   const timerRef = useRef<number>();
-  // const changeRef = useRef(false);
 
   useEffect(() => {
     clearTimeout(timerRef.current);
     setTime(gameState.time);
-    setChange(!change);
+    setChange((c) => !c);
     // changeRef.current = !changeRef.current;
   }, [gameState.guessedWord, gameState.numIncorrect, gameState.time]);
 
