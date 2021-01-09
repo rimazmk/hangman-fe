@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { gameStateInterface } from "../hangman";
 import { socket } from "../modules";
-import { InputLabel, TextField, Button } from "@material-ui/core";
+import { InputLabel, TextField, Button, Typography } from "@material-ui/core";
 
 function Wait({
   user,
@@ -18,7 +18,6 @@ function Wait({
   >;
   setUser: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  const [joined, setJoined] = useState(false);
   const [formUser, setFormUser] = useState("");
   const [copy, setCopy] = useState("Copy Link");
   const timerRef = useRef<number>();
@@ -30,7 +29,6 @@ function Wait({
       roomID: roomID,
       user: formUser,
     };
-    setJoined(true);
     setUser(formUser);
     socket.emit("join", credentials);
   };
@@ -53,12 +51,12 @@ function Wait({
       () => {
         clearTimeout(timerRef.current);
         setCopy("Copied!");
-        timerRef.current = window.setTimeout(() => setCopy("Copy"), 5000);
+        timerRef.current = window.setTimeout(() => setCopy("Copy Link"), 5000);
       },
       () => {
         clearTimeout(timerRef.current);
         setCopy("Failed to Copy");
-        timerRef.current = window.setTimeout(() => setCopy("Copy"), 5000);
+        timerRef.current = window.setTimeout(() => setCopy("Copy Link"), 5000);
       }
     );
   };
@@ -81,20 +79,25 @@ function Wait({
     } else {
       return (
         <>
-          <p>Players: </p>
+          <Typography variant="h4" paragraph>
+            Players
+          </Typography>
           {gameState.players.map((player) => (
-            <p key={player}>{player}</p>
+            <Typography key={player} paragraph>
+              {player}
+            </Typography>
           ))}
 
           {user === gameState.hanger && (
             <>
-              Share this link with your friends:
-              <p>
+              <Typography paragraph>
+                Share this link with your friends:
+                <br />
                 {url}{" "}
                 <Button variant="contained" onClick={copyLink}>
                   {copy}
                 </Button>
-              </p>
+              </Typography>
             </>
           )}
 
@@ -104,15 +107,17 @@ function Wait({
             </Button>
           )}
           {/* Add functionality for changing username */}
-          {user !== gameState.hanger && !joined && (
-            <div>
+          {!gameState.players.includes(user) && (
+            <div id="wait">
               <form onSubmit={handleSubmitJoin}>
                 <InputLabel htmlFor="username">Username</InputLabel>
                 <TextField
                   type="text"
                   value={formUser}
-                  inputProps={{ pattern: "^[^s]+(s+[^s]+)*$" }}
-                  title="Username cannot have leading or trailing spaces"
+                  inputProps={{
+                    pattern: "^(?=[A-Za-z0-9])([A-Za-z0-9s]*)(?<=[A-Za-z0-9])$",
+                    title: "Username cannot have leading or trailing spaces",
+                  }}
                   onChange={(e) => setFormUser(e.target.value)}
                   onInput={(e) => validateUsername()}
                   id="username"

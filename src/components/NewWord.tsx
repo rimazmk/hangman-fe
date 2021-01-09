@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, InputLabel } from "@material-ui/core";
+import { TextField, Button, InputLabel, Typography } from "@material-ui/core";
 import { gameStateInterface } from "../hangman";
 import Standings from "./Standings";
 import { socket } from "../modules";
@@ -133,7 +133,9 @@ const NewWord = ({
           ) : (
             <div>
               {gameState.word !== "" && user !== gameState.hanger && (
-                <p>The word(s) was {gameState.word}</p>
+                <Typography variant="h6">
+                  The word(s) was {gameState.word}
+                </Typography>
               )}
               <p>
                 {next_hanger} is {gameState.word ? "now" : ""} the hanger
