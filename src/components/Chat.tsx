@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { socket } from "../modules";
+import { FormControl, Input, InputLabel, Button } from "@material-ui/core";
 
 function Chat({ user, roomID }: { user: string; roomID: string }) {
   const [messages, setMessages] = useState<[string, string][]>([]);
@@ -26,43 +27,51 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
         message: message,
       };
       setMessage("");
+      scrollToBottom();
       socket.emit("chat", info);
     }
   };
 
   useEffect(() => {
     socket.on("chat", handleMessage);
-    scrollToBottom();
     return () => {
       socket.off("chat", handleMessage);
     };
   }, [messages]);
 
   return (
-    <div className="messagesWrapper">
+    <>
       <h2>Chat:</h2>
+      <div className="messagesWrapper">
+        {/* Add scroll functionality through CSS */}
+        {messages.map((info, idx) => (
+          <p key={idx}>
+            {info[0]}: {info[1]}
+          </p>
+        ))}
+        <div ref={messagesEndRef} />
 
-      {/* Add scroll functionality through CSS */}
-      {messages.map((info, idx) => (
-        <p key={idx}>
-          {info[0]}: {info[1]}
-        </p>
-      ))}
-      <div ref={messagesEndRef} />
-
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          pattern="^[^\s]+(\s+[^\s]+)*$"
-          title="Message cannot have leading or trailing spaces"
-          id="message"
-          name="message"
-        ></input>
-        <input type="submit" value="Send" />
-      </form>
-    </div>
+        <form onSubmit={handleSubmit}>
+          <FormControl>
+            <Input
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              inputProps={{
+                pattern: "(?! )([^*?]| )+(?<! )",
+                title: "Message cannot have leading or trailing spaces",
+              }}
+              id="message"
+              name="message"
+            />
+            <br />
+            <Button variant="contained" color="primary" type="submit">
+              Send
+            </Button>
+          </FormControl>
+        </form>
+      </div>
+    </>
   );
 }
 

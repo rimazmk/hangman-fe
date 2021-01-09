@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { gameStateInterface } from "../hangman";
+import { FormControl, Input, InputLabel } from "@material-ui/core";
 import Letters from "./Letters";
 import Timer from "./Timer";
 import Chat from "./Chat";
@@ -41,6 +42,7 @@ function Game({
   };
 
   const makeGuess = (guessedEntity: string) => {
+    console.log(guessedEntity);
     let guessState = Object.assign(
       {},
       { ...gameState, curGuess: guessedEntity }
@@ -63,7 +65,7 @@ function Game({
   const onLetterClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setWord("");
-    let ev = e.target as HTMLButtonElement;
+    let ev = e.currentTarget as HTMLButtonElement;
     makeGuess(ev.value);
   };
 
@@ -90,22 +92,26 @@ function Game({
             guessedLetters={gameState.guessedLetters}
           />
           <br />
-
+          <br />
           <form onSubmit={onFormSubmit}>
-            Enter Guess:
-            <input
-              type="text"
-              value={word}
-              onChange={(e) => setWord(e.target.value)}
-              id="word"
-              name="word"
-              pattern="^[-\sa-zA-Z]+$"
-              title="Only alphabetic characters, spaces, and dashes allowed"
-              onInput={(e) => validateWord()}
-              maxLength={50}
-              minLength={2}
-              disabled={gameState.guesser !== username}
-            ></input>
+            <FormControl>
+              <InputLabel htmlFor="word">Word</InputLabel>
+              <Input
+                type="text"
+                value={word}
+                onChange={(e) => setWord(e.target.value)}
+                id="word"
+                name="word"
+                inputProps={{
+                  pattern: "^[-sa-zA-Z]+$",
+                  maxLength: 50,
+                  minLength: 2,
+                }}
+                title="Only alphabetic characters, spaces, and dashes allowed"
+                onInput={(e) => validateWord()}
+                disabled={gameState.guesser !== username}
+              />
+            </FormControl>
           </form>
           <br />
           {username === gameState.hanger && (

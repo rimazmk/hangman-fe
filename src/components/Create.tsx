@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router";
 import { gameInitInterface, gameStateInterface } from "../hangman";
+import {
+  FormGroup,
+  Input,
+  FormControl,
+  InputLabel,
+  TextField,
+  MenuItem,
+  Select,
+  Button,
+} from "@material-ui/core";
 import { socket } from "../modules";
 
 function Create({
@@ -10,10 +20,10 @@ function Create({
 }) {
   const [state, setState] = useState<gameInitInterface>({
     username: "",
-    lives: "",
-    numRounds: "",
+    lives: "6",
+    numRounds: "3",
     rotation: "robin",
-    time: "30",
+    time: "10",
   });
   const [roomID, setRoomID] = useState("");
 
@@ -41,77 +51,100 @@ function Create({
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Enter Username: </label>
-        <input
-          type="text"
-          value={state.username}
-          onChange={(e) => setState({ ...state, username: e.target.value })}
-          id="username"
-          name="username"
-          pattern="^[^\s]+(\s+[^\s]+)*$"
-          title="Username cannot have leading or trailing spaces"
-          onInvalid={(e) => "Please fill out this field"}
-          required
-        ></input>
-        <br />
-        <label htmlFor="lives">Enter Lives: </label>
-        <input
-          type="number"
-          value={state.lives}
-          onChange={(e) => setState({ ...state, lives: e.target.value })}
-          id="lives"
-          name="lives"
-          min="6"
-          max="10"
-          onInvalid={(e) => "Please fill out this field"}
-          required
-        ></input>
-        <br />
-        <label htmlFor="numRounds">Enter Number of Rounds:</label>
-        <input
-          type="number"
-          value={state.numRounds}
-          onChange={(e) => setState({ ...state, numRounds: e.target.value })}
-          id="numRounds"
-          name="numRounds"
-          min="1"
-          onInvalid={(e) => "Please fill out this field"}
-          required
-        ></input>
-        <br />
-        <label htmlFor="rotation">Rotation Mode:</label>
-        <select
-          name="rotation"
-          id="rotation"
-          onChange={(e) => setState({ ...state, rotation: e.target.value })}
-          onInvalid={(e) => "Please fill out this field"}
-          required
-        >
-          <option value="robin">Round Robin</option>
-          <option value="king">King of the Hill</option>
-        </select>{" "}
-        <label htmlFor="time">Enter Guess Time: </label>
-        <select
-          name="time"
-          id="time"
-          onInvalid={(e) => "Please fill out this field"}
-          required
-          onChange={(e) => setState({ ...state, time: e.target.value })}
-        >
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
-          <option value="40">40</option>
-          <option value="50">50</option>
-          <option value="60">60</option>
-          <option value="70">70</option>
-          <option value="80">80</option>
-          <option value="90">90</option>
-          <option value="inf">Unlimited</option>
-        </select>
-        <br />
-        <br />
-        <input type="submit" value="Get Game Link"></input>
+        <FormGroup>
+          <TextField
+            type="text"
+            value={state.username}
+            onChange={(e) => setState({ ...state, username: e.target.value })}
+            id="username"
+            name="username"
+            label="Username"
+            inputProps={{
+              pattern: "^(?=[A-Za-z0-9])([A-Za-z0-9s]*)(?<=[A-Za-z0-9])$",
+              title: "Username cannot have leading or trailing spaces",
+            }}
+            onInvalid={(e) => "Please fill out this field"}
+            variant="outlined"
+            required
+          />
+          <br />
+          <TextField
+            type="number"
+            label="Lives"
+            value={state.lives}
+            onChange={(e) => setState({ ...state, lives: e.target.value })}
+            id="lives"
+            name="lives"
+            inputProps={{ min: 6, max: 10 }}
+            onInvalid={(e) => "Please fill out this field"}
+            variant="outlined"
+            required
+          />
+          <br />
+          <TextField
+            type="number"
+            label="Rounds"
+            value={state.numRounds}
+            onChange={(e) => setState({ ...state, numRounds: e.target.value })}
+            id="numRounds"
+            name="numRounds"
+            inputProps={{ min: 1 }}
+            onInvalid={(e) => "Please fill out this field"}
+            variant="outlined"
+            required
+          />
+          <br />
+          <FormControl>
+            <InputLabel id="rotation-label">Rotation</InputLabel>
+            <Select
+              labelId="rotation-label"
+              name="rotation"
+              id="rotation"
+              value={state.rotation}
+              onChange={(e) =>
+                setState({ ...state, rotation: e.target.value as string })
+              }
+              onInvalid={(e) => "Please fill out this field"}
+              variant="outlined"
+              required
+            >
+              <MenuItem value="robin">Round Robin</MenuItem>
+              <MenuItem value="king">King of the Hill</MenuItem>
+            </Select>{" "}
+          </FormControl>
+          <br />
+          <FormControl>
+            <InputLabel id="time-label">Time</InputLabel>
+            <Select
+              name="time"
+              id="time"
+              labelId="time-label"
+              onInvalid={(e) => "Please fill out this field"}
+              value={state.time}
+              required
+              variant="outlined"
+              onChange={(e) =>
+                setState({ ...state, time: e.target.value as string })
+              }
+            >
+              <MenuItem value="10">10</MenuItem>
+              <MenuItem value="20">20</MenuItem>
+              <MenuItem value="30">30</MenuItem>
+              <MenuItem value="40">40</MenuItem>
+              <MenuItem value="50">50</MenuItem>
+              <MenuItem value="60">60</MenuItem>
+              <MenuItem value="70">70</MenuItem>
+              <MenuItem value="80">80</MenuItem>
+              <MenuItem value="90">90</MenuItem>
+              <MenuItem value="inf">Unlimited</MenuItem>
+            </Select>
+          </FormControl>
+          <br />
+          <br />
+          <Button variant="contained" color="primary" type="submit">
+            Submit
+          </Button>
+        </FormGroup>
       </form>
       {roomID && roomID !== "" && <Redirect to={`/${roomID}`} />}
     </div>

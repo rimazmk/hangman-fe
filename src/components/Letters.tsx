@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "@material-ui/core";
 
 interface Props {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
@@ -12,14 +13,16 @@ const Letters = ({ onClick, disabled, guessedLetters }: Props) => {
   const renderLetters = () => {
     return letters.map((letter) => {
       return (
-        <button
+        <Button
+          variant="contained"
           onClick={onClick}
           value={letter}
           key={letter.charCodeAt(0)}
+          size="small"
           disabled={disabled || guessedLetters.includes(letter)}
         >
           {letter}
-        </button>
+        </Button>
       );
     });
   };
