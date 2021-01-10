@@ -162,15 +162,23 @@ function Create({
       <Typography variant="h5">
         About <br />
       </Typography>
-      Hangman Online.io is a free online platform to play Hangman with your
-      friends.
+      hangmanonline.io is a free online platform to play Hangman with your
+      friends. A player can create a game by filling out the form above and can
+      invite his/her friends by sharing the URL that they'll receive afterwards.
       <br />
       <br />
       <Typography variant="h5">
         How to Play <br />
       </Typography>
-      Choose a word, category, and time limit. Then Pick between Classic
-      “Rotation” mode and the competetive “ and challenge your friends!!
+      When it's your turn to be the "hanger", choose a word and category you
+      think could stump, or even get a laugh out of your friends. Alternatively,
+      if you're a "guesser", try to either guess an individual letter to be in
+      the word or, if you're feeling confident, the entire word itself. Make
+      sure to keep an eye on the timer and the number of lives the guessers have
+      at all times! If you run out of time or guess wrong you lose a life, and
+      if you run out of lives, the "hanger" wins! Once you've finished, you can
+      continue the fun by trying out the different rotation modes as well as
+      varying the game time and the number of lives!
       <br />
       {roomID && roomID !== "" && <Redirect to={`/${roomID}`} />}
     </div>
