@@ -20,9 +20,6 @@ a {
 }
 
 .messagesWrapper {
-  overflow-y: scroll;
-}
-
-.messages {
-  position: relative;
+  overflow-y: auto;
+  height: 100px;
 }

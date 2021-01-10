@@ -36,6 +36,17 @@ function Create({
     setRoomID(info.roomID);
   };
 
+  const validateUsername = () => {
+    let username = document.getElementById("username") as HTMLInputElement;
+    if (!/^[^\s]+(\s+[^\s]+)*$/.test(username.value)) {
+      username.setCustomValidity(
+        "Username cannot have leading or trailing spaces"
+      );
+    } else {
+      username.setCustomValidity("");
+    }
+  };
+
   useEffect(() => {
     socket.on("link", handleLink);
     return () => {
@@ -62,10 +73,7 @@ function Create({
             id="username"
             name="username"
             label="username"
-            inputProps={{
-              pattern: "(?! )([^*?]| )+(?<! )",
-              title: "Username cannot have leading or trailing spaces",
-            }}
+            onInput={() => validateUsername()}
             onInvalid={(e) => "Please fill out this field"}
             variant="filled"
             required

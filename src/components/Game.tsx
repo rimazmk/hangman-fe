@@ -168,11 +168,8 @@ function Game({
                 id="guess"
                 name="guess"
                 inputProps={{
-                  // pattern: "^[-sa-zA-Z]{2,}$",
                   maxLength: 50,
                   minLength: 2,
-                  // title:
-                  //   "Only alphabetic characters, spaces, and dashes allowed",
                 }}
                 onInput={(e) => validateGuess()}
                 disabled={gameState.guesser !== username}

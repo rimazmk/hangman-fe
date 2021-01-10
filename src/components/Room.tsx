@@ -63,17 +63,17 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
     return () => window.removeEventListener("unload", cleanup);
   }, [user, roomID]);
 
-  useEffect(() => {
-    let guesser_pos: number = gameState!.players.indexOf(gameState!.guesser);
-    let prevGuesser: number =
-      (((guesser_pos - 1) % gameState!.players.length) +
-        gameState!.players.length) %
-      gameState!.players.length;
-    messages.push([
-      gameState!.players[prevGuesser],
-      `guessed ${gameState!.guessedWords[gameState!.guessedWords.length - 1]}`,
-    ]);
-  }, [gameState!.guessedWords.length]);
+  // useEffect(() => {
+  //   let guesser_pos: number = gameState!.players.indexOf(gameState!.guesser);
+  //   let prevGuesser: number =
+  //     (((guesser_pos - 1) % gameState!.players.length) +
+  //       gameState!.players.length) %
+  //     gameState!.players.length;
+  //   messages.push([
+  //     gameState!.players[prevGuesser],
+  //     `guessed ${gameState!.guessedWords[gameState!.guessedWords.length - 1]}`,
+  //   ]);
+  // }, [gameState!.guessedWords.length]);
 
   const render = () => {
     if (err) {

@@ -87,7 +87,7 @@ const NewWord = ({
             gameState.numIncorrect !== gameState.lives &&
             user === gameState.guesser && (
               <>
-                <p>YOU WIN! :)</p>
+                <h2>YOU WIN! :)</h2>
                 <audio autoPlay muted={mute}>
                   <source src={"http://localhost:5000/audio/win.mp3"} />
                 </audio>

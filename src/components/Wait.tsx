@@ -55,6 +55,10 @@ function Wait({
     let username = document.getElementById("username") as HTMLInputElement;
     if (gameState.players.includes(username.value)) {
       username.setCustomValidity("Username is already taken");
+    } else if (!/^[^\s]+(\s+[^\s]+)*$/.test(username.value)) {
+      username.setCustomValidity(
+        "Guess cannot have leading or trailing spaces"
+      );
     } else {
       username.setCustomValidity("");
     }
@@ -143,10 +147,6 @@ function Wait({
                 <TextField
                   type="text"
                   value={formUser}
-                  inputProps={{
-                    pattern: "^(?=[A-Za-z0-9])([A-Za-z0-9s]*)(?<=[A-Za-z0-9])$",
-                    title: "Username cannot have leading or trailing spaces",
-                  }}
                   onChange={(e) => setFormUser(e.target.value)}
                   onInput={(e) => validateUsername()}
                   id="username"

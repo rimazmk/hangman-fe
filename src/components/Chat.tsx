@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { socket } from "../modules";
 import { FormControl, Input, Button } from "@material-ui/core";
+import ScrollableFeed from "react-scrollable-feed";
 import { gameStateInterface } from "../hangman";
 
 function Chat({
@@ -15,26 +16,6 @@ function Chat({
   setMessages: React.Dispatch<React.SetStateAction<[string, string][]>>;
 }) {
   const [message, setMessage] = useState("");
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const didMountRef = useRef(false);
-  const scrollToBottom = () => {
-    // window.scroll({top: messagesEndRef.current!.offsetTop, behavior: 'smooth'});
-    messagesEndRef.current!.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "start",
-    });
-  };
-
-  useEffect(() => {
-    if (didMountRef.current) {
-      scrollToBottom();
-    } else {
-      didMountRef.current = true;
-    }
-  }, [messages]);
-
-  // useEffect(scrollToBottom, [messages]);
 
   const handleMessage = (info: [string, string]) => {
     setMessages((messages) => [...messages, info]);
@@ -54,6 +35,17 @@ function Chat({
     }
   };
 
+  const validateMessage = () => {
+    let userMsg = document.getElementById("message") as HTMLInputElement;
+    if (!/^[^\s]+(\s+[^\s]+)*$/.test(userMsg.value)) {
+      userMsg.setCustomValidity(
+        "Message cannot have leading or trailing spaces"
+      );
+    } else {
+      userMsg.setCustomValidity("");
+    }
+  };
+
   useEffect(() => {
     socket.on("chat", handleMessage);
     return () => {
@@ -64,14 +56,13 @@ function Chat({
   return (
     <div className="messages">
       <h2>Chat:</h2>
-      <div className="messagesWrapper">
+      <ScrollableFeed className="messagesWrapper" forceScroll={true}>
         {messages.map((info, idx) => (
           <p key={idx}>
             {info[0]}: {info[1]}
           </p>
         ))}
-        <div ref={messagesEndRef} />
-      </div>
+      </ScrollableFeed>
 
       <form onSubmit={handleSubmit}>
         <FormControl>
@@ -79,12 +70,10 @@ function Chat({
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            inputProps={{
-              pattern: "(?! )([^*?]| )+(?<! )",
-              title: "Message cannot have leading or trailing spaces",
-            }}
+            onInput={() => validateMessage()}
             id="message"
             name="message"
+            required
           />
           <br />
           <Button variant="contained" color="primary" type="submit">
