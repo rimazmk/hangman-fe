@@ -63,7 +63,7 @@ const NewRound = ({
 
   return (
     <div>
-      {newID === "" && (
+      {newID === "" && user === gameState.players[0] && (
         <form onSubmit={handleSubmit}>
           <label htmlFor="lives">Enter Lives: </label>
           <input
@@ -120,7 +120,7 @@ const NewRound = ({
           </select>
           <br />
           <br />
-          <input type="submit" value="Play Again"></input>
+          <input type="submit" value="Start New Game"></input>
         </form>
       )}
 
