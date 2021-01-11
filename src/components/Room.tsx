@@ -36,7 +36,6 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
   const [err, setErr] = useState(false);
 
   const [source, setSource] = useState("");
-  const [messages, setMessages] = useState<[string, string][]>([]);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const updateSong = () => {
@@ -121,8 +120,6 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
           gameState={gameState}
           setGameState={setGameState}
           mute={mute}
-          messages={messages}
-          setMessages={setMessages}
         />
       );
     } else if (gameState && gameState.category === "") {
@@ -142,14 +139,7 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
 
   const show_chat = () => {
     if (!err && gameState && gameState.players.includes(user)) {
-      return (
-        <Chat
-          user={user}
-          roomID={roomID}
-          messages={messages}
-          setMessages={setMessages}
-        />
-      );
+      return <Chat user={user} roomID={roomID} />;
     }
   };
 
