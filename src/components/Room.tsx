@@ -6,11 +6,31 @@ import Wait from "./Wait";
 import Chat from "./Chat";
 import NewWord from "./NewWord";
 import axios from "axios";
+import "../css/Room.scss";
 
 import { socket } from "../modules";
 
 function Room({ username, mute }: { username: string; mute: boolean }) {
-  const [gameState, setGameState] = useState<gameStateInterface>();
+  const [gameState, setGameState] = useState<gameStateInterface>({
+    players: [],
+    wins: {},
+    hanger: "",
+    category: "",
+    word: "",
+    guessedLetters: [],
+    numIncorrect: 0,
+    lives: 0,
+    guessedWords: [],
+    guesser: "",
+    curGuess: "",
+    guessedWord: "",
+    gameStart: false,
+    cap: 0,
+    rotation: "",
+    round: 0,
+    numRounds: 0,
+    time: 0,
+  });
   const [user, setUser] = useState(username);
   const { roomID }: { roomID: string } = useParams();
   const [err, setErr] = useState(false);
@@ -63,17 +83,27 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
     return () => window.removeEventListener("unload", cleanup);
   }, [user, roomID]);
 
-  // useEffect(() => {
-  //   let guesser_pos: number = gameState!.players.indexOf(gameState!.guesser);
-  //   let prevGuesser: number =
-  //     (((guesser_pos - 1) % gameState!.players.length) +
-  //       gameState!.players.length) %
-  //     gameState!.players.length;
-  //   messages.push([
-  //     gameState!.players[prevGuesser],
-  //     `guessed ${gameState!.guessedWords[gameState!.guessedWords.length - 1]}`,
-  //   ]);
-  // }, [gameState!.guessedWords.length]);
+  useEffect(() => {
+    if (gameState && gameState.guessedWords.length > 0) {
+      let guesser_pos: number = gameState.players.indexOf(gameState.guesser);
+      let prevGuesser: number =
+        (((guesser_pos - 1) % gameState.players.length) +
+          gameState.players.length) %
+        gameState.players.length;
+
+      if (gameState.players[prevGuesser] === gameState.hanger) {
+        prevGuesser =
+          (((prevGuesser - 1) % gameState.players.length) +
+            gameState.players.length) %
+          gameState.players.length;
+      }
+      messages.push([
+        gameState.players[prevGuesser],
+        `guessed ${gameState.guessedWords[gameState.guessedWords.length - 1]}`,
+      ]);
+      console.log(messages[messages.length - 1]);
+    }
+  }, [gameState!.guessedWords.length]);
 
   const render = () => {
     if (err) {
@@ -139,20 +169,18 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
         (gameState.gameStart && gameState.category !== ""))
     ) {
       return (
-        <div>
-          <Chat
-            user={user}
-            roomID={roomID}
-            messages={messages}
-            setMessages={setMessages}
-          />
-        </div>
+        <Chat
+          user={user}
+          roomID={roomID}
+          messages={messages}
+          setMessages={setMessages}
+        />
       );
     }
   };
 
   return (
-    <div>
+    <div className="room-container">
       {render()}
       {show_chat()}
     </div>

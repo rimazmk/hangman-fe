@@ -14,9 +14,7 @@ function Wait({
   user: string;
   roomID: string;
   gameState: gameStateInterface;
-  setGameState: React.Dispatch<
-    React.SetStateAction<gameStateInterface | undefined>
-  >;
+  setGameState: React.Dispatch<React.SetStateAction<gameStateInterface>>;
   setUser: React.Dispatch<React.SetStateAction<string>>;
   mute: boolean;
 }) {
@@ -101,15 +99,6 @@ function Wait({
     } else {
       return (
         <>
-          <Typography variant="h4" paragraph>
-            Players
-          </Typography>
-          {gameState.players.map((player) => (
-            <Typography key={player} paragraph>
-              {player}
-            </Typography>
-          ))}
-
           {play && gameState.players[gameState.players.length - 1] !== user && (
             <audio
               autoPlay
@@ -121,25 +110,23 @@ function Wait({
             </audio>
           )}
 
-          {user === gameState.hanger && (
-            <>
-              <Typography paragraph>
-                Share this link with your friends:
-                <br />
-                {url}{" "}
-                <Button variant="contained" onClick={copyLink}>
-                  {copy}
-                </Button>
-              </Typography>
-            </>
-          )}
+          <Typography variant="h4" paragraph>
+            Players
+          </Typography>
+          {gameState.players.map((player) => (
+            <Typography key={player} variant="h6">
+              {player}
+            </Typography>
+          ))}
+
+          <br />
 
           {user === gameState.hanger && gameState.players.length >= 2 && (
             <Button variant="contained" onClick={onButtonClick}>
               Start game!
             </Button>
           )}
-          {/* Add functionality for changing username */}
+
           {!gameState.players.includes(user) && (
             <div id="wait">
               <form onSubmit={handleSubmitJoin}>
@@ -155,6 +142,18 @@ function Wait({
               </form>
             </div>
           )}
+
+          <br />
+          <br />
+
+          <Typography paragraph>
+            Share this link with your friends:
+            <br />
+            {url}{" "}
+            <Button variant="contained" onClick={copyLink}>
+              {copy}
+            </Button>
+          </Typography>
         </>
       );
     }

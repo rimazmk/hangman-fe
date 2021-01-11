@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { gameStateInterface } from "../hangman";
-import { FormControl, Input, InputLabel } from "@material-ui/core";
+import { FormControl, Input, InputLabel, Typography } from "@material-ui/core";
 import Letters from "./Letters";
 import Timer from "./Timer";
 import Chat from "./Chat";
+import "../css/Game.scss";
 import { socket } from "../modules";
 
 function Game({
@@ -14,9 +15,7 @@ function Game({
   mute,
 }: {
   gameState: gameStateInterface;
-  setGameState: React.Dispatch<
-    React.SetStateAction<gameStateInterface | undefined>
-  >;
+  setGameState: React.Dispatch<React.SetStateAction<gameStateInterface>>;
   username: string;
   roomID: string;
   mute: boolean;
@@ -81,7 +80,6 @@ function Game({
   };
 
   const makeGuess = (guessedEntity: string) => {
-    console.log(guessedEntity);
     let guessState = Object.assign(
       {},
       { ...gameState, curGuess: guessedEntity }
@@ -135,79 +133,87 @@ function Game({
 
   return (
     <>
-      {username === gameState.players[prevGuesser] && source !== "" && (
-        <audio
-          id="guessAudio"
-          autoPlay
-          onEnded={() => setSource("")}
-          muted={mute}
-          ref={audioRef}
-        >
-          <source src={source} />
-        </audio>
-      )}
-      {username && username !== "" && (
-        <div>
-          <h1>
-            Round {gameState.round} of {gameState.numRounds}
-          </h1>
-          <Letters
-            onClick={onLetterClick}
-            disabled={gameState.guesser !== username}
-            guessedLetters={gameState.guessedLetters}
-          />
-          <br />
-          <br />
-          <form onSubmit={onFormSubmit}>
-            <FormControl>
-              <InputLabel htmlFor="guess">Word</InputLabel>
-              <Input
-                type="text"
-                value={word}
-                onChange={(e) => setWord(e.target.value)}
-                id="guess"
-                name="guess"
-                inputProps={{
-                  maxLength: 50,
-                  minLength: 2,
-                }}
-                onInput={(e) => validateGuess()}
-                disabled={gameState.guesser !== username}
-              />
-            </FormControl>
-          </form>
-          <br />
-          {username === gameState.hanger && (
-            <h1>{"Word(s): " + gameState.word}</h1>
-          )}
-          <h1>{"Guessed Word(s): " + gameState.guessedWord}</h1>
-          <h2>{"Category: " + gameState.category}</h2>
-          <h2>{"Guesser: " + gameState.guesser}</h2>
-          <h2>{"Hanger: " + gameState.hanger}</h2>
-          <h2>
-            {"Guesses Remaining: " + (gameState.lives - gameState.numIncorrect)}
-          </h2>
-          <h2>{"Letters Guessed: "}</h2>
-          {displayGuesses()}
-          <h2>{"Words Guessed: "}</h2>
-          {displayWords()}
-          <h2>Player: {username}</h2>
-          {/* TODO: Add Unique Key for Child in List */}
-          <h2>
-            Active Players:{" "}
-            {gameState.players.map((player) => (
-              <>{player} </>
-            ))}
-          </h2>
-          {username === gameState.guesser && gameState.time && (
-            <>
-              <br />
-              <Timer gameState={gameState} makeGuess={makeGuess} />
-            </>
-          )}
-          <br />
-        </div>
-      )}
+      <h2 className="players">
+        Active Players:{" "}
+        {gameState.players.map((player) => (
+          <Typography
+            variant="h4"
+            style={{ color: player === gameState.guesser ? "blue" : "black" }}
+          >
+            {player}
+          </Typography>
+        ))}
+      </h2>
+      <div className="game-container">
+        {username === gameState.players[prevGuesser] && source !== "" && (
+          <audio
+            id="guessAudio"
+            autoPlay
+            onEnded={() => setSource("")}
+            muted={mute}
+            ref={audioRef}
+          >
+            <source src={source} />
+          </audio>
+        )}
+        {username && username !== "" && (
+          <div>
+            <h1>
+              Round {gameState.round} of {gameState.numRounds}
+            </h1>
+            <h1>{"Guessed Word(s): " + gameState.guessedWord}</h1>
+            <Letters
+              onClick={onLetterClick}
+              disabled={gameState.guesser !== username}
+              guessedLetters={gameState.guessedLetters}
+            />
+            <br />
+            <br />
+            <form onSubmit={onFormSubmit}>
+              <FormControl>
+                <InputLabel htmlFor="guess">Word</InputLabel>
+                <Input
+                  type="text"
+                  value={word}
+                  onChange={(e) => setWord(e.target.value)}
+                  id="guess"
+                  name="guess"
+                  inputProps={{
+                    maxLength: 50,
+                    minLength: 2,
+                  }}
+                  onInput={(e) => validateGuess()}
+                  disabled={gameState.guesser !== username}
+                />
+              </FormControl>
+            </form>
+            <br />
+            {username === gameState.hanger && (
+              <h1>{"Word(s): " + gameState.word}</h1>
+            )}
+            <h2>{"Category: " + gameState.category}</h2>
+            <h2>{"Guesser: " + gameState.guesser}</h2>
+            <h2>{"Hanger: " + gameState.hanger}</h2>
+            <h2>
+              {"Guesses Remaining: " +
+                (gameState.lives - gameState.numIncorrect)}
+            </h2>
+            <h2>{"Letters Guessed: "}</h2>
+            {displayGuesses()}
+            <h2>{"Words Guessed: "}</h2>
+            {displayWords()}
+            <h2>Player: {username}</h2>
+            {/* TODO: Add Unique Key for Child in List */}
+            {username === gameState.guesser && gameState.time && (
+              <>
+                <br />
+                <Timer gameState={gameState} makeGuess={makeGuess} />
+              </>
+            )}
+            <br />
+          </div>
+        )}
+      </div>
     </>
   );
 }

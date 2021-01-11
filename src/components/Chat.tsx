@@ -47,6 +47,7 @@ function Chat({
   };
 
   useEffect(() => {
+    console.log(messages[messages.length - 1]);
     socket.on("chat", handleMessage);
     return () => {
       socket.off("chat", handleMessage);

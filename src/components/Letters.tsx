@@ -19,6 +19,7 @@ const Letters = ({ onClick, disabled, guessedLetters }: Props) => {
           value={letter}
           key={letter.charCodeAt(0)}
           size="small"
+          // classes={{root: {width: "20px"}}}
           disabled={disabled || guessedLetters.includes(letter)}
         >
           {letter}
