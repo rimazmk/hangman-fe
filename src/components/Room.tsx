@@ -83,28 +83,6 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
     return () => window.removeEventListener("unload", cleanup);
   }, [user, roomID]);
 
-  // useEffect(() => {
-  //   if (gameState && gameState.guessedWords.length > 0) {
-  //     let guesser_pos: number = gameState.players.indexOf(gameState.guesser);
-  //     let prevGuesser: number =
-  //       (((guesser_pos - 1) % gameState.players.length) +
-  //         gameState.players.length) %
-  //       gameState.players.length;
-
-  //     if (gameState.players[prevGuesser] === gameState.hanger) {
-  //       prevGuesser =
-  //         (((prevGuesser - 1) % gameState.players.length) +
-  //           gameState.players.length) %
-  //         gameState.players.length;
-  //     }
-  //     messages.push([
-  //       gameState.players[prevGuesser],
-  //       `guessed ${gameState.guessedWords[gameState.guessedWords.length - 1]}`,
-  //     ]);
-  //     console.log(messages[messages.length - 1]);
-  //   }
-  // }, [gameState!.guessedWords.length]);
-
   const render = () => {
     if (err) {
       return <p>Room does not exist</p>;
@@ -163,13 +141,7 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
   };
 
   const show_chat = () => {
-    if (
-      gameState &&
-      gameState.players.includes(user) &&
-      (user === "" ||
-        !gameState.gameStart ||
-        (gameState.gameStart && gameState.category !== ""))
-    ) {
+    if (!err && gameState && gameState.players.includes(user)) {
       return (
         <Chat
           user={user}
