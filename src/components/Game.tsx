@@ -13,12 +13,16 @@ function Game({
   username,
   roomID,
   mute,
+  messages,
+  setMessages,
 }: {
   gameState: gameStateInterface;
   setGameState: React.Dispatch<React.SetStateAction<gameStateInterface>>;
   username: string;
   roomID: string;
   mute: boolean;
+  messages: [string, string][];
+  setMessages: React.Dispatch<React.SetStateAction<[string, string][]>>;
 }) {
   const [word, setWord] = useState("");
   const [source, setSource] = useState("");
@@ -91,6 +95,17 @@ function Game({
     };
 
     socket.emit("guess", guess);
+
+    let message = guessedEntity
+      ? `guessed ${guessedEntity}`
+      : `ran out of time`;
+    setMessages([...messages, [username, message]]);
+    let info = {
+      roomID: roomID,
+      user: username,
+      message: message,
+    };
+    socket.emit("chat", info);
   };
 
   const onFormSubmit = (e: React.FormEvent) => {
