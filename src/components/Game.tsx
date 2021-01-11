@@ -13,16 +13,12 @@ function Game({
   username,
   roomID,
   mute,
-  messages,
-  setMessages,
 }: {
   gameState: gameStateInterface;
   setGameState: React.Dispatch<React.SetStateAction<gameStateInterface>>;
   username: string;
   roomID: string;
   mute: boolean;
-  messages: [string, string][];
-  setMessages: React.Dispatch<React.SetStateAction<[string, string][]>>;
 }) {
   const [word, setWord] = useState("");
   const [source, setSource] = useState("");
@@ -97,12 +93,12 @@ function Game({
     socket.emit("guess", guess);
 
     let message = guessedEntity
-      ? `guessed ${guessedEntity}`
-      : `ran out of time`;
-    setMessages([...messages, [username, message]]);
+      ? `${username} guessed ${guessedEntity}`
+      : `${username} ran out of time`;
+
     let info = {
       roomID: roomID,
-      user: username,
+      user: "game",
       message: message,
     };
     socket.emit("chat", info);
@@ -148,17 +144,20 @@ function Game({
 
   return (
     <>
-      <h2 className="players">
-        Active Players:{" "}
+      <div className="players">
+        <h2>Active Players: </h2>
         {gameState.players.map((player) => (
           <Typography
-            variant="h4"
+            variant="h5"
             style={{ color: player === gameState.guesser ? "blue" : "black" }}
           >
             {player}
           </Typography>
         ))}
-      </h2>
+        <br />
+        <Typography variant="h5">{"Hanger: " + gameState.hanger}</Typography>
+        <Typography variant="h5">{"Mode: " + gameState.rotation}</Typography>
+      </div>
       <div className="game-container">
         {username === gameState.players[prevGuesser] && source !== "" && (
           <audio
@@ -173,10 +172,30 @@ function Game({
         )}
         {username && username !== "" && (
           <div>
-            <h1>
-              Round {gameState.round} of {gameState.numRounds}
-            </h1>
-            <h1>{"Guessed Word(s): " + gameState.guessedWord}</h1>
+            <div className="top-container">
+              <h1>
+                Round {gameState.round} of {gameState.numRounds}
+              </h1>
+              {username === gameState.guesser && gameState.time && (
+                <div className="timer">
+                  <Timer gameState={gameState} makeGuess={makeGuess} />
+                </div>
+              )}
+            </div>
+            <Typography variant="h6">
+              {"Category: " + gameState.category} <br />
+              {"Guesses Remaining: " +
+                (gameState.lives - gameState.numIncorrect)}
+            </Typography>
+            <Typography variant="h3" style={{}} className="word">
+              {gameState.guessedWord}
+            </Typography>
+            <br />
+            {username === gameState.hanger && (
+              <h1 style={{ wordWrap: "break-word" }}>
+                {"Word(s): " + gameState.word}
+              </h1>
+            )}
             <Letters
               onClick={onLetterClick}
               disabled={gameState.guesser !== username}
@@ -202,29 +221,7 @@ function Game({
                 />
               </FormControl>
             </form>
-            <br />
-            {username === gameState.hanger && (
-              <h1>{"Word(s): " + gameState.word}</h1>
-            )}
-            <h2>{"Category: " + gameState.category}</h2>
-            <h2>{"Guesser: " + gameState.guesser}</h2>
-            <h2>{"Hanger: " + gameState.hanger}</h2>
-            <h2>
-              {"Guesses Remaining: " +
-                (gameState.lives - gameState.numIncorrect)}
-            </h2>
-            <h2>{"Letters Guessed: "}</h2>
-            {displayGuesses()}
-            <h2>{"Words Guessed: "}</h2>
-            {displayWords()}
-            <h2>Player: {username}</h2>
             {/* TODO: Add Unique Key for Child in List */}
-            {username === gameState.guesser && gameState.time && (
-              <>
-                <br />
-                <Timer gameState={gameState} makeGuess={makeGuess} />
-              </>
-            )}
             <br />
           </div>
         )}

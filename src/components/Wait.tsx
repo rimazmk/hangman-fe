@@ -57,6 +57,8 @@ function Wait({
       username.setCustomValidity(
         "Guess cannot have leading or trailing spaces"
       );
+    } else if (username.value.length > 20) {
+      username.setCustomValidity("Username cannot be more than 20 characters");
     } else {
       username.setCustomValidity("");
     }

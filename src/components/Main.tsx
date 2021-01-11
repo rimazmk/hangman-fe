@@ -17,6 +17,9 @@ import { BrowserRouter, Route } from "react-router-dom";
 const theme = createMuiTheme({
   typography: {
     fontFamily: ["Yeon Sung", "Sans Serif"].join(","),
+    h3: {
+      letterSpacing: "2px",
+    },
   },
   palette: {
     primary: {

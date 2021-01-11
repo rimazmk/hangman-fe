@@ -1,12 +1,25 @@
 .room-container {
   margin-top: 40px;
+  min-height: 450px;
   display: flex;
   width: 100%;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }
 
 .messages {
-  margin-left: auto;
-  min-width: 350px;
+  min-width: 300px;
+  max-width: 300px;
+  height: 550px;
+  padding: 20px;
+  background-color: rgb(214, 214, 214);
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
+@media only screen and (max-width: 950px) {
+  .room-container {
+    flex-direction: column;
+    align-items: center;
+  }
 }

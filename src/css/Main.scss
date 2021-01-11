@@ -1,6 +1,6 @@
 .container {
   padding: 40px;
-  max-width: 1150px;
+  max-width: 1350px;
   width: 90%;
   display: flex;
   flex-direction: column;
@@ -23,5 +23,6 @@ a {
 
 .messagesWrapper {
   overflow-y: auto;
-  height: 100px;
+  word-wrap: break-word;
+  height: 60%;
 }

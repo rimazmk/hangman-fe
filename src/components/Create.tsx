@@ -42,6 +42,10 @@ function Create({
       username.setCustomValidity(
         "Username cannot have leading or trailing spaces"
       );
+    } else if (username.value.length > 20) {
+      username.setCustomValidity(
+        "Username must be between 1 and 20 characters"
+      );
     } else {
       username.setCustomValidity("");
     }

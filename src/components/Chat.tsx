@@ -2,20 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { socket } from "../modules";
 import { FormControl, Input, Button } from "@material-ui/core";
 import ScrollableFeed from "react-scrollable-feed";
-import { gameStateInterface } from "../hangman";
 
-function Chat({
-  user,
-  roomID,
-  messages,
-  setMessages,
-}: {
-  user: string;
-  roomID: string;
-  messages: [string, string][];
-  setMessages: React.Dispatch<React.SetStateAction<[string, string][]>>;
-}) {
+function Chat({ user, roomID }: { user: string; roomID: string }) {
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState<[string, string][]>([]);
 
   const handleMessage = (info: [string, string]) => {
     setMessages((messages) => [...messages, info]);
@@ -24,7 +14,7 @@ function Chat({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message && message !== "") {
-      setMessages([...messages, [user, message]]);
+      // setMessages([...messages, [user, message]]);
       let info = {
         roomID: roomID,
         user: user,
@@ -51,6 +41,7 @@ function Chat({
     socket.on("chat", handleMessage);
     return () => {
       socket.off("chat", handleMessage);
+      socket.off("chatGuess", handleMessage);
     };
   }, [messages]);
 
@@ -59,8 +50,8 @@ function Chat({
       <h2>Chat:</h2>
       <ScrollableFeed className="messagesWrapper" forceScroll={true}>
         {messages.map((info, idx) => (
-          <p key={idx}>
-            {info[0]}: {info[1]}
+          <p key={idx} style={{ color: info[0] === "game" ? "red" : "black" }}>
+            {info[0] === "game" ? "" : `${info[0]}:`} {info[1]}
           </p>
         ))}
       </ScrollableFeed>
