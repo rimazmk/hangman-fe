@@ -5,16 +5,21 @@ import { socket } from "../modules";
 
 const NewRound = ({
   gameState,
+  setGameState,
   roomID,
   user,
 }: {
   gameState: gameStateInterface;
+  setGameState: React.Dispatch<
+    React.SetStateAction<gameStateInterface | undefined>
+  >;
   roomID: string;
   user: string;
 }) => {
   const [redirect, setRedirect] = useState(false);
   const [newID, setNewID] = useState("");
   const [newHanger, setNewHanger] = useState("");
+  const [started, setStarted] = useState(false);
 
   let temp: string;
   if (gameState.time === null) {
@@ -34,36 +39,54 @@ const NewRound = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     let params = Object.assign({}, state);
-    console.log(params);
 
     const info = { params: params, roomID: roomID, username: user };
     socket.emit("new", info);
   };
 
-  const handleURL = (info: {
-    gameState: gameStateInterface;
-    roomID: string;
-  }) => {
-    setNewID(info.roomID);
-    setNewHanger(info.gameState["hanger"]);
+  const onClick = () => {
+    console.log("newt");
+    socket.emit("newt", roomID);
+  };
+
+  const handleNew = (info: string) => {
+    setStarted(true);
+  };
+
+  const handleURL = (newState: gameStateInterface) => {
+    setGameState(Object.assign({}, newState));
+    // setRedirect(true);
   };
 
   useEffect(() => {
+    socket.on("newt", handleNew);
     socket.on("url", handleURL);
     return () => {
       socket.off("url", handleURL);
+      socket.off("newt", handleNew);
     };
   }, []);
 
-  const handleClick = () => {
-    const info = { user: user, roomID: roomID, newID: newID };
-    socket.emit("join_new", info);
-    setRedirect(true);
-  };
+  // const handleClick = () => {
+  //   const info = { user: user, roomID: roomID, newID: newID };
+  //   socket.emit("join_new", info);
+  //   setRedirect(true);
+  // };
 
   return (
     <div>
-      {newID === "" && user === gameState.players[0] && (
+      {newID === "" && user === gameState.players[0] && !started && (
+        <button onClick={onClick} value={"start new game"}>
+          start new game
+        </button>
+      )}
+      {newID === "" && user !== gameState.players[0] && !started && (
+        <p>waiting for {gameState.players[0]} to start game...</p>
+      )}
+      {newID === "" && user !== gameState.players[0] && started && (
+        <p>waiting for {gameState.players[0]} to choose settings...</p>
+      )}
+      {newID === "" && user === gameState.players[0] && started && (
         <form onSubmit={handleSubmit}>
           <label htmlFor="lives">Enter Lives: </label>
           <input
@@ -120,19 +143,15 @@ const NewRound = ({
           </select>
           <br />
           <br />
-          <input type="submit" value="Start New Game"></input>
+          <input type="submit" value="Create Game"></input>
         </form>
       )}
 
-      {newHanger === user && newID && newID !== "" && (
-        <Redirect to={`/${newID}`} />
-      )}
+      {redirect && <Redirect to={`/${roomID}`} />}
 
-      {newHanger !== user && newID && newID !== "" && (
+      {/* {newHanger !== user && newID && newID !== "" && (
         <button onClick={handleClick}>Go To Next Game</button>
-      )}
-
-      {redirect && <Redirect to={`/${newID}`} />}
+      )} */}
     </div>
   );
 };

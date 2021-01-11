@@ -4,10 +4,14 @@ import NewRound from "./NewRound";
 
 const Standings = ({
   gameState,
+  setGameState,
   roomID,
   user,
 }: {
   gameState: gameStateInterface;
+  setGameState: React.Dispatch<
+    React.SetStateAction<gameStateInterface | undefined>
+  >;
   roomID: string;
   user: string;
 }) => {
@@ -50,7 +54,12 @@ const Standings = ({
         <p key={place}>{place}</p>
       ))}
 
-      <NewRound gameState={gameState} roomID={roomID} user={user} />
+      <NewRound
+        gameState={gameState}
+        setGameState={setGameState}
+        roomID={roomID}
+        user={user}
+      />
     </div>
   );
 };
