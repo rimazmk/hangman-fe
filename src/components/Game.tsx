@@ -7,6 +7,20 @@ import Chat from "./Chat";
 import "../css/Game.scss";
 import { socket } from "../modules";
 
+const figureMapping = [
+  "none.png",
+  "head.png",
+  "body.png",
+  "left_leg.png",
+  "right_leg.png",
+  "left_arm.png",
+  "right_arm.png",
+  "hair.png",
+  "eyes.png",
+  "nose.png",
+  "mouth.png",
+];
+
 function Game({
   gameState,
   setGameState,
@@ -191,6 +205,10 @@ function Game({
               {gameState.guessedWord}
             </Typography>
             <br />
+            <img
+              className="drawing"
+              src={`/images/${figureMapping[gameState.numIncorrect]}`}
+            />
             {username === gameState.hanger && (
               <h1 style={{ wordWrap: "break-word" }}>
                 {"Word(s): " + gameState.word}
