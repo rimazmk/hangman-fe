@@ -134,6 +134,20 @@ function Game({
     makeGuess(ev.value);
   };
 
+  const getScore = (player: string) => {
+    const win: number = 30;
+    const right: number = 15;
+    const wrong: number = -5;
+    const miss: number = 0;
+
+    return (
+      win * gameState.wins[player] +
+      right * gameState.right[player] +
+      wrong * gameState.wrong[player] +
+      miss * gameState.misses[player]
+    );
+  };
+
   let prevGuesser: number = gameState.players.indexOf(gameState.guesser);
 
   do {
@@ -154,6 +168,7 @@ function Game({
             key={player}
           >
             {player}
+            {getScore(player)}
           </Typography>
         ))}
         <br />

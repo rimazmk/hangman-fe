@@ -184,6 +184,14 @@ function Create({
       continue the fun by trying out the different rotation modes as well as
       varying the guess time and the number of lives!
       <br />
+      <br />
+      <Typography variant="h5">
+        Scoring <br />
+      </Typography>
+      If a guesser completes the word, he/she gets 30 points. All other correct
+      guesses are worth 15 points. Though incorrect guesses cause a guesser to
+      lose 5 points, running out of time does not change a guesser's score.
+      <br />
       {roomID && roomID !== "" && <Redirect to={`/${roomID}`} />}
     </div>
   );

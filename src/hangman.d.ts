@@ -12,7 +12,10 @@ export interface gameInitInterface {
 
 export interface gameStateInterface {
   players: string[];
-  wins: object;
+  wins: { [key: string]: number };
+  right: { [key: string]: number };
+  wrong: { [key: string]: number };
+  misses: { [key: string]: number };
   cap: number;
   hanger: string;
   category: string;
