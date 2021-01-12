@@ -138,7 +138,12 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
   };
 
   const show_chat = () => {
-    if (!err && gameState && gameState.players.includes(user)) {
+    if (
+      !err &&
+      gameState &&
+      gameState.players.includes(user) &&
+      gameState.players.length > 1
+    ) {
       return <Chat user={user} roomID={roomID} />;
     }
   };

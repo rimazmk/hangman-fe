@@ -3,7 +3,6 @@ import { gameStateInterface } from "../hangman";
 import { FormControl, Input, InputLabel, Typography } from "@material-ui/core";
 import Letters from "./Letters";
 import Timer from "./Timer";
-import Chat from "./Chat";
 import "../css/Game.scss";
 import { socket } from "../modules";
 
@@ -131,18 +130,6 @@ function Game({
     makeGuess(ev.value);
   };
 
-  const displayGuesses = () => {
-    return gameState.guessedLetters.map((letter) => {
-      return <>{letter} </>;
-    });
-  };
-
-  const displayWords = () => {
-    return gameState.guessedWords.map((word) => {
-      return <div key={word}>{word}</div>;
-    });
-  };
-
   let guesser_pos: number = gameState.players.indexOf(gameState.guesser);
   let prevGuesser: number =
     (((guesser_pos - 1) % gameState.players.length) +
@@ -208,6 +195,7 @@ function Game({
             <img
               className="drawing"
               src={`/images/${figureMapping[gameState.numIncorrect]}`}
+              alt="Hangman Representing Game Progress"
             />
             {username === gameState.hanger && (
               <h1 style={{ wordWrap: "break-word" }}>
@@ -239,7 +227,6 @@ function Game({
                 />
               </FormControl>
             </form>
-            {/* TODO: Add Unique Key for Child in List */}
             <br />
           </div>
         )}

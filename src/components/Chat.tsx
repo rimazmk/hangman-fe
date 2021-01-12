@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { socket } from "../modules";
 import { FormControl, Input, Button } from "@material-ui/core";
 import ScrollableFeed from "react-scrollable-feed";
@@ -14,7 +14,6 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (message && message !== "") {
-      // setMessages([...messages, [user, message]]);
       let info = {
         roomID: roomID,
         user: user,
@@ -37,11 +36,9 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
   };
 
   useEffect(() => {
-    console.log(messages[messages.length - 1]);
     socket.on("chat", handleMessage);
     return () => {
       socket.off("chat", handleMessage);
-      socket.off("chatGuess", handleMessage);
     };
   }, [messages]);
 
