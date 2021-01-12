@@ -14,7 +14,9 @@ function Wait({
   user: string;
   roomID: string;
   gameState: gameStateInterface;
-  setGameState: React.Dispatch<React.SetStateAction<gameStateInterface>>;
+  setGameState: React.Dispatch<
+    React.SetStateAction<gameStateInterface | undefined>
+  >;
   setUser: React.Dispatch<React.SetStateAction<string>>;
   mute: boolean;
 }) {
@@ -47,6 +49,14 @@ function Wait({
     };
     setUser(formUser);
     socket.emit("join", credentials);
+
+    let message = `${formUser} has joined`;
+    let info = {
+      roomID: roomID,
+      user: "join",
+      message: message,
+    };
+    socket.emit("chat", info);
   };
 
   const validateUsername = () => {

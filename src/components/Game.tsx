@@ -28,7 +28,9 @@ function Game({
   mute,
 }: {
   gameState: gameStateInterface;
-  setGameState: React.Dispatch<React.SetStateAction<gameStateInterface>>;
+  setGameState: React.Dispatch<
+    React.SetStateAction<gameStateInterface | undefined>
+  >;
   username: string;
   roomID: string;
   mute: boolean;

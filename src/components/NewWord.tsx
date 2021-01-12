@@ -12,7 +12,9 @@ const NewWord = ({
   mute,
 }: {
   gameState: gameStateInterface;
-  setGameState: React.Dispatch<React.SetStateAction<gameStateInterface>>;
+  setGameState: React.Dispatch<
+    React.SetStateAction<gameStateInterface | undefined>
+  >;
   user: string;
   roomID: string;
   mute: boolean;

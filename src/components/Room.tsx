@@ -11,26 +11,7 @@ import "../css/Room.scss";
 import { socket } from "../modules";
 
 function Room({ username, mute }: { username: string; mute: boolean }) {
-  const [gameState, setGameState] = useState<gameStateInterface>({
-    players: [],
-    wins: {},
-    hanger: "",
-    category: "",
-    word: "",
-    guessedLetters: [],
-    numIncorrect: 0,
-    lives: 0,
-    guessedWords: [],
-    guesser: "",
-    curGuess: "",
-    guessedWord: "",
-    gameStart: false,
-    cap: 0,
-    rotation: "",
-    round: 0,
-    numRounds: 0,
-    time: 0,
-  });
+  const [gameState, setGameState] = useState<gameStateInterface>();
   const [user, setUser] = useState(username);
   const { roomID }: { roomID: string } = useParams();
   const [err, setErr] = useState(false);

@@ -42,13 +42,26 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
     };
   }, [messages]);
 
+  const color: { [key: string]: string } = {
+    game: "red",
+    join: "gray",
+    leave: "gray",
+  };
+  const font: { [key: string]: string } = { join: "italic", leave: "italic" };
+
   return (
     <div className="messages">
       <h2>Chat:</h2>
       <ScrollableFeed className="messagesWrapper" forceScroll={true}>
         {messages.map((info, idx) => (
-          <p key={idx} style={{ color: info[0] === "game" ? "red" : "black" }}>
-            {info[0] === "game" ? "" : `${info[0]}:`} {info[1]}
+          <p
+            key={idx}
+            style={{
+              color: info[0] in color ? color[info[0]] : "black",
+              fontStyle: info[0] in font ? font[info[0]] : "normal",
+            }}
+          >
+            {info[0] in color ? "" : `${info[0]}:`} {info[1]}
           </p>
         ))}
       </ScrollableFeed>
