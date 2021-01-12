@@ -18,7 +18,7 @@ const Standings = ({ gameState }: { gameState: gameStateInterface }) => {
     const win: number = 30;
     const right: number = 15;
     const wrong: number = -5;
-    const miss: number = 0;
+    const miss: number = -5;
 
     return (
       win * gameState.wins[player] +
