@@ -76,7 +76,7 @@ function Create({
             onChange={(e) => setState({ ...state, username: e.target.value })}
             id="username"
             name="username"
-            label="username"
+            label="Username"
             onInput={() => validateUsername()}
             onInvalid={(e) => "Please fill out this field"}
             variant="filled"

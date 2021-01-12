@@ -95,12 +95,24 @@ const NewWord = ({
           {gameState.word !== "" &&
             gameState.rotation === "robin" &&
             gameState.numIncorrect === gameState.lives &&
-            user === gameState.hanger && <p>YOU WIN! :)</p>}
+            user === gameState.hanger && (
+              <>
+                <h2>YOU WIN! :)</h2>
+                <audio autoPlay muted={mute}>
+                  <source src={"http://localhost:5000/audio/win.mp3"} />
+                </audio>
+              </>
+            )}
 
           {user === next_hanger ? (
             <div>
               {gameState.word !== "" && gameState.rotation === "king" && (
-                <p>YOU WIN! :)</p>
+                <>
+                  <h2>YOU WIN! :)</h2>
+                  <audio autoPlay muted={mute}>
+                    <source src={"http://localhost:5000/audio/win.mp3"} />
+                  </audio>
+                </>
               )}
 
               <form onSubmit={handleSubmit}>
