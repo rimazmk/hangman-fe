@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
 import VolumeOffIcon from "@material-ui/icons/VolumeOff";
-import HomeIcon from "@material-ui/icons/Home";
+// import HomeIcon from "@material-ui/icons/Home";
 import Create from "./Create";
 import Room from "./Room";
 import "../css/Main.scss";

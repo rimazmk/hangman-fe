@@ -182,7 +182,7 @@ function Create({
       at all times! If you run out of time or guess wrong you lose a life, and
       if you run out of lives, the "hanger" wins! Once you've finished, you can
       continue the fun by trying out the different rotation modes as well as
-      varying the game time and the number of lives!
+      varying the guess time and the number of lives!
       <br />
       {roomID && roomID !== "" && <Redirect to={`/${roomID}`} />}
     </div>

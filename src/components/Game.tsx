@@ -47,21 +47,34 @@ function Game({
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.load();
-      audioRef.current.play();
+      audioRef.current.play(); // Maintain returned promise with a ref to avoid console error
     }
   };
 
-  const handleStatus = (status: string) => {
+  const handleStatus = (info: { status: string; guess: string }) => {
     let newURL: string = "";
-    if (status === "timer") {
+    let message: string = "";
+    if (info["status"] === "timer") {
       newURL = "http://localhost:5000/audio/timer.mp3";
-    } else if (status === "correct") {
+      message = `${username} ran out of time`;
+    } else if (info["status"] === "correct") {
       newURL = "http://localhost:5000/audio/correct.mp3";
-    } else if (status === "incorrect") {
+      message = `${username} guessed ${info["guess"]}`;
+    } else if (info["status"] === "incorrect") {
       newURL = "http://localhost:5000/audio/wrong.mp3";
+      message = `${username} guessed ${info["guess"]}`;
+    } else if (info["status"] === "win") {
+      message = `${username} guessed ${gameState.word}`;
     }
 
     updateSong(newURL);
+
+    let res = {
+      roomID: roomID,
+      user: info["status"],
+      message: message,
+    };
+    socket.emit("chat", res);
   };
 
   useEffect(() => {
@@ -106,17 +119,6 @@ function Game({
     };
 
     socket.emit("guess", guess);
-
-    let message = guessedEntity
-      ? `${username} guessed ${guessedEntity}`
-      : `${username} ran out of time`;
-
-    let info = {
-      roomID: roomID,
-      user: "game",
-      message: message,
-    };
-    socket.emit("chat", info);
   };
 
   const onFormSubmit = (e: React.FormEvent) => {
@@ -132,18 +134,14 @@ function Game({
     makeGuess(ev.value);
   };
 
-  let guesser_pos: number = gameState.players.indexOf(gameState.guesser);
-  let prevGuesser: number =
-    (((guesser_pos - 1) % gameState.players.length) +
-      gameState.players.length) %
-    gameState.players.length;
+  let prevGuesser: number = gameState.players.indexOf(gameState.guesser);
 
-  if (gameState.players[prevGuesser] === gameState.hanger) {
+  do {
     prevGuesser =
       (((prevGuesser - 1) % gameState.players.length) +
         gameState.players.length) %
       gameState.players.length;
-  }
+  } while (gameState.players[prevGuesser] === gameState.hanger);
 
   return (
     <>
@@ -153,6 +151,7 @@ function Game({
           <Typography
             variant="h5"
             style={{ color: player === gameState.guesser ? "blue" : "black" }}
+            key={player}
           >
             {player}
           </Typography>

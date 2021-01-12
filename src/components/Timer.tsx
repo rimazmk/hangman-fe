@@ -16,7 +16,6 @@ function Timer({
     clearTimeout(timerRef.current);
     setTime(gameState.time);
     setChange((c) => !c);
-    // changeRef.current = !changeRef.current;
   }, [gameState.guessedWord, gameState.numIncorrect, gameState.time]);
 
   useEffect(() => {

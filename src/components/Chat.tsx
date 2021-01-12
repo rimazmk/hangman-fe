@@ -43,7 +43,10 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
   }, [messages]);
 
   const color: { [key: string]: string } = {
-    game: "red",
+    win: "green",
+    correct: "green",
+    incorrect: "red",
+    timer: "red",
     join: "gray",
     leave: "gray",
   };
