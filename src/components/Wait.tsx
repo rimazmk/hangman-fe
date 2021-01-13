@@ -101,7 +101,7 @@ function Wait({
     return () => {
       socket.off("update", handleUpdate);
     };
-  }, []);
+  }, [roomID, handleUpdate]);
 
   const render = () => {
     if (

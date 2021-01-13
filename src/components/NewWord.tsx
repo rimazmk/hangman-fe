@@ -71,7 +71,7 @@ const NewWord = ({
     return () => {
       socket.off("update", gameHandler);
     };
-  }, []);
+  }, [gameHandler]);
 
   const next =
     gameState.players[

@@ -69,7 +69,7 @@ const NewRound = ({
       socket.off("join_new", handleJoin);
       socket.off("new", handleNew);
     };
-  }, []);
+  }, [handleJoin, handleNew]);
 
   return (
     <div>

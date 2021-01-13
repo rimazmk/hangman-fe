@@ -52,7 +52,7 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
 
     socket.on("leave", handleLeave);
     getGameState();
-  }, [roomID]);
+  }, [roomID, handleLeave]);
 
   useEffect(() => {
     const cleanup = (e: Event) => {

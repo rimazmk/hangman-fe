@@ -28,7 +28,7 @@ function Timer({
     return () => {
       clearTimeout(timerRef.current);
     };
-  }, [time, change]);
+  }, [time, change, makeGuess]);
 
   return <>{time !== 0 && <h2>Time Remaining: {time}</h2>}</>;
 }

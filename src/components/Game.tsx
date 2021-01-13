@@ -97,7 +97,7 @@ function Game({
       socket.off("update", gameHandler);
       socket.off("status", handleStatus);
     };
-  }, []);
+  }, [gameHandler, handleStatus]);
 
   const validateGuess = () => {
     let userGuess = document.getElementById("guess") as HTMLInputElement;

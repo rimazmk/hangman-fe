@@ -67,7 +67,7 @@ function Create({
     return () => {
       socket.off("link", handleLink);
     };
-  }, []);
+  }, [handleLink]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,7 +79,7 @@ function Create({
     e.preventDefault();
     if (timerRef.current) clearTimeout(timerRef.current);
     setStatus("Sent!");
-    const res = await axios.post(`${process.env.REACT_APP_SERVER}/feedback/`, {
+    await axios.post(`${process.env.REACT_APP_SERVER}/feedback/`, {
       data: form,
     });
 
