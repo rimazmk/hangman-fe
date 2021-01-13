@@ -31,7 +31,7 @@ function Create({
     lives: "6",
     numRounds: "3",
     rotation: "robin",
-    time: "30",
+    time: "10",
   });
   const [form, setForm] = useState<feedbackForm>({
     first: "",

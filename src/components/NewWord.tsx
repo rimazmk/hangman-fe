@@ -169,7 +169,14 @@ const NewWord = ({
         </>
       );
     } else {
-      return <Standings gameState={gameState} />;
+      return (
+        <Standings
+          gameState={gameState}
+          setGameState={setGameState}
+          roomID={roomID}
+          user={user}
+        />
+      );
     }
   };
 

@@ -1,8 +1,22 @@
 import React, { useRef } from "react";
 import { gameStateInterface } from "../hangman";
+import NewRound from "./NewRound";
 
-const Standings = ({ gameState }: { gameState: gameStateInterface }) => {
+const Standings = ({
+  gameState,
+  setGameState,
+  roomID,
+  user,
+}: {
+  gameState: gameStateInterface;
+  setGameState: React.Dispatch<
+    React.SetStateAction<gameStateInterface | undefined>
+  >;
+  roomID: string;
+  user: string;
+}) => {
   const standings = useRef<string[]>([]);
+
   const places = [
     "FIRST",
     "SECOND",
@@ -63,6 +77,13 @@ const Standings = ({ gameState }: { gameState: gameStateInterface }) => {
       {standings.current.map((place: string) => (
         <p key={place}>{place}</p>
       ))}
+
+      <NewRound
+        gameState={gameState}
+        setGameState={setGameState}
+        roomID={roomID}
+        user={user}
+      />
     </div>
   );
 };
