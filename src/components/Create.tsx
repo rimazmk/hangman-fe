@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Redirect } from "react-router";
 import {
   feedbackForm,
@@ -39,13 +39,14 @@ function Create({
     feedback: "",
   });
 
-  const handleLink = (info: {
-    gameState: gameStateInterface;
-    roomID: string;
-  }) => {
-    setUser(info.gameState.players[0]); // why doesn't state.username itself work
-    setRoomID(info.roomID);
-  };
+  const handleLink = useCallback(
+    (info: { gameState: gameStateInterface; roomID: string }) => {
+      setUser(info.gameState.players[0]); // why doesn't state.username itself work
+      setRoomID(info.roomID);
+      // eslint-disable-next-line
+    },
+    []
+  );
 
   const validateUsername = () => {
     let username = document.getElementById("username") as HTMLInputElement;

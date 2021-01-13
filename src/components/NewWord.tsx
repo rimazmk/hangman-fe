@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { TextField, Button, InputLabel, Typography } from "@material-ui/core";
 import { gameStateInterface } from "../hangman";
 import Standings from "./Standings";
@@ -35,9 +35,10 @@ const NewWord = ({
     socket.emit("newRound", info);
   };
 
-  const gameHandler = (newState: gameStateInterface) => {
+  const gameHandler = useCallback((newState: gameStateInterface) => {
     setGameState(Object.assign({}, newState));
-  };
+    // eslint-disable-next-line
+  }, []);
 
   const validateWord = () => {
     let userWord = document.getElementById("word") as HTMLInputElement;
@@ -71,6 +72,7 @@ const NewWord = ({
     return () => {
       socket.off("update", gameHandler);
     };
+    // eslint-disable-next-line
   }, [gameHandler]);
 
   const next =

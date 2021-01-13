@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { gameStateInterface } from "../hangman";
 import { socket } from "../modules";
 import { InputLabel, TextField, Button, Typography } from "@material-ui/core";
@@ -27,10 +27,11 @@ function Wait({
   const audioRef = useRef<HTMLAudioElement>(null);
   const url = window.location.href;
 
-  const handleUpdate = (newState: gameStateInterface) => {
+  const handleUpdate = useCallback((newState: gameStateInterface) => {
     updateSong();
     setGameState(Object.assign({}, newState));
-  };
+    // eslint-disable-next-line
+  }, []);
 
   const updateSong = () => {
     setPlay(true);

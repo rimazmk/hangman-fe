@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { gameStateInterface } from "../hangman";
 import Game from "./Game";
@@ -28,11 +28,11 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
     }
   };
 
-  const handleLeave = (newState: gameStateInterface) => {
+  const handleLeave = useCallback((newState: gameStateInterface) => {
     if (newState!.players.length === 0) setErr(true);
     setGameState(Object.assign({}, newState));
     updateSong();
-  };
+  }, []);
 
   useEffect(() => {
     const getGameState = async () => {

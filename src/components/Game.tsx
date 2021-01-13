@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { gameStateInterface } from "../hangman";
 import { FormControl, Input, InputLabel, Typography } from "@material-ui/core";
 import Letters from "./Letters";
@@ -41,11 +41,12 @@ function Game({
   const [change, setChange] = useState("");
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  const gameHandler = (newState: gameStateInterface) => {
+  const gameHandler = useCallback((newState: gameStateInterface) => {
     setGameState(Object.assign({}, newState));
     setShowScore(true);
     window.setTimeout(() => setShowScore(false), 2000);
-  };
+    // eslint-disable-next-line
+  }, []);
 
   const updateSong = (source: string) => {
     setSource(source);
@@ -56,39 +57,43 @@ function Game({
     }
   };
 
-  const handleStatus = (info: { status: string; guess: string }) => {
-    let newURL: string = "";
-    let message: string = "";
-    if (info["status"] === "timer") {
-      newURL = `${process.env.REACT_APP_SERVER}/audio/timer.mp3`;
-      message = `${username} ran out of time`;
-      setChange("-5");
-    } else if (info["status"] === "correct") {
-      newURL = `${process.env.REACT_APP_SERVER}/audio/correct.mp3`;
-      message = `${username} guessed ${info["guess"]}`;
-      setChange("+15");
-    } else if (info["status"] === "incorrect") {
-      console.log(gameState);
-      console.log(info["guess"]);
-      newURL = `${process.env.REACT_APP_SERVER}/audio/wrong.mp3`;
-      message = `${username} guessed ${info["guess"]}`;
-      setChange("-5");
-    } else if (info["status"] === "win") {
-      message = `${username} completed the word!`;
-      setChange("+30");
-    }
+  const handleStatus = useCallback(
+    (info: { status: string; guess: string }) => {
+      let newURL: string = "";
+      let message: string = "";
+      if (info["status"] === "timer") {
+        newURL = `${process.env.REACT_APP_SERVER}/audio/timer.mp3`;
+        message = `${username} ran out of time`;
+        setChange("-5");
+      } else if (info["status"] === "correct") {
+        newURL = `${process.env.REACT_APP_SERVER}/audio/correct.mp3`;
+        message = `${username} guessed ${info["guess"]}`;
+        setChange("+15");
+      } else if (info["status"] === "incorrect") {
+        console.log(gameState);
+        console.log(info["guess"]);
+        newURL = `${process.env.REACT_APP_SERVER}/audio/wrong.mp3`;
+        message = `${username} guessed ${info["guess"]}`;
+        setChange("-5");
+      } else if (info["status"] === "win") {
+        message = `${username} completed the word!`;
+        setChange("+30");
+      }
 
-    updateSong(newURL);
+      updateSong(newURL);
 
-    let res = {
-      roomID: roomID,
-      user: info["status"],
-      message: message,
-      effects: true,
-    };
+      let res = {
+        roomID: roomID,
+        user: info["status"],
+        message: message,
+        effects: true,
+      };
 
-    socket.emit("chat", res);
-  };
+      socket.emit("chat", res);
+      // eslint-disable-next-line
+    },
+    []
+  );
 
   useEffect(() => {
     socket.on("update", gameHandler);
