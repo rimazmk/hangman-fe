@@ -259,6 +259,7 @@ function Game({
                   }}
                   onInput={(e) => validateGuess()}
                   disabled={gameState.guesser !== username}
+                  required
                 />
               </FormControl>
             </form>

@@ -48,6 +48,7 @@ function Wait({
       user: formUser,
     };
     setUser(formUser);
+    setFormUser("");
     socket.emit("join", credentials);
 
     let message = `${formUser} has joined`;
@@ -151,6 +152,7 @@ function Wait({
                   onInput={(e) => validateUsername()}
                   id="username"
                   name="username"
+                  required
                 />
               </form>
             </div>

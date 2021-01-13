@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { gameStateInterface } from "../hangman";
 import NewRound from "./NewRound";
-
+import { Typography } from "@material-ui/core";
 const Standings = ({
   gameState,
   setGameState,
@@ -75,8 +75,12 @@ const Standings = ({
   return (
     <div>
       {standings.current.map((place: string) => (
-        <p key={place}>{place}</p>
+        <Typography variant="h5" key={place}>
+          <b>{place}</b>
+        </Typography>
       ))}
+
+      <br />
 
       <NewRound
         gameState={gameState}

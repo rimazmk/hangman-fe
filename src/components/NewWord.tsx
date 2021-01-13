@@ -30,6 +30,7 @@ const NewWord = ({
       user: user,
       roomID: roomID,
     };
+    setWord("");
     socket.emit("newRound", info);
   };
 

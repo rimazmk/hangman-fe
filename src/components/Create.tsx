@@ -72,6 +72,7 @@ function Create({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setState({ ...state, username: "" });
     socket.emit("create", state);
   };
 

@@ -1,4 +1,14 @@
 import React, { useEffect, useState } from "react";
+import {
+  FormGroup,
+  FormControl,
+  InputLabel,
+  TextField,
+  Typography,
+  MenuItem,
+  Select,
+  Button,
+} from "@material-ui/core";
 import { gameStateInterface, gameInitInterface } from "../hangman";
 import { socket } from "../modules";
 
@@ -64,7 +74,9 @@ const NewRound = ({
   return (
     <div>
       {user !== gameState.players[0] && !started && (
-        <p>Waiting for {gameState.players[0]} to start the next game...</p>
+        <Typography variant="h6">
+          Waiting for {gameState.players[0]} to start the next game...
+        </Typography>
       )}
 
       {user !== gameState.players[0] && started && (
@@ -72,69 +84,103 @@ const NewRound = ({
       )}
 
       {user === gameState.players[0] && !started && (
-        <button onClick={onClick} value={"start new game"}>
-          Start New Game
-        </button>
+        <Button
+          onClick={onClick}
+          variant="contained"
+          color="primary"
+          type="submit"
+        >
+          Start Next Game
+        </Button>
       )}
 
       {user === gameState.players[0] && started && (
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="lives">Enter Lives: </label>
-          <input
-            type="number"
-            value={state.lives}
-            onChange={(e) => setState({ ...state, lives: e.target.value })}
-            id="lives"
-            name="lives"
-            min="6"
-            max="10"
-          ></input>
-          <br />
-          <label htmlFor="numRounds">Enter Number of Rounds:</label>
-          <input
-            type="number"
-            value={state.numRounds}
-            onChange={(e) => setState({ ...state, numRounds: e.target.value })}
-            id="numRounds"
-            name="numRounds"
-            min="1"
-            onInvalid={(e) => "Please fill out this field"}
-            required
-          ></input>
-          <br />
-          <label htmlFor="rotation">Rotation Mode:</label>
-          <select
-            name="rotation"
-            id="rotation"
-            onChange={(e) => setState({ ...state, rotation: e.target.value })}
-            onInvalid={(e) => "Please fill out this field"}
-            required
-          >
-            <option value="robin">Round Robin</option>
-            <option value="king">King of the Hill</option>
-          </select>{" "}
-          <label htmlFor="time">Enter Guess Time: </label>
-          <select
-            name="time"
-            id="time"
-            onInvalid={(e) => "Please fill out this field"}
-            required
-            onChange={(e) => setState({ ...state, time: e.target.value })}
-          >
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="30">30</option>
-            <option value="40">40</option>
-            <option value="50">50</option>
-            <option value="60">60</option>
-            <option value="70">70</option>
-            <option value="80">80</option>
-            <option value="90">90</option>
-            <option value="inf">Unlimited</option>
-          </select>
-          <br />
-          <br />
-          <input type="submit" value="Create Game"></input>
+        <form
+          onSubmit={handleSubmit}
+          style={{ minWidth: "225px", maxWidth: "400px", margin: "auto 0" }}
+        >
+          <FormGroup>
+            <TextField
+              type="number"
+              label="Lives"
+              value={state.lives}
+              onChange={(e) => setState({ ...state, lives: e.target.value })}
+              id="lives"
+              name="lives"
+              inputProps={{ min: 6, max: 10 }}
+              onInvalid={(e) => "Please fill out this field"}
+              variant="filled"
+              required
+            />
+            <br />
+            <TextField
+              type="number"
+              label="Rounds"
+              value={state.numRounds}
+              onChange={(e) =>
+                setState({ ...state, numRounds: e.target.value })
+              }
+              id="numRounds"
+              name="numRounds"
+              inputProps={{ min: 1 }}
+              onInvalid={(e) => "Please fill out this field"}
+              variant="filled"
+              required
+            />
+            <br />
+            <FormControl>
+              <InputLabel id="rotation-label">Rotation</InputLabel>
+              <Select
+                labelId="rotation-label"
+                name="rotation"
+                id="rotation"
+                value={state.rotation}
+                onChange={(e) =>
+                  setState({ ...state, rotation: e.target.value as string })
+                }
+                onInvalid={(e) => "Please fill out this field"}
+                variant="filled"
+                required
+              >
+                <MenuItem value="robin">Round Robin</MenuItem>
+                <MenuItem value="king">King of the Hill</MenuItem>
+              </Select>{" "}
+            </FormControl>
+            <br />
+            <FormControl>
+              <InputLabel id="time-label">Guess Time (sec)</InputLabel>
+              <Select
+                name="time"
+                id="time"
+                labelId="time-label"
+                onInvalid={(e) => "Please fill out this field"}
+                value={state.time}
+                required
+                variant="filled"
+                onChange={(e) =>
+                  setState({ ...state, time: e.target.value as string })
+                }
+              >
+                <MenuItem value="10">10</MenuItem>
+                <MenuItem value="20">20</MenuItem>
+                <MenuItem value="30">30</MenuItem>
+                <MenuItem value="40">40</MenuItem>
+                <MenuItem value="50">50</MenuItem>
+                <MenuItem value="60">60</MenuItem>
+                <MenuItem value="70">70</MenuItem>
+                <MenuItem value="80">80</MenuItem>
+                <MenuItem value="90">90</MenuItem>
+                <MenuItem value="inf">Unlimited</MenuItem>
+              </Select>
+            </FormControl>
+            <br />
+            <br />
+            <Button variant="contained" color="primary" type="submit">
+              Create Game
+            </Button>
+            <br />
+            <br />
+          </FormGroup>
         </form>
       )}
     </div>
