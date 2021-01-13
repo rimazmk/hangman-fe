@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { gameStateInterface, gameInitInterface } from "../hangman";
-import { Redirect } from "react-router";
 import { socket } from "../modules";
 
 const NewRound = ({
@@ -16,7 +15,6 @@ const NewRound = ({
   roomID: string;
   user: string;
 }) => {
-  const [redirect, setRedirect] = useState(false);
   const [started, setStarted] = useState(false);
 
   let temp: string;
@@ -46,13 +44,12 @@ const NewRound = ({
     socket.emit("new", roomID);
   };
 
-  const handleNew = (info: string) => {
+  const handleNew = () => {
     setStarted(true);
   };
 
   const handleJoin = (newState: gameStateInterface) => {
     setGameState(Object.assign({}, newState));
-    // setRedirect(true);
   };
 
   useEffect(() => {
@@ -67,16 +64,16 @@ const NewRound = ({
   return (
     <div>
       {user !== gameState.players[0] && !started && (
-        <p>waiting for {gameState.players[0]} to start game...</p>
+        <p>Waiting for {gameState.players[0]} to start the next game...</p>
       )}
 
       {user !== gameState.players[0] && started && (
-        <p>waiting for {gameState.players[0]} to choose settings...</p>
+        <p>{gameState.players[0]} is choosing the settings...</p>
       )}
 
       {user === gameState.players[0] && !started && (
         <button onClick={onClick} value={"start new game"}>
-          start new game
+          Start New Game
         </button>
       )}
 
@@ -140,8 +137,6 @@ const NewRound = ({
           <input type="submit" value="Create Game"></input>
         </form>
       )}
-
-      {redirect && <Redirect to={`/${roomID}`} />}
     </div>
   );
 };
