@@ -25,7 +25,7 @@ function Wait({
   const [play, setPlay] = useState(false);
   const timerRef = useRef<number>();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const url = `/${roomID}`;
+  const url = window.location.href;
 
   const handleUpdate = (newState: gameStateInterface) => {
     updateSong();

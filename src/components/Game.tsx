@@ -68,11 +68,13 @@ function Game({
       message = `${username} guessed ${info["guess"]}`;
       setChange("+15");
     } else if (info["status"] === "incorrect") {
+      console.log(gameState);
+      console.log(info["guess"]);
       newURL = `${process.env.REACT_APP_SERVER}/audio/wrong.mp3`;
       message = `${username} guessed ${info["guess"]}`;
       setChange("-5");
     } else if (info["status"] === "win") {
-      message = `${username} guessed ${gameState.word}`;
+      message = `${username} completed the word!`;
       setChange("+30");
     }
 
@@ -84,6 +86,7 @@ function Game({
       message: message,
       effects: true,
     };
+
     socket.emit("chat", res);
   };
 
@@ -148,7 +151,7 @@ function Game({
     const win: number = 30;
     const right: number = 15;
     const wrong: number = -5;
-    const miss: number = 0;
+    const miss: number = -5;
 
     return (
       win * gameState.wins[player] +
@@ -211,15 +214,22 @@ function Game({
         {username && username !== "" && (
           <div>
             <div className="top-container">
-              <h1>
+              <Typography variant="h4" paragraph>
                 Round {gameState.round} of {gameState.numRounds}
-              </h1>
+              </Typography>
+              <br />
+
               {username === gameState.guesser && gameState.time && (
                 <div className="timer">
                   <Timer gameState={gameState} makeGuess={makeGuess} />
                 </div>
               )}
             </div>
+            {username === gameState.hanger && (
+              <Typography variant="h5" style={{ wordWrap: "break-word" }}>
+                {"Word(s): " + gameState.word}
+              </Typography>
+            )}
             <Typography variant="h6">
               {"Category: " + gameState.category} <br />
               {"Guesses Remaining: " +
@@ -233,36 +243,36 @@ function Game({
               src={`/images/${figureMapping[gameState.numIncorrect]}`}
               alt="Hangman Representing Game Progress"
             />
-            {username === gameState.hanger && (
-              <h1 style={{ wordWrap: "break-word" }}>
-                {"Word(s): " + gameState.word}
-              </h1>
-            )}
-            <Letters
-              onClick={onLetterClick}
-              disabled={gameState.guesser !== username}
-              guessedLetters={gameState.guessedLetters}
-            />
-            <br />
-            <form onSubmit={onFormSubmit}>
-              <FormControl>
-                <InputLabel htmlFor="guess">Word</InputLabel>
-                <Input
-                  type="text"
-                  value={word}
-                  onChange={(e) => setWord(e.target.value)}
-                  id="guess"
-                  name="guess"
-                  inputProps={{
-                    maxLength: 50,
-                    minLength: 2,
-                  }}
-                  onInput={(e) => validateGuess()}
+
+            {username !== gameState.hanger && (
+              <>
+                <Letters
+                  onClick={onLetterClick}
                   disabled={gameState.guesser !== username}
-                  required
+                  guessedLetters={gameState.guessedLetters}
                 />
-              </FormControl>
-            </form>
+                <br />
+                <form onSubmit={onFormSubmit}>
+                  <FormControl>
+                    <InputLabel htmlFor="guess">Word</InputLabel>
+                    <Input
+                      type="text"
+                      value={word}
+                      onChange={(e) => setWord(e.target.value)}
+                      id="guess"
+                      name="guess"
+                      inputProps={{
+                        maxLength: 50,
+                        minLength: 2,
+                      }}
+                      onInput={(e) => validateGuess()}
+                      disabled={gameState.guesser !== username}
+                      required
+                    />
+                  </FormControl>
+                </form>
+              </>
+            )}
             <br />
           </div>
         )}

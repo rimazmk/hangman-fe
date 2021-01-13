@@ -9,6 +9,12 @@
   margin: auto;
 }
 
+.right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
 .create-container {
   width: 100%;
   display: flex;

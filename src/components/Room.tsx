@@ -39,7 +39,7 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
       let res = null;
       try {
         res = await axios.get<gameStateInterface>(
-          `${process.env.REACT_SERVER}/?roomID=${roomID}`
+          `${process.env.REACT_APP_SERVER}/?roomID=${roomID}`
         );
       } catch (err) {
         setErr(true);

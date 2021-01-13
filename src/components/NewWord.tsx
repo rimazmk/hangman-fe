@@ -31,6 +31,7 @@ const NewWord = ({
       roomID: roomID,
     };
     setWord("");
+    setCategory("");
     socket.emit("newRound", info);
   };
 
@@ -55,6 +56,18 @@ const NewWord = ({
 
   useEffect(() => {
     socket.on("update", gameHandler);
+
+    if (gameState.word !== "" && user === gameState.hanger) {
+      let wordWin = {
+        roomID: roomID,
+        user: "word",
+        message: `The word was ${gameState.word}`,
+        effects: true,
+      };
+
+      socket.emit("chat", wordWin);
+    }
+
     return () => {
       socket.off("update", gameHandler);
     };
@@ -90,7 +103,9 @@ const NewWord = ({
               <>
                 <h2>YOU WIN! :)</h2>
                 <audio autoPlay muted={mute}>
-                  <source src={`${process.env.REACT_APP_SERVER}/win.mp3`} />
+                  <source
+                    src={`${process.env.REACT_APP_SERVER}/audio/win.mp3`}
+                  />
                 </audio>
               </>
             )}
@@ -102,7 +117,9 @@ const NewWord = ({
               <>
                 <h2>YOU WIN! :)</h2>
                 <audio autoPlay muted={mute}>
-                  <source src={`${process.env.REACT_APP_SERVER}/win.mp3`} />
+                  <source
+                    src={`${process.env.REACT_APP_SERVER}/audio/win.mp3`}
+                  />
                 </audio>
               </>
             )}
@@ -113,7 +130,9 @@ const NewWord = ({
                 <>
                   <h2>YOU WIN! :)</h2>
                   <audio autoPlay muted={mute}>
-                    <source src={`${process.env.REACT_APP_SERVER}/win.mp3`} />
+                    <source
+                      src={`${process.env.REACT_APP_SERVER}/audio/win.mp3`}
+                    />
                   </audio>
                 </>
               )}
