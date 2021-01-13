@@ -41,7 +41,7 @@ const Main = () => {
         <CssBaseline />
         <AppBar position="static" className="menu">
           <Typography variant="h5">
-            <a href="http://localhost:3000/">Hangmanonline.io</a>
+            <a href="/">Hangmanonline.io</a>
           </Typography>
           <div className="volume" style={{ marginLeft: "10px" }}>
             {!mute && (

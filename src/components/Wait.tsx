@@ -25,7 +25,7 @@ function Wait({
   const [play, setPlay] = useState(false);
   const timerRef = useRef<number>();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const url = `http://localhost:3000/${roomID}`;
+  const url = `/${roomID}`;
 
   const handleUpdate = (newState: gameStateInterface) => {
     updateSong();
@@ -120,7 +120,7 @@ function Wait({
               muted={mute}
               ref={audioRef}
             >
-              <source src="http://localhost:5000/audio/join.mp3" />
+              <source src={`${process.env.REACT_APP_SERVER}/audio/join.mp3`} />
             </audio>
           )}
 

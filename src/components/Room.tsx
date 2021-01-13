@@ -20,7 +20,7 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const updateSong = () => {
-    setSource("http://localhost:5000/audio/leave.mp3");
+    setSource(`${process.env.REACT_APP_SERVER}/audio/leave.mp3`);
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.load();
@@ -39,7 +39,7 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
       let res = null;
       try {
         res = await axios.get<gameStateInterface>(
-          `http://localhost:5000/?roomID=${roomID}`
+          `${process.env.REACT_SERVER}/?roomID=${roomID}`
         );
       } catch (err) {
         setErr(true);

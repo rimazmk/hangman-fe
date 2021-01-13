@@ -60,15 +60,15 @@ function Game({
     let newURL: string = "";
     let message: string = "";
     if (info["status"] === "timer") {
-      newURL = "http://localhost:5000/audio/timer.mp3";
+      newURL = `${process.env.REACT_APP_SERVER}/audio/timer.mp3`;
       message = `${username} ran out of time`;
       setChange("-5");
     } else if (info["status"] === "correct") {
-      newURL = "http://localhost:5000/audio/correct.mp3";
+      newURL = `${process.env.REACT_APP_SERVER}/audio/correct.mp3`;
       message = `${username} guessed ${info["guess"]}`;
       setChange("+15");
     } else if (info["status"] === "incorrect") {
-      newURL = "http://localhost:5000/audio/wrong.mp3";
+      newURL = `${process.env.REACT_APP_SERVER}/audio/wrong.mp3`;
       message = `${username} guessed ${info["guess"]}`;
       setChange("-5");
     } else if (info["status"] === "win") {

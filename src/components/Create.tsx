@@ -80,7 +80,7 @@ function Create({
     e.preventDefault();
     if (timerRef.current) clearTimeout(timerRef.current);
     setStatus("Sent!");
-    const res = await axios.post("http://localhost:5000/feedback/", {
+    const res = await axios.post(`${process.env.REACT_APP_SERVER}/feedback/`, {
       data: form,
     });
 
