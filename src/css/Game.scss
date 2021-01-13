@@ -5,7 +5,8 @@
 
 .drawing {
   max-width: 100%;
-  margin: 20px;
+  margin: 0 10px;
+  margin-top: 20px;
   border: 3px solid black;
   border-radius: 2px;
 }
@@ -28,4 +29,60 @@
   text-align: center;
   margin: 20px 0;
   word-wrap: break-word;
+}
+
+.change {
+  -webkit-animation: fadeout 2.5s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadeout 2.5s; /* Firefox < 16 */
+  -ms-animation: fadeout 2.5s; /* Internet Explorer */
+  -o-animation: fadeout 2.5s; /* Opera < 12.1 */
+  animation: fadeout 2.5s;
+}
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

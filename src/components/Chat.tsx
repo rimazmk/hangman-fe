@@ -5,9 +5,9 @@ import ScrollableFeed from "react-scrollable-feed";
 
 function Chat({ user, roomID }: { user: string; roomID: string }) {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<[string, string][]>([]);
+  const [messages, setMessages] = useState<[string, string, boolean][]>([]);
 
-  const handleMessage = (info: [string, string]) => {
+  const handleMessage = (info: [string, string, boolean]) => {
     setMessages((messages) => [...messages, info]);
   };
 
@@ -18,6 +18,7 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
         roomID: roomID,
         user: user,
         message: message,
+        effects: false,
       };
       setMessage("");
       socket.emit("chat", info);
@@ -60,11 +61,11 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
           <p
             key={idx}
             style={{
-              color: info[0] in color ? color[info[0]] : "black",
-              fontStyle: info[0] in font ? font[info[0]] : "normal",
+              color: info[2] ? color[info[0]] : "black",
+              fontStyle: info[2] ? font[info[0]] : "normal",
             }}
           >
-            {info[0] in color ? "" : `${info[0]}:`} {info[1]}
+            {info[2] ? "" : `${info[0]}:`} {info[1]}
           </p>
         ))}
       </ScrollableFeed>

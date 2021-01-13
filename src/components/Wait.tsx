@@ -55,6 +55,7 @@ function Wait({
       roomID: roomID,
       user: "join",
       message: message,
+      effects: true,
     };
     socket.emit("chat", info);
   };

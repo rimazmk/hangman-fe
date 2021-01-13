@@ -33,3 +33,10 @@ export interface gameStateInterface {
   numRounds: number;
   time: number;
 }
+
+export interface feedbackForm {
+  first: string;
+  last: string;
+  email: string;
+  feedback: string;
+}

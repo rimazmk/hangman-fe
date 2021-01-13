@@ -53,9 +53,9 @@ const NewWord = ({
   };
 
   useEffect(() => {
-    socket.on("response", gameHandler);
+    socket.on("update", gameHandler);
     return () => {
-      socket.off("response", gameHandler);
+      socket.off("update", gameHandler);
     };
   }, []);
 

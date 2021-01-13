@@ -28,6 +28,6 @@ const Letters = ({ onClick, disabled, guessedLetters }: Props) => {
     });
   };
 
-  return <>{renderLetters()}</>;
+  return <div style={{ textAlign: "center" }}>{renderLetters()}</div>;
 };
 export default Letters;

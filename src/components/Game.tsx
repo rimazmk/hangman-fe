@@ -37,9 +37,14 @@ function Game({
 }) {
   const [word, setWord] = useState("");
   const [source, setSource] = useState("");
+  const [showScore, setShowScore] = useState(false);
+  const [change, setChange] = useState("");
   const audioRef = useRef<HTMLAudioElement>(null);
+
   const gameHandler = (newState: gameStateInterface) => {
     setGameState(Object.assign({}, newState));
+    setShowScore(true);
+    window.setTimeout(() => setShowScore(false), 2000);
   };
 
   const updateSong = (source: string) => {
@@ -57,14 +62,18 @@ function Game({
     if (info["status"] === "timer") {
       newURL = "http://localhost:5000/audio/timer.mp3";
       message = `${username} ran out of time`;
+      setChange("-5");
     } else if (info["status"] === "correct") {
       newURL = "http://localhost:5000/audio/correct.mp3";
       message = `${username} guessed ${info["guess"]}`;
+      setChange("+15");
     } else if (info["status"] === "incorrect") {
       newURL = "http://localhost:5000/audio/wrong.mp3";
       message = `${username} guessed ${info["guess"]}`;
+      setChange("-5");
     } else if (info["status"] === "win") {
       message = `${username} guessed ${gameState.word}`;
+      setChange("+30");
     }
 
     updateSong(newURL);
@@ -73,6 +82,7 @@ function Game({
       roomID: roomID,
       user: info["status"],
       message: message,
+      effects: true,
     };
     socket.emit("chat", res);
   };
@@ -157,6 +167,9 @@ function Game({
       gameState.players.length;
   } while (gameState.players[prevGuesser] === gameState.hanger);
 
+  let mode =
+    gameState.rotation === "robin" ? "Round Robin" : "King of the Hill";
+
   return (
     <>
       <div className="players">
@@ -167,13 +180,21 @@ function Game({
             style={{ color: player === gameState.guesser ? "blue" : "black" }}
             key={player}
           >
-            {player}
-            {getScore(player)}
+            {username === player ? "*" : ""}
+            {player} {getScore(player)}{" "}
+            {showScore && player === gameState.players[prevGuesser] && (
+              <span
+                className="change"
+                style={{ color: change[0] === "+" ? "green" : "red" }}
+              >
+                {change}
+              </span>
+            )}
           </Typography>
         ))}
         <br />
         <Typography variant="h5">{"Hanger: " + gameState.hanger}</Typography>
-        <Typography variant="h5">{"Mode: " + gameState.rotation}</Typography>
+        <Typography variant="h5">{"Mode: " + mode}</Typography>
       </div>
       <div className="game-container">
         {username === gameState.players[prevGuesser] && source !== "" && (
@@ -207,7 +228,6 @@ function Game({
             <Typography variant="h3" style={{}} className="word">
               {gameState.guessedWord}
             </Typography>
-            <br />
             <img
               className="drawing"
               src={`/images/${figureMapping[gameState.numIncorrect]}`}
@@ -223,7 +243,6 @@ function Game({
               disabled={gameState.guesser !== username}
               guessedLetters={gameState.guessedLetters}
             />
-            <br />
             <br />
             <form onSubmit={onFormSubmit}>
               <FormControl>
