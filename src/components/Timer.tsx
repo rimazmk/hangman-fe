@@ -28,7 +28,8 @@ function Timer({
     return () => {
       clearTimeout(timerRef.current);
     };
-  }, [time, change, makeGuess]);
+    // eslint-disable-next-line
+  }, [time, change]);
 
   return <>{time !== 0 && <h2>Time Remaining: {time}</h2>}</>;
 }

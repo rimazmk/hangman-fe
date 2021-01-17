@@ -19,13 +19,17 @@ import { socket } from "../modules";
 import axios from "axios";
 
 function Create({
+  user,
   setUser,
 }: {
+  user: string;
   setUser: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [roomID, setRoomID] = useState("");
+  // Feedback from response message
   const [status, setStatus] = useState("SEND");
   const timerRef = useRef<number>();
+  const [submitted, setSubmitted] = useState(false);
   const [state, setState] = useState<gameInitInterface>({
     username: "",
     lives: "6",
@@ -43,8 +47,8 @@ function Create({
     (info: { gameState: gameStateInterface; roomID: string }) => {
       setUser(info.gameState.players[0]); // why doesn't state.username itself work
       setRoomID(info.roomID);
-      // eslint-disable-next-line
     },
+    // eslint-disable-next-line
     []
   );
 
@@ -72,6 +76,7 @@ function Create({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitted(true);
     setState({ ...state, username: "" });
     socket.emit("create", state);
   };
@@ -123,7 +128,7 @@ function Create({
           any suggestions you have to improve this website.
           <br />
           <br />
-          <form onSubmit={handleForm}>
+          <form onSubmit={handleForm} style={{ marginBottom: "25px" }}>
             <InputLabel htmlFor="first">Name:</InputLabel>
             <TextField
               type="text"
@@ -188,6 +193,7 @@ function Create({
                 onInvalid={(e) => "Please fill out this field"}
                 variant="filled"
                 required
+                disabled={submitted}
               />
               <br />
               <TextField
@@ -201,6 +207,7 @@ function Create({
                 onInvalid={(e) => "Please fill out this field"}
                 variant="filled"
                 required
+                disabled={submitted}
               />
               <br />
               <TextField
@@ -216,6 +223,7 @@ function Create({
                 onInvalid={(e) => "Please fill out this field"}
                 variant="filled"
                 required
+                disabled={submitted}
               />
               <br />
               <FormControl>
@@ -231,6 +239,7 @@ function Create({
                   onInvalid={(e) => "Please fill out this field"}
                   variant="filled"
                   required
+                  disabled={submitted}
                 >
                   <MenuItem value="king">King of the Hill</MenuItem>
                   <MenuItem value="robin">Round Robin</MenuItem>
@@ -250,6 +259,7 @@ function Create({
                   onChange={(e) =>
                     setState({ ...state, time: e.target.value as string })
                   }
+                  disabled={submitted}
                 >
                   <MenuItem value="10">10</MenuItem>
                   <MenuItem value="20">20</MenuItem>
@@ -265,7 +275,12 @@ function Create({
               </FormControl>
               <br />
               <br />
-              <Button variant="contained" color="primary" type="submit">
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                disabled={submitted}
+              >
                 Create Game
               </Button>
               <br />
@@ -273,12 +288,10 @@ function Create({
             </FormGroup>
           </form>
           <br />
-          <br />
-          <br />
           <p>Creators: Vikhram Thirupathi, Srihari Srinivasan, Rimaz Khan</p>
         </div>
       </div>
-      {roomID && roomID !== "" && <Redirect to={`/${roomID}`} />}
+      {user !== "" && roomID && roomID !== "" && <Redirect to={`/${roomID}`} />}
     </>
   );
 }

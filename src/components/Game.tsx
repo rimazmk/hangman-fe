@@ -90,8 +90,8 @@ function Game({
       };
 
       socket.emit("chat", res);
-      // eslint-disable-next-line
     },
+    // eslint-disable-next-line
     []
   );
 

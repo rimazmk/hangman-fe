@@ -137,7 +137,7 @@ function Wait({
           <br />
 
           {user === gameState.hanger && gameState.players.length >= 2 && (
-            <Button variant="contained" onClick={onButtonClick}>
+            <Button variant="contained" color="primary" onClick={onButtonClick}>
               Start game!
             </Button>
           )}
@@ -166,7 +166,7 @@ function Wait({
             Share this link with your friends:
             <br />
             {url}{" "}
-            <Button variant="contained" onClick={copyLink}>
+            <Button variant="contained" onClick={copyLink} color="primary">
               {copy}
             </Button>
           </Typography>
