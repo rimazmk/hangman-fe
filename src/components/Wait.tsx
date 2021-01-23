@@ -166,7 +166,7 @@ function Wait({
             Share this link with your friends:
             <br />
             {url}{" "}
-            <Button variant="contained" onClick={copyLink} color="primary">
+            <Button onClick={copyLink} color="primary">
               {copy}
             </Button>
           </Typography>
