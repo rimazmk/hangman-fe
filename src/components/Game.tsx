@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useContext,
+} from "react";
 import { gameStateInterface } from "../hangman";
 import { FormControl, Input, InputLabel, Typography } from "@material-ui/core";
 import Letters from "./Letters";
@@ -37,11 +43,12 @@ function Game({
   const [change, setChange] = useState("");
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  const gameHandler = (newState: gameStateInterface) => {
+  const gameHandler = useCallback((newState: gameStateInterface) => {
     setGameState(Object.assign({}, newState));
     setShowScore(true);
     window.setTimeout(() => setShowScore(false), 2000);
-  };
+    // eslint-disable-next-line
+  }, []);
 
   const updateSong = (source: string) => {
     setSource(source);
@@ -52,36 +59,43 @@ function Game({
     }
   };
 
-  const handleStatus = (info: { status: string; guess: string }) => {
-    let newURL: string = "";
-    let message: string = "";
-    if (info["status"] === "timer") {
-      newURL = `${process.env.REACT_APP_SERVER}/audio/timer.mp3`;
-      message = `${username} ran out of time`;
-      setChange("-5");
-    } else if (info["status"] === "correct") {
-      newURL = `${process.env.REACT_APP_SERVER}/audio/correct.mp3`;
-      message = `${username} guessed ${info["guess"]}`;
-      setChange("+15");
-    } else if (info["status"] === "incorrect") {
-      newURL = `${process.env.REACT_APP_SERVER}/audio/wrong.mp3`;
-      message = `${username} guessed ${info["guess"]}`;
-      setChange("-5");
-    } else if (info["status"] === "win") {
-      message = `${username} guessed ${gameState.word}`;
-      setChange("+30");
-    }
+  const handleStatus = useCallback(
+    (info: { status: string; guess: string }) => {
+      let newURL: string = "";
+      let message: string = "";
+      if (info["status"] === "timer") {
+        newURL = `${process.env.REACT_APP_SERVER}/audio/timer.mp3`;
+        message = `${username} ran out of time`;
+        setChange("-5");
+      } else if (info["status"] === "correct") {
+        newURL = `${process.env.REACT_APP_SERVER}/audio/correct.mp3`;
+        message = `${username} guessed ${info["guess"]}`;
+        setChange("+15");
+      } else if (info["status"] === "incorrect") {
+        console.log(gameState);
+        console.log(info["guess"]);
+        newURL = `${process.env.REACT_APP_SERVER}/audio/wrong.mp3`;
+        message = `${username} guessed ${info["guess"]}`;
+        setChange("-5");
+      } else if (info["status"] === "win") {
+        message = `${username} completed the word!`;
+        setChange("+30");
+      }
 
-    updateSong(newURL);
+      updateSong(newURL);
 
-    let res = {
-      roomID: roomID,
-      user: info["status"],
-      message: message,
-      effects: true,
-    };
-    socket.emit("chat", res);
-  };
+      let res = {
+        roomID: roomID,
+        user: info["status"],
+        message: message,
+        effects: true,
+      };
+
+      socket.emit("chat", res);
+    },
+    // eslint-disable-next-line
+    []
+  );
 
   useEffect(() => {
     socket.on("update", gameHandler);
@@ -90,7 +104,7 @@ function Game({
       socket.off("update", gameHandler);
       socket.off("status", handleStatus);
     };
-  }, []);
+  }, [gameHandler, handleStatus]);
 
   const validateGuess = () => {
     let userGuess = document.getElementById("guess") as HTMLInputElement;
@@ -144,7 +158,7 @@ function Game({
     const win: number = 30;
     const right: number = 15;
     const wrong: number = -5;
-    const miss: number = 0;
+    const miss: number = -5;
 
     return (
       win * gameState.wins[player] +
@@ -207,15 +221,22 @@ function Game({
         {username && username !== "" && (
           <div>
             <div className="top-container">
-              <h1>
+              <Typography variant="h4" paragraph>
                 Round {gameState.round} of {gameState.numRounds}
-              </h1>
+              </Typography>
+              <br />
+
               {username === gameState.guesser && gameState.time && (
                 <div className="timer">
                   <Timer gameState={gameState} makeGuess={makeGuess} />
                 </div>
               )}
             </div>
+            {username === gameState.hanger && (
+              <Typography variant="h5" style={{ wordWrap: "break-word" }}>
+                {"Word(s): " + gameState.word}
+              </Typography>
+            )}
             <Typography variant="h6">
               {"Category: " + gameState.category} <br />
               {"Guesses Remaining: " +
@@ -229,36 +250,36 @@ function Game({
               src={`/images/${figureMapping[gameState.numIncorrect]}`}
               alt="Hangman Representing Game Progress"
             />
-            {username === gameState.hanger && (
-              <h1 style={{ wordWrap: "break-word" }}>
-                {"Word(s): " + gameState.word}
-              </h1>
-            )}
-            <Letters
-              onClick={onLetterClick}
-              disabled={gameState.guesser !== username}
-              guessedLetters={gameState.guessedLetters}
-            />
-            <br />
-            <form onSubmit={onFormSubmit}>
-              <FormControl>
-                <InputLabel htmlFor="guess">Word</InputLabel>
-                <Input
-                  type="text"
-                  value={word}
-                  onChange={(e) => setWord(e.target.value)}
-                  id="guess"
-                  name="guess"
-                  inputProps={{
-                    maxLength: 50,
-                    minLength: 2,
-                  }}
-                  onInput={(e) => validateGuess()}
+
+            {username !== gameState.hanger && (
+              <>
+                <Letters
+                  onClick={onLetterClick}
                   disabled={gameState.guesser !== username}
-                  required
+                  guessedLetters={gameState.guessedLetters}
                 />
-              </FormControl>
-            </form>
+                <br />
+                <form onSubmit={onFormSubmit}>
+                  <FormControl>
+                    <InputLabel htmlFor="guess">Word</InputLabel>
+                    <Input
+                      type="text"
+                      value={word}
+                      onChange={(e) => setWord(e.target.value)}
+                      id="guess"
+                      name="guess"
+                      inputProps={{
+                        maxLength: 50,
+                        minLength: 2,
+                      }}
+                      onInput={(e) => validateGuess()}
+                      disabled={gameState.guesser !== username}
+                      required
+                    />
+                  </FormControl>
+                </form>
+              </>
+            )}
             <br />
           </div>
         )}

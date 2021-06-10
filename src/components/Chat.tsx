@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { socket } from "../modules";
 import { FormControl, Input, Button } from "@material-ui/core";
 import ScrollableFeed from "react-scrollable-feed";
@@ -7,9 +7,9 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<[string, string, boolean][]>([]);
 
-  const handleMessage = (info: [string, string, boolean]) => {
+  const handleMessage = useCallback((info: [string, string, boolean]) => {
     setMessages((messages) => [...messages, info]);
-  };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,9 +41,11 @@ function Chat({ user, roomID }: { user: string; roomID: string }) {
     return () => {
       socket.off("chat", handleMessage);
     };
+    // eslint-disable-next-line
   }, [messages]);
 
   const color: { [key: string]: string } = {
+    word: "SlateBlue",
     win: "green",
     correct: "green",
     incorrect: "red",

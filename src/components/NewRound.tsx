@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useCallback, useEffect, useState, useContext } from "react";
 import {
   FormGroup,
   FormControl,
@@ -44,13 +44,15 @@ const NewRound = ({ roomID, user }: { roomID: string; user: string }) => {
     socket.emit("new", roomID);
   };
 
-  const handleNew = () => {
+  const handleNew = useCallback(() => {
     setStarted(true);
-  };
+    // eslint-disable-next-line
+  }, []);
 
-  const handleJoin = (newState: gameStateInterface) => {
+  const handleJoin = useCallback((newState: gameStateInterface) => {
     setGameState(Object.assign({}, newState));
-  };
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     socket.on("new", handleNew);
@@ -59,7 +61,7 @@ const NewRound = ({ roomID, user }: { roomID: string; user: string }) => {
       socket.off("join_new", handleJoin);
       socket.off("new", handleNew);
     };
-  }, []);
+  }, [handleJoin, handleNew]);
 
   return (
     <div>

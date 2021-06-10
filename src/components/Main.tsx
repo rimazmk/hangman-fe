@@ -23,10 +23,10 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: "#000000",
+      main: "#2994ff",
     },
     background: {
-      default: "#d2d2d2",
+      default: "#c2e0ff",
     },
   },
 });
@@ -61,7 +61,7 @@ const Main = () => {
         <div className="container">
           <BrowserRouter>
             <Route exact path="/">
-              <Create setUser={setUsername} />
+              <Create setUser={setUsername} user={username} />
             </Route>
             <Route path="/:roomID">
               <Room username={username} mute={mute} />

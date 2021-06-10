@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useContext,
+} from "react";
 import { useParams } from "react-router-dom";
 import { gameStateInterface } from "../hangman";
 import Game from "./Game";
@@ -31,18 +37,18 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
     }
   };
 
-  const handleLeave = (newState: gameStateInterface) => {
+  const handleLeave = useCallback((newState: gameStateInterface) => {
     if (newState!.players.length === 0) setErr(true);
     setGameState(Object.assign({}, newState));
     updateSong();
-  };
+  }, []);
 
   useEffect(() => {
     const getGameState = async () => {
       let res = null;
       try {
         res = await axios.get<gameStateInterface>(
-          `${process.env.REACT_SERVER}/?roomID=${roomID}`
+          `${process.env.REACT_APP_SERVER}/?roomID=${roomID}`
         );
       } catch (err) {
         setErr(true);
@@ -55,7 +61,7 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
 
     socket.on("leave", handleLeave);
     getGameState();
-  }, [roomID]);
+  }, [roomID, handleLeave]);
 
   useEffect(() => {
     const cleanup = (e: Event) => {

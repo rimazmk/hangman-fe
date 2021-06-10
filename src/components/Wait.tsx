@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useContext,
+} from "react";
 import { gameStateInterface } from "../hangman";
 import gameStateContext from "../context/gameContext";
 import { socket } from "../modules";
@@ -21,12 +27,13 @@ function Wait({
   const [play, setPlay] = useState(false);
   const timerRef = useRef<number>();
   const audioRef = useRef<HTMLAudioElement>(null);
-  const url = `/${roomID}`;
+  const url = window.location.href;
 
-  const handleUpdate = (newState: gameStateInterface) => {
+  const handleUpdate = useCallback((newState: gameStateInterface) => {
     updateSong();
     setGameState(Object.assign({}, newState));
-  };
+    // eslint-disable-next-line
+  }, []);
 
   const updateSong = () => {
     setPlay(true);
@@ -97,7 +104,7 @@ function Wait({
     return () => {
       socket.off("update", handleUpdate);
     };
-  }, []);
+  }, [roomID, handleUpdate]);
 
   const render = () => {
     if (
@@ -132,7 +139,7 @@ function Wait({
           <br />
 
           {user === gameState.hanger && gameState.players.length >= 2 && (
-            <Button variant="contained" onClick={onButtonClick}>
+            <Button variant="contained" color="primary" onClick={onButtonClick}>
               Start game!
             </Button>
           )}
@@ -161,7 +168,7 @@ function Wait({
             Share this link with your friends:
             <br />
             {url}{" "}
-            <Button variant="contained" onClick={copyLink}>
+            <Button onClick={copyLink} color="primary">
               {copy}
             </Button>
           </Typography>

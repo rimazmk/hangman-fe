@@ -35,8 +35,7 @@ export interface gameStateInterface {
 }
 
 export interface feedbackForm {
-  first: string;
-  last: string;
+  name: string;
   email: string;
   feedback: string;
 }
