@@ -1,24 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { TextField, Button, InputLabel, Typography } from "@material-ui/core";
 import { gameStateInterface } from "../hangman";
 import Standings from "./Standings";
+import gameStateContext from "../context/gameContext";
 import { socket } from "../modules";
 
 const NewWord = ({
-  gameState,
-  setGameState,
   user,
   roomID,
   mute,
 }: {
-  gameState: gameStateInterface;
-  setGameState: React.Dispatch<
-    React.SetStateAction<gameStateInterface | undefined>
-  >;
   user: string;
   roomID: string;
   mute: boolean;
 }) => {
+  const { gameState, setGameState } = useContext(gameStateContext);
   const [word, setWord] = useState("");
   const [category, setCategory] = useState("");
 
@@ -170,14 +166,7 @@ const NewWord = ({
         </>
       );
     } else {
-      return (
-        <Standings
-          gameState={gameState}
-          setGameState={setGameState}
-          roomID={roomID}
-          user={user}
-        />
-      );
+      return <Standings roomID={roomID} user={user} />;
     }
   };
 
