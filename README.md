@@ -7,12 +7,12 @@ Frontend for Hangman
 install dependencies
 
 ```bash
-npm install .
+yarn
 ```
 
 ## Scripts
 
-`npm run start`: Start development server \
-`npm run build`: Create production build \
-`npm run tests`: Run tests \
-`npm run pretty-quick`: Runs prettier on source files
+`yarn start`: Start development server \
+`yarn build`: Create production build \
+`yarn test`: Run tests \
+`yarn pretty-quick`: Runs prettier on source files

@@ -8,10 +8,10 @@ import {
 } from "@material-ui/core";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
 import VolumeOffIcon from "@material-ui/icons/VolumeOff";
-// import HomeIcon from "@material-ui/icons/Home";
 import Create from "./Create";
 import Room from "./Room";
 import "../css/Main.scss";
+import ReactGA from "react-ga4";
 import { BrowserRouter, Route } from "react-router-dom";
 
 const theme = createMuiTheme({
@@ -30,6 +30,11 @@ const theme = createMuiTheme({
     },
   },
 });
+
+const key = process.env.REACT_APP_ANALYTICS_KEY;
+if (key) {
+  ReactGA.initialize(key);
+}
 
 const Main = () => {
   const [username, setUsername] = useState("");
