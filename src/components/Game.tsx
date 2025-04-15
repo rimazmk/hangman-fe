@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { gameStateInterface } from "../hangman";
-import { FormControl, Input, InputLabel, Typography } from "@material-ui/core";
+import { FormControl, Input, InputLabel, Typography } from "@mui/material";
 import Letters from "./Letters";
 import Timer from "./Timer";
 import "../css/Game.scss";

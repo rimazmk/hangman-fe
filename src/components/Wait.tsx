@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { gameStateInterface } from "../hangman";
 import { socket } from "../modules";
-import { InputLabel, TextField, Button, Typography } from "@material-ui/core";
+import { InputLabel, TextField, Button, Typography } from "@mui/material";
 
 function Wait({
   user,

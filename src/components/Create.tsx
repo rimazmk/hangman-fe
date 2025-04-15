@@ -14,7 +14,7 @@ import {
   Select,
   Typography,
   Button,
-} from "@material-ui/core";
+} from "@mui/material";
 import { socket } from "../modules";
 import axios from "axios";
 
@@ -175,84 +175,91 @@ function Create({
         <div className="right">
           <form
             onSubmit={handleSubmit}
-            style={{ minWidth: "225px", maxWidth: "400px" }}
+            style={{
+              minWidth: "225px",
+              maxWidth: "400px",
+            }}
           >
             <Typography variant="h4">Play</Typography>
             <br />
             <FormGroup>
-              <TextField
-                type="text"
-                value={state.username}
-                onChange={(e) =>
-                  setState({ ...state, username: e.target.value })
-                }
-                id="username"
-                name="username"
-                label="Username"
-                onInput={() => validateUsername()}
-                onInvalid={(e) => "Please fill out this field"}
-                variant="filled"
-                required
-                disabled={submitted}
-              />
-              <br />
-              <TextField
-                type="number"
-                label="Lives"
-                value={state.lives}
-                onChange={(e) => setState({ ...state, lives: e.target.value })}
-                id="lives"
-                name="lives"
-                inputProps={{ min: 6, max: 10 }}
-                onInvalid={(e) => "Please fill out this field"}
-                variant="filled"
-                required
-                disabled={submitted}
-              />
-              <br />
-              <TextField
-                type="number"
-                label="Rounds"
-                value={state.numRounds}
-                onChange={(e) =>
-                  setState({ ...state, numRounds: e.target.value })
-                }
-                id="numRounds"
-                name="numRounds"
-                inputProps={{ min: 1 }}
-                onInvalid={(e) => "Please fill out this field"}
-                variant="filled"
-                required
-                disabled={submitted}
-              />
-              <br />
               <FormControl>
+                <TextField
+                  type="text"
+                  value={state.username}
+                  onChange={(e) =>
+                    setState({ ...state, username: e.target.value })
+                  }
+                  id="username"
+                  name="username"
+                  label="Username"
+                  onInput={() => validateUsername()}
+                  onInvalid={(e) => "Please fill out this field"}
+                  variant="filled"
+                  required
+                  disabled={submitted}
+                />
+              </FormControl>
+              <FormControl>
+                <TextField
+                  type="number"
+                  label="Lives"
+                  value={state.lives}
+                  onChange={(e) =>
+                    setState({ ...state, lives: e.target.value })
+                  }
+                  id="lives"
+                  name="lives"
+                  inputProps={{ min: 6, max: 10 }}
+                  onInvalid={(e) => "Please fill out this field"}
+                  variant="filled"
+                  required
+                  disabled={submitted}
+                />
+              </FormControl>
+              <FormControl>
+                <TextField
+                  type="number"
+                  label="Rounds"
+                  value={state.numRounds}
+                  onChange={(e) =>
+                    setState({ ...state, numRounds: e.target.value })
+                  }
+                  id="numRounds"
+                  name="numRounds"
+                  inputProps={{ min: 1 }}
+                  onInvalid={(e) => "Please fill out this field"}
+                  variant="filled"
+                  required
+                  disabled={submitted}
+                />
+              </FormControl>
+              <FormControl variant="filled" fullWidth>
                 <InputLabel id="rotation-label">Rotation</InputLabel>
                 <Select
                   labelId="rotation-label"
+                  label="Rotation"
                   name="rotation"
                   id="rotation"
                   value={state.rotation}
                   onChange={(e) =>
                     setState({ ...state, rotation: e.target.value as string })
                   }
-                  onInvalid={(e) => "Please fill out this field"}
-                  variant="filled"
                   required
                   disabled={submitted}
                 >
                   <MenuItem value="king">King of the Hill</MenuItem>
                   <MenuItem value="robin">Round Robin</MenuItem>
-                </Select>{" "}
+                </Select>
               </FormControl>
               <br />
-              <FormControl>
+              <FormControl variant="filled" fullWidth>
                 <InputLabel id="time-label">Guess Time (sec)</InputLabel>
                 <Select
                   name="time"
                   id="time"
                   labelId="time-label"
-                  onInvalid={(e) => "Please fill out this field"}
+                  label="Guess Time (sec)"
                   value={state.time}
                   required
                   variant="filled"
@@ -273,8 +280,6 @@ function Create({
                   <MenuItem value="inf">Unlimited</MenuItem>
                 </Select>
               </FormControl>
-              <br />
-              <br />
               <Button
                 variant="contained"
                 color="primary"
@@ -283,7 +288,6 @@ function Create({
               >
                 Create Game
               </Button>
-              <br />
               <br />
             </FormGroup>
           </form>

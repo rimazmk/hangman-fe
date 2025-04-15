@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { TextField, Button, InputLabel, Typography } from "@material-ui/core";
+import { TextField, Button, InputLabel, Typography } from "@mui/material";
 import { gameStateInterface } from "../hangman";
 import Standings from "./Standings";
 import { socket } from "../modules";

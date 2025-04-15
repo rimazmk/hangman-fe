@@ -4,19 +4,21 @@ import {
   Typography,
   ThemeProvider,
   CssBaseline,
-  createMuiTheme,
-} from "@material-ui/core";
-import VolumeUpIcon from "@material-ui/icons/VolumeUp";
-import VolumeOffIcon from "@material-ui/icons/VolumeOff";
+  createTheme,
+} from "@mui/material";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import Create from "./Create";
 import Room from "./Room";
 import "../css/Main.scss";
 import ReactGA from "react-ga4";
 import { BrowserRouter, Route } from "react-router-dom";
+import { ANALYTICS_KEY } from "../env";
 
-const theme = createMuiTheme({
+const theme = createTheme({
   typography: {
     fontFamily: ["Yeon Sung", "Sans Serif"].join(","),
+    fontSize: 12,
     h3: {
       letterSpacing: "2px",
     },
@@ -31,9 +33,8 @@ const theme = createMuiTheme({
   },
 });
 
-const key = process.env.REACT_APP_ANALYTICS_KEY;
-if (key) {
-  ReactGA.initialize(key);
+if (ANALYTICS_KEY) {
+  ReactGA.initialize(ANALYTICS_KEY);
 }
 
 const Main = () => {
