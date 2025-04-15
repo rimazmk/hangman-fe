@@ -7,6 +7,7 @@ import Chat from "./Chat";
 import NewWord from "./NewWord";
 import axios from "axios";
 import "../css/Room.scss";
+import { SERVER_URL } from "../env";
 
 import { socket } from "../modules";
 
@@ -20,7 +21,7 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const updateSong = () => {
-    setSource(`${process.env.REACT_APP_SERVER}/audio/leave.mp3`);
+    setSource(`${SERVER_URL}/audio/leave.mp3`);
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.load();
@@ -39,7 +40,7 @@ function Room({ username, mute }: { username: string; mute: boolean }) {
       let res = null;
       try {
         res = await axios.get<gameStateInterface>(
-          `${process.env.REACT_APP_SERVER}/?roomID=${roomID}`
+          `${SERVER_URL}/?roomID=${roomID}`
         );
       } catch (err) {
         setErr(true);

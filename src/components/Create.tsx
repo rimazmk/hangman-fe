@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { socket } from "../modules";
 import axios from "axios";
+import { SERVER_URL } from "../env";
 
 function Create({
   user,
@@ -85,7 +86,7 @@ function Create({
     e.preventDefault();
     if (timerRef.current) clearTimeout(timerRef.current);
     setStatus("Sent!");
-    await axios.post(`${process.env.REACT_APP_SERVER}/feedback/`, {
+    await axios.post(`${SERVER_URL}/feedback/`, {
       data: form,
     });
 

@@ -1,8 +1,6 @@
-import io from "socket.io-client";
+import { io } from "socket.io-client";
+import { SERVER_URL } from "./env";
 
-const socket = io(process.env.REACT_APP_SERVER!, {
+export const socket = io(SERVER_URL!, {
   transports: ["websocket"],
-  upgrade: false,
 });
-
-export { socket };
