@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { gameStateInterface } from "../hangman";
 import { socket } from "../modules";
-import { InputLabel, TextField, Button, Typography } from "@material-ui/core";
+import { InputLabel, TextField, Button, Typography } from "@mui/material";
+import { SERVER_URL } from "../env";
 
 function Wait({
   user,
@@ -121,7 +122,7 @@ function Wait({
               muted={mute}
               ref={audioRef}
             >
-              <source src={`${process.env.REACT_APP_SERVER}/audio/join.mp3`} />
+              <source src={`${SERVER_URL}/audio/join.mp3`} />
             </audio>
           )}
 

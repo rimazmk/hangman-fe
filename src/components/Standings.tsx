@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { gameStateInterface } from "../hangman";
 import NewRound from "./NewRound";
-import { Typography } from "@material-ui/core";
+import { Typography } from "@mui/material";
 const Standings = ({
   gameState,
   setGameState,

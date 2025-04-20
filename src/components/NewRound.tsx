@@ -8,7 +8,7 @@ import {
   MenuItem,
   Select,
   Button,
-} from "@material-ui/core";
+} from "@mui/material";
 import { gameStateInterface, gameInitInterface } from "../hangman";
 import { socket } from "../modules";
 
@@ -130,7 +130,7 @@ const NewRound = ({
               required
             />
             <br />
-            <FormControl>
+            <FormControl variant="filled" fullWidth>
               <InputLabel id="rotation-label">Rotation</InputLabel>
               <Select
                 labelId="rotation-label"
@@ -140,25 +140,23 @@ const NewRound = ({
                 onChange={(e) =>
                   setState({ ...state, rotation: e.target.value as string })
                 }
-                onInvalid={(e) => "Please fill out this field"}
-                variant="filled"
+                label="Rotation"
                 required
               >
                 <MenuItem value="robin">Round Robin</MenuItem>
                 <MenuItem value="king">King of the Hill</MenuItem>
-              </Select>{" "}
+              </Select>
             </FormControl>
             <br />
-            <FormControl>
+            <FormControl variant="filled" fullWidth>
               <InputLabel id="time-label">Guess Time (sec)</InputLabel>
               <Select
                 name="time"
                 id="time"
                 labelId="time-label"
-                onInvalid={(e) => "Please fill out this field"}
                 value={state.time}
                 required
-                variant="filled"
+                label="Guess Time (sec)"
                 onChange={(e) =>
                   setState({ ...state, time: e.target.value as string })
                 }

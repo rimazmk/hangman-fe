@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { socket } from "../modules";
-import { FormControl, Input, Button } from "@material-ui/core";
+import { FormControl, Input, Button } from "@mui/material";
 import ScrollableFeed from "react-scrollable-feed";
 
 function Chat({ user, roomID }: { user: string; roomID: string }) {

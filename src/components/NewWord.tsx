@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { TextField, Button, InputLabel, Typography } from "@material-ui/core";
+import { TextField, Button, InputLabel, Typography } from "@mui/material";
 import { gameStateInterface } from "../hangman";
 import Standings from "./Standings";
 import { socket } from "../modules";
+import { SERVER_URL } from "../env";
 
 const NewWord = ({
   gameState,
@@ -105,9 +106,7 @@ const NewWord = ({
               <>
                 <h2>YOU WIN! :)</h2>
                 <audio autoPlay muted={mute}>
-                  <source
-                    src={`${process.env.REACT_APP_SERVER}/audio/win.mp3`}
-                  />
+                  <source src={`${SERVER_URL}/audio/win.mp3`} />
                 </audio>
               </>
             )}
@@ -119,9 +118,7 @@ const NewWord = ({
               <>
                 <h2>YOU WIN! :)</h2>
                 <audio autoPlay muted={mute}>
-                  <source
-                    src={`${process.env.REACT_APP_SERVER}/audio/win.mp3`}
-                  />
+                  <source src={`${SERVER_URL}/audio/win.mp3`} />
                 </audio>
               </>
             )}
@@ -132,9 +129,7 @@ const NewWord = ({
                 <>
                   <h2>YOU WIN! :)</h2>
                   <audio autoPlay muted={mute}>
-                    <source
-                      src={`${process.env.REACT_APP_SERVER}/audio/win.mp3`}
-                    />
+                    <source src={`${SERVER_URL}/audio/win.mp3`} />
                   </audio>
                 </>
               )}

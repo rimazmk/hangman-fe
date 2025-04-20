@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { gameStateInterface } from "../hangman";
-import { FormControl, Input, InputLabel, Typography } from "@material-ui/core";
+import { FormControl, Input, InputLabel, Typography } from "@mui/material";
 import Letters from "./Letters";
 import Timer from "./Timer";
 import "../css/Game.scss";
 import { socket } from "../modules";
+import { SERVER_URL } from "../env";
 
 const figureMapping = [
   "none.png",
@@ -62,17 +63,17 @@ function Game({
       let newURL: string = "";
       let message: string = "";
       if (info["status"] === "timer") {
-        newURL = `${process.env.REACT_APP_SERVER}/audio/timer.mp3`;
+        newURL = `${SERVER_URL}/audio/timer.mp3`;
         message = `${username} ran out of time`;
         setChange("-5");
       } else if (info["status"] === "correct") {
-        newURL = `${process.env.REACT_APP_SERVER}/audio/correct.mp3`;
+        newURL = `${SERVER_URL}/audio/correct.mp3`;
         message = `${username} guessed ${info["guess"]}`;
         setChange("+15");
       } else if (info["status"] === "incorrect") {
         console.log(gameState);
         console.log(info["guess"]);
-        newURL = `${process.env.REACT_APP_SERVER}/audio/wrong.mp3`;
+        newURL = `${SERVER_URL}/audio/wrong.mp3`;
         message = `${username} guessed ${info["guess"]}`;
         setChange("-5");
       } else if (info["status"] === "win") {
